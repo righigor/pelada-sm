@@ -5,3 +5,17 @@ export type JogadorType = {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface FirestoreTimestamp {
+  type: 'firestore/timestamp/1.0';
+  seconds: number;
+  nanoseconds: number;
+}
+
+export interface JogadorResponseType {
+  id: string;
+  nome: string;
+  fotoUrl: string | null;
+  createdAt: FirestoreTimestamp;
+  updatedAt: FirestoreTimestamp; 
+}

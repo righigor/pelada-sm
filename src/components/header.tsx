@@ -16,7 +16,7 @@ export default function Header() {
   const navItems = [
     {
       name: "Jogadores",
-      link: "#jogadores",
+      link: "/jogadores",
     },
     {
       name: "Partidas",
