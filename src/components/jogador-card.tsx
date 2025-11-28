@@ -1,7 +1,6 @@
 import { Card } from "@/components/ui/card";
 import type { JogadorResponseType } from "@/types/jogadores/Jogador";
 import { IconBallFootball, IconShoe } from "@tabler/icons-react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AvatarLoad from "./avatar-load";
 
@@ -11,13 +10,12 @@ interface JogadorItemProps {
 
 export default function JogadorCard({ jogador }: JogadorItemProps) {
   const navigate = useNavigate();
-  const [isImageLoaded, setIsImageLoaded] = useState(false); 
   const avatarSizeClasses = "w-14 h-14 md:w-20 md:h-20";
 
   return (
-    <Card className="mb-4 p-4 flex flex-row justify-between items-center cursor-pointer" onClick={() => navigate(`/jogadores/${jogador.id}`)}>
+    <Card className="mb-4 p-4 flex flex-row justify-between items-center cursor-pointer hover:scale-105 transition-transform duration-500" onClick={() => navigate(`/jogadores/${jogador.id}`)}>
       <div className="flex gap-2 md:gap-4 items-center">
-        <AvatarLoad jogador={jogador} avatarSizeClasses={avatarSizeClasses} isImageLoaded={isImageLoaded} setIsImageLoaded={setIsImageLoaded} />
+        <AvatarLoad jogador={jogador} avatarSizeClasses={avatarSizeClasses} />
         <h2 className="md:text-xl text-xs font-bold">{jogador.nome}
         </h2>
       </div>

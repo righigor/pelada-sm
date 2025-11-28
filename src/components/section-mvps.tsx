@@ -21,9 +21,7 @@ export default function SectionMvps({
   bagre,
 }: SectionMvpsProps) {
 
-  if (!artilheiro || !assistente || !bagre || !artilheiroName || !assistenteName || !bagreName) {
-    return null;
-  }
+
   return (
     <section className="mx-auto border bg-blue-950/35 p-4 rounded-lg mb-8 flex flex-col gap-6 items-center">
       <h3 className="text-xl font-semibold">Destaques da pelada</h3>
@@ -31,18 +29,20 @@ export default function SectionMvps({
         <MvpCard
           title="Artilheiro"
           icon={<IconBallFootball />}
-          name={artilheiroName.nome ?? "N/A"}
-          fotoUrl={artilheiroName.fotoUrl ?? null}
-          stat={artilheiro.stat ?? null}
+          name={artilheiroName?.nome ?? "N/A"}
+          fotoUrl={artilheiroName?.fotoUrl ?? null}
+          stat={artilheiro?.stat ?? null}
           type="gols"
+          fallbackMessage="Nenhum gol marcado"
         />
         <MvpCard
           title="Maior Assistente"
           icon={<IconShoe />}
-          name={assistenteName.nome ?? "N/A"}
-          fotoUrl={assistenteName.fotoUrl ?? null}
-          stat={assistente.stat ?? null}
+          name={assistenteName?.nome ?? "N/A"}
+          fotoUrl={assistenteName?.fotoUrl ?? null}
+          stat={assistente?.stat ?? null}
           type="assistencias"
+          fallbackMessage="Nenhuma assistência registrada"
         />
         <MvpCard
           title="Maior Bagre"
@@ -51,6 +51,7 @@ export default function SectionMvps({
           fotoUrl={bagreName?.fotoUrl ?? null}
           stat={bagre?.stat ?? null}
           type="gols contra"
+          fallbackMessage="Ninguém foi bagre hoje"
         />
       </div>
     </section>
