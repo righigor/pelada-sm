@@ -22,3 +22,7 @@ export interface JogadorResponseType {
   createdAt: FirestoreTimestamp;
   updatedAt: FirestoreTimestamp; 
 }
+
+export type JogadorNameMap = {
+  [id: string]: string;
+}
