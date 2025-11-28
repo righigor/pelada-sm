@@ -1,3 +1,4 @@
+import GolsChart from "@/components/gols-chart";
 import SectionMvps from "@/components/section-mvps";
 import useGetAllNamesJogadores from "@/hooks/jogadores/use-get-names-jogadores";
 import useGetPartidaByID from "@/hooks/partida/use-get-partida-by-id";
@@ -6,6 +7,7 @@ import { getAllGols } from "@/utils/get-all-gols";
 import getArtilheiro from "@/utils/get-artilheiro";
 import { getAssistente } from "@/utils/get-assistente";
 import { getBagre } from "@/utils/get-bagre";
+import { getGolsChartData } from "@/utils/get-gols-chart-data";
 import { IconBallFootball } from "@tabler/icons-react";
 import { useParams } from "react-router-dom";
 
@@ -22,6 +24,8 @@ export default function DetalhesPartidaPage() {
     return <div>Error loading partida details</div>;
   }
 
+  if (!jogadoresNames || !partida) return null;
+
   const artilheiro = getArtilheiro(partida.jogadoresEstatisticas);
   const artilheiroName =
     artilheiro && jogadoresNames ? jogadoresNames[artilheiro.jogadorId] : null;
@@ -31,6 +35,11 @@ export default function DetalhesPartidaPage() {
   const bagre = getBagre(partida.jogadoresEstatisticas);
   const bagreName =
     bagre && jogadoresNames ? jogadoresNames[bagre.jogadorId] : null;
+
+  const chartData = getGolsChartData(
+    partida.jogadoresEstatisticas,
+    jogadoresNames
+  );
 
   return (
     <div className="mt-8 container mx-auto px-8 py-8">
@@ -67,6 +76,8 @@ export default function DetalhesPartidaPage() {
         bagre={bagre}
         bagreName={bagreName}
       />
+
+      <GolsChart data={chartData} />
     </div>
   );
 }
