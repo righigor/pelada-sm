@@ -6,7 +6,7 @@ export default function AllJogadoresPage() {
   const { data, isPending } = useGetAllJogadores();
 
   return (
-    <div className="flex flex-col mt-8">
+    <div className="flex flex-col mt-8 container mx-auto px-8 py-8">
       <h2 className="text-xl font-bold mb-4 text-center md:text-2xl">
         Todos os Jogadores
       </h2>

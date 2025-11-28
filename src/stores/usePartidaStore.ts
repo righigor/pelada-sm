@@ -1,12 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { JogadorResponseType } from '../types/jogadores/Jogador';
-
-export interface EstatisticaPartida {
-  gols: number;
-  assistencias: number;
-  golContra: number;
-}
+import type { EstatisticaPartida } from '@/types/Partida';
 
 interface PartidaState {
   jogadoresSelecionados: JogadorResponseType[];

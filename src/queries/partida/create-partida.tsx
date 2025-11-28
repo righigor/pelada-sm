@@ -1,4 +1,5 @@
 import { db } from "@/firebase/config";
+import type { PartidaData } from "@/types/Partida";
 import {
   collection,
   addDoc,
@@ -7,16 +8,6 @@ import {
   increment,
 } from "firebase/firestore";
 
-interface EstatisticaPartida {
-  gols: number;
-  assistencias: number;
-  golContra: number;
-}
-
-export interface PartidaData {
-  date: Date;
-  jogadoresEstatisticas: { [jogadorId: string]: EstatisticaPartida };
-}
 
 export async function createNewPartida(data: PartidaData): Promise<string> {
   const partidasRef = collection(db, "partidas");
