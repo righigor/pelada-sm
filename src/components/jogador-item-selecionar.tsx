@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Item, ItemActions, ItemTitle } from "@/components/ui/item";
 import { Check, Plus } from "lucide-react"; // Ícones
@@ -18,7 +17,6 @@ export default function JogadorItemSelecionar({
   onToggle,
   isDisabled,
 }: JogadorCardProps) {
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
   const avatarSizeClasses = "w-14 h-14 md:w-20 md:h-20";
 
   const handleToggle = () => {
@@ -37,7 +35,7 @@ export default function JogadorItemSelecionar({
     >
       <ItemTitle>
         <div className="flex gap-2 md:gap-4 items-center">
-          <AvatarLoad jogador={jogador} avatarSizeClasses={avatarSizeClasses} isImageLoaded={isImageLoaded} setIsImageLoaded={setIsImageLoaded} />
+          <AvatarLoad jogador={jogador} avatarSizeClasses={avatarSizeClasses} />
           <h2 className="md:text-xl text-xs font-bold">{jogador.nome}</h2>
         </div>
       </ItemTitle>
