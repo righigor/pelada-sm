@@ -1,10 +1,10 @@
 import type { JogadorResponseType } from "@/types/jogadores/Jogador";
 import AvatarLoad from "./avatar-load";
 import { Card } from "./ui/card";
-import { useState } from "react";
 import StatsCounter from "./stats-counter";
 import { IconBallFootball, IconShoe } from "@tabler/icons-react";
-import type { EstatisticaPartida } from "@/stores/usePartidaStore";
+import type { EstatisticaPartida } from "@/types/Partida";
+
 
 interface JogadorCardStatsProps {
   jogador: JogadorResponseType;
@@ -21,7 +21,6 @@ export default function JogadorCardStats({
   handleUpdate,
   estatisticas,
 }: JogadorCardStatsProps) {
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
   const avatarSizeClasses = "w-14 h-14 md:w-20 md:h-20";
 
   return (
@@ -30,8 +29,6 @@ export default function JogadorCardStats({
 
       <AvatarLoad
         jogador={jogador}
-        isImageLoaded={isImageLoaded}
-        setIsImageLoaded={setIsImageLoaded}
         avatarSizeClasses={avatarSizeClasses}
       />
         <h2 className="md:text-xl text-xs font-bold">{jogador.nome}</h2>
