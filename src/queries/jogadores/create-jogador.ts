@@ -14,6 +14,10 @@ export async function createJogador(data: CreateJogadorRequest): Promise<string>
   const res = await addDoc(jogadoresRef, {
     nome: data.nome,
     fotoUrl: imgUrl,
+    gols: 0,
+    assistencias: 0,
+    golsContra: 0,
+    partidas: 0,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });

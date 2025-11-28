@@ -16,6 +16,9 @@ export interface JogadorResponseType {
   id: string;
   nome: string;
   fotoUrl: string | null;
+  gols: number;
+  assistencias: number;
+  golContra: number;
   createdAt: FirestoreTimestamp;
   updatedAt: FirestoreTimestamp; 
 }
