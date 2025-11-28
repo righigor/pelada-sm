@@ -73,15 +73,19 @@ export default function Header() {
             </a>
           ))}
 
-            <NavbarButton
-              onClick={() => setIsMobileMenuOpen(false)}
-              variant="primary"
-              className="w-full mt-4 flex items-center justify-center"
-            >
+          <NavbarButton
+            onClick={() => (
+              navigate("/partida/selecionar-jogadores"),
+              setIsMobileMenuOpen(false)
+            )}
+            variant="primary"
+            className="w-full mt-4 flex items-center justify-center"
+          >
+            
               <Plus className="mr-2 h-4 w-4" />
               Adicionar registro
-            </NavbarButton>
-
+           
+          </NavbarButton>
         </MobileNavMenu>
       </MobileNav>
     </Navbar>

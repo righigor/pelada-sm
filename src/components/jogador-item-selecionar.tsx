@@ -1,12 +1,9 @@
-// src/components/JogadorCard.tsx
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Item, ItemActions, ItemTitle } from "@/components/ui/item";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { getIniciais } from "@/utils/get-iniciais";
 import { Check, Plus } from "lucide-react"; // Ícones
 import type { JogadorResponseType } from "@/types/jogadores/Jogador";
+import AvatarLoad from "./avatar-load";
 
 interface JogadorCardProps {
   jogador: JogadorResponseType;
@@ -40,35 +37,7 @@ export default function JogadorItemSelecionar({
     >
       <ItemTitle>
         <div className="flex gap-2 md:gap-4 items-center">
-          <Avatar className={`relative ${avatarSizeClasses}`}>
-            <AvatarImage
-              src={jogador.fotoUrl ?? undefined}
-              alt={jogador.nome}
-              className={`${avatarSizeClasses} rounded-md object-cover transition-opacity duration-300 ${
-                isImageLoaded ? "opacity-100" : "opacity-0"
-              }`}
-              onLoad={() => setIsImageLoaded(true)}
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "";
-                setIsImageLoaded(true);
-              }}
-            />
-
-            {(!isImageLoaded || !jogador.fotoUrl) && (
-              <div
-                className={`absolute top-0 left-0 ${avatarSizeClasses} rounded-md overflow-hidden`}
-              >
-                <Skeleton className="w-full h-full" />
-                {!jogador.fotoUrl && isImageLoaded && (
-                  <AvatarFallback
-                    className={`bg-gray-300 text-lg absolute inset-0 flex items-center justify-center`}
-                  >
-                    {getIniciais(jogador.nome)}
-                  </AvatarFallback>
-                )}
-              </div>
-            )}
-          </Avatar>
+          <AvatarLoad jogador={jogador} avatarSizeClasses={avatarSizeClasses} isImageLoaded={isImageLoaded} setIsImageLoaded={setIsImageLoaded} />
           <h2 className="md:text-xl text-xs font-bold">{jogador.nome}</h2>
         </div>
       </ItemTitle>
