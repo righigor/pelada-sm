@@ -1,3 +1,5 @@
+import type { GetAllPartidaResponseType } from "../Partida";
+
 export type JogadorType = {
   id: string;
   nome: string;
@@ -23,6 +25,16 @@ export interface JogadorResponseType {
   updatedAt: FirestoreTimestamp; 
 }
 
-export type JogadorNameMap = {
-  [id: string]: string;
+export interface JogadorAvatarType {
+  nome: string;
+  fotoUrl: string | null;
 }
+
+export type JogadorNameMap = {
+  [id: string]: {
+    nome: string;
+    fotoUrl: string | null;
+  };
+}
+
+export type JogadoresEstatistica = GetAllPartidaResponseType['jogadoresEstatisticas'];

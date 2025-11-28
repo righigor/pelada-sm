@@ -11,23 +11,27 @@ export default function AddJogadoresPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (nome.trim() && foto) {
-      mutate({ nome, foto });
-    }
+    mutate({ nome: nome.trim(), foto });
   };
 
   return (
     <div className="flex h-[60vh] items-center justify-center">
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
-          <InputFotoPerfil onFileChange={setFoto} />
-          <Input
-            type="text"
-            placeholder="Nome do Jogador"
-            className="w-full"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-          />
-        <LoadingButton isLoading={isPending} type="submit" className="mt-4 w-full cursor-pointer">Adicionar Jogador</LoadingButton>
+        <InputFotoPerfil onFileChange={setFoto} />
+        <Input
+          type="text"
+          placeholder="Nome do Jogador"
+          className="w-full"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+        />
+        <LoadingButton
+          isLoading={isPending}
+          type="submit"
+          className="mt-4 w-full cursor-pointer"
+        >
+          Adicionar Jogador
+        </LoadingButton>
       </form>
     </div>
   );

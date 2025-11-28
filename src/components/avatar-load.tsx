@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import type { JogadorResponseType } from "@/types/jogadores/Jogador";
+import type { JogadorAvatarType, JogadorResponseType } from "@/types/jogadores/Jogador";
 import { getIniciais } from "@/utils/get-iniciais";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Skeleton } from "./ui/skeleton";
 import { useEffect, useState } from "react";
 
 interface AvatarLoadProps {
-  jogador: JogadorResponseType;
+  jogador: JogadorResponseType | JogadorAvatarType;
   avatarSizeClasses: string;
 }
 
@@ -42,7 +42,7 @@ export default function AvatarLoad({
           imageState === 'loaded' ? "opacity-100" : "opacity-0"
         }`}
         onLoad={() => setImageState('loaded')}
-        onError={() => setImageState('error')} // Falha no carregamento
+        onError={() => setImageState('error')}
       />
 
       {imageState === 'loading' && (

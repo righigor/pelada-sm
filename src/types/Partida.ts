@@ -17,3 +17,10 @@ export interface GetAllPartidaResponseType {
   local: string;
   jogadoresEstatisticas: { [jogadorId: string]: EstatisticaPartida };
 }
+
+export interface PartidaByIDResponseType {
+  id: string;
+  dataPartida: Timestamp;
+  local: string;
+  jogadoresEstatisticas: { [jogadorId: string]: EstatisticaPartida };
+}

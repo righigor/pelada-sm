@@ -2,7 +2,7 @@ import type { GetAllPartidaResponseType } from "@/types/Partida";
 
 export type Artilheiro = {
   jogadorId: string;
-  gols: number;
+  stat: number;
 };
 
 export type JogadoresEstatistica = GetAllPartidaResponseType['jogadoresEstatisticas'];
@@ -23,7 +23,7 @@ export default function getArtilheiro(estatisticas: JogadoresEstatistica): Artil
     if (artilheiroId) {
         return {
             jogadorId: artilheiroId,
-            gols: maxGols
+            stat: maxGols
         };
     }
     
