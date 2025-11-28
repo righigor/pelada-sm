@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePartidaStore } from "../../stores/usePartidaStore";
-import { createNewPartida, type PartidaData } from "@/queries/partida/create-partida";
+import { createNewPartida } from "@/queries/partida/create-partida";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import type { PartidaData } from "@/types/Partida";
 
 export const useCreatePartida = () => {
   const navigate = useNavigate();

@@ -38,7 +38,7 @@ export default function SelecionarJogadoresPage() {
   };
 
   return (
-    <div className="p-4 flex flex-col gap-4">
+    <div className="flex flex-col gap-4 container mx-auto px-8 py-16">
       <div className="flex justify-between items-center mb-6 flex-col md:flex-row gap-4">
         <h2 className=" text-sm md:text-xl font-semibold">⚽ Seleção da Pelada</h2>
         <p className="text-gray-300 text-xs md:text-lg">Você já selecionou {selecionados.length} jogadores.</p>

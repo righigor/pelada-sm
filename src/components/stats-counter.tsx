@@ -34,7 +34,6 @@ export default function StatsCounter({
         <Button
           variant="outline"
           size="icon-sm"
-          // className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
           onClick={() => onUpdate(jogadorId, tipo, -1)}
           disabled={value === 0}
         >
@@ -44,7 +43,6 @@ export default function StatsCounter({
         <Button
           variant="outline"
           size="icon-sm"
-          // className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
           onClick={() => onUpdate(jogadorId, tipo, 1)}
         >
           +

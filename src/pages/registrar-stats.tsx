@@ -45,7 +45,7 @@ export default function RegistrarStatsPage() {
   };
 
   return (
-    <div className="p-4">
+    <div className="container mx-auto px-8 py-12">
       <div className="mb-4 flex items-center justify-center gap-2">
         <h2 className="text-sm md:text-lg font-semibold">
           Data: {new Date().toLocaleDateString()}

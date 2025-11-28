@@ -1,4 +1,4 @@
 export type CreateJogadorRequest = {
   nome: string;
-  foto?: File;
+  foto: File | null;
 }
