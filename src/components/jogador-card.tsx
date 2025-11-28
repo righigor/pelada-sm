@@ -12,7 +12,7 @@ interface JogadorItemProps {
   jogador: JogadorResponseType;
 }
 
-export default function JogadorItem({ jogador }: JogadorItemProps) {
+export default function JogadorCard({ jogador }: JogadorItemProps) {
   const navigate = useNavigate();
   const [isImageLoaded, setIsImageLoaded] = useState(false); 
   const avatarSizeClasses = "w-14 h-14 md:w-20 md:h-20";
@@ -54,15 +54,15 @@ export default function JogadorItem({ jogador }: JogadorItemProps) {
 
       <div className="flex gap-4 items-center md:gap-8">
         <div className="flex items-center">
-          <strong className="text-xs md:text-xl">0</strong>
+          <strong className="text-xs md:text-xl">{jogador.gols}</strong>
           <IconBallFootball className="inline-block ml-1 size-4 md:size-6" />
         </div>
         <div className="flex items-center">
-          <strong className="text-xs md:text-xl">0</strong>
+          <strong className="text-xs md:text-xl">{jogador.assistencias}</strong>
           <IconShoe className="inline-block ml-1 size-4 md:size-6" />
         </div>
         <div className="flex items-center">
-          <strong className="text-xs md:text-xl">0</strong>
+          <strong className="text-xs md:text-xl">{jogador.golContra}</strong>
           <IconBallFootball className="inline-block ml-1 text-red-700 size-4 md:size-6" />
         </div>
       </div>

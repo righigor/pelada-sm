@@ -11,8 +11,10 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
   const navItems = [
     {
       name: "Jogadores",
@@ -20,11 +22,11 @@ export default function Header() {
     },
     {
       name: "Partidas",
-      link: "#partidas",
+      link: "/partidas",
     },
     {
       name: "Estatísticas",
-      link: "#estatisticas",
+      link: "/estatisticas",
     },
   ];
 
@@ -38,6 +40,9 @@ export default function Header() {
         <NavbarButton
           variant="primary"
           className="mr-4 hidden items-center md:inline-flex"
+          onClick={() => {
+            navigate("/partida/selecionar-jogadores");
+          }}
         >
           <Plus className="mr-2 h-4 w-4" />
           Adicionar registro
