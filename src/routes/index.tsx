@@ -25,7 +25,7 @@ const router = createBrowserRouter([
       { path: "/partida/:partidaId", element: <DetalhesPartidaPage /> },
       { path: "/partida/selecionar-jogadores", element: <SelecionarJogadoresPage /> },
       { path: "/partida/registrar-stats", element: <RegistrarStatsPage /> },
-      { path: "/admin/jogadores", element: <AddJogadoresPage /> },
+      { path: "/admin/jogador", element: <AddJogadoresPage /> },
       { path: "*", element: <NotFoundPage /> }
     ],
   }
