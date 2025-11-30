@@ -17,7 +17,7 @@ export default function JogadorItemSelecionar({
   onToggle,
   isDisabled,
 }: JogadorCardProps) {
-  const avatarSizeClasses = "w-14 h-14 md:w-20 md:h-20";
+  const avatarSizeClasses = "w-14 h-14 md:w-20 md:h-20 flex-shrink-0";
 
   const handleToggle = () => {
     if (!isDisabled || isSelected) {
@@ -33,10 +33,17 @@ export default function JogadorItemSelecionar({
       } ${isDisabled && !isSelected ? "opacity-50 cursor-not-allowed" : ""}`}
       onClick={handleToggle}
     >
-      <ItemTitle>
-        <div className="flex gap-2 md:gap-4 items-center">
+      <ItemTitle className="flex-1 min-w-0">
+        <div className="flex gap-2 md:gap-4 items-center w-full min-w-0">
           <AvatarLoad jogador={jogador} avatarSizeClasses={avatarSizeClasses} />
-          <h2 className="md:text-xl text-xs font-bold">{jogador.nome}</h2>
+
+          <h2
+            className="md:text-xl text-xs font-bold 
+                               flex-1 min-w-0 /* Permite encolhimento */
+                               truncate overflow-hidden whitespace-nowrap"
+          >
+            {jogador.nome}
+          </h2>
         </div>
       </ItemTitle>
 
