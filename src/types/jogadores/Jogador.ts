@@ -21,6 +21,7 @@ export interface JogadorResponseType {
   gols: number;
   assistencias: number;
   golContra: number;
+  partidas: number;
   createdAt?: FirestoreTimestamp;
   updatedAt?: FirestoreTimestamp;
 }
