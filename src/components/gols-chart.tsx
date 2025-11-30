@@ -1,6 +1,6 @@
 import type { ChartData } from "@/utils/get-gols-chart-data";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { Card } from "./ui/card";
+import { Card, CardTitle } from "./ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "./ui/chart";
 
 interface GolsChartProps {
@@ -25,15 +25,18 @@ export default function GolsChart({ data }: GolsChartProps) {
 
   return (
     <section className="mb-10">
+
+      <Card>
+        <CardTitle>
       <h3 className="text-2xl font-semibold mb-4 text-center">
         Gols por Jogador
       </h3>
 
-      <Card className="p-4">
+        </CardTitle>
         <ChartContainer config={chartConfig} className="h-[400px] w-full">
           <BarChart
             data={data}
-            margin={{ top: 20, right: 30, left: 20, bottom: 45 }}
+            margin={{ top: 20, right: 0, bottom: 60, left: 0 }}
           >
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
 
@@ -44,9 +47,9 @@ export default function GolsChart({ data }: GolsChartProps) {
               tickLine={false}
               axisLine={false}
               interval={0}
-              angle={-45}
+              angle={-50}
               textAnchor="end"
-              height={45}
+              height={40}
             />
 
             <YAxis

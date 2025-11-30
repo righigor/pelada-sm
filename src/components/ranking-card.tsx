@@ -54,10 +54,36 @@ export default function RankingCard({
     );
   }
 
-  let chartData = data.map((item, index) => ({
+  const chartConfig = {
+    Gols: {
+      label: "test",
+      color: "hsl(var(--chart-1))",
+    },
+  };
+
+  const filteredData = data.filter((item) => item[dataKey] > 0);
+
+  if (!filteredData || filteredData.length === 0) {
+    return (
+      <Card className="shadow-lg h-[400px]">
+        <CardHeader>
+          <CardTitle className="text-xl flex items-center gap-2">
+            {icon} {title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-center text-gray-500">
+            Nenhum jogador fez um(a) {unit.toLowerCase()} ainda.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  let chartData = filteredData.map((item, index) => ({
     ...item,
     rank: index + 1,
-    nomeEixo: `${item.nome.split(" ")[0]}`,
+    nomeEixo: `${item.nome}`,
   }));
 
   if (chartData.length === 3) {
@@ -65,15 +91,12 @@ export default function RankingCard({
     const primeiroLugar = chartData[0];
     const terceiroLugar = chartData[2];
 
-    chartData = [segundoLugar, primeiroLugar, terceiroLugar];
+    if (primeiroLugar[dataKey] !== segundoLugar[dataKey]) {
+      chartData = [segundoLugar, primeiroLugar, terceiroLugar];
+    } else {
+      chartData = [primeiroLugar, segundoLugar, terceiroLugar];
+    }
   }
-
-  const chartConfig = {
-    Gols: {
-      label: "test",
-      color: "hsl(var(--chart-1))",
-    },
-  };
 
   return (
     <Card className="shadow-lg h-full text-center flex flex-col">
@@ -82,11 +105,11 @@ export default function RankingCard({
           {icon} {title}
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-4 h-[350px]">
-        <ChartContainer config={chartConfig} className="h-[350px] w-full">
+      <CardContent className="pt-4 h-[400px]">
+        <ChartContainer config={chartConfig} className="h-[400px] w-full">
           <BarChart
             data={chartData}
-            margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
+            margin={{ top: 10, right: 10, left: 10, bottom: 60 }}
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis
@@ -95,8 +118,9 @@ export default function RankingCard({
               fontSize={12}
               tickLine={false}
               axisLine={false}
-              angle={-45}
-              dy={15}
+              angle={-50}
+              height={50}
+              textAnchor="end"
               tickFormatter={(value, index) =>
                 `${chartData[index].rank}º ${value}`
               }
@@ -117,15 +141,7 @@ export default function RankingCard({
               }}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            {/* <Tooltip
-                            cursor={{ fill: 'rgba(0,0,0,0.05)' }}
-                            labelFormatter={(label) => {
-                                const player = chartData.find(p => p.nomeEixo === label);
-                                return player ? `${player.rank}º ${player.nome}` : label;
-                            }}
-                            
-                            formatter={(value: number) => [value, unit]}
-                        /> */}
+
             <Bar
               dataKey={dataKey}
               fill={RANK_COLORS[1]}
