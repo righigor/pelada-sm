@@ -1,4 +1,5 @@
 import App from "@/App";
+import NotFoundPage from "@/components/not-found";
 import AppLayout from "@/layouts/app-layout";
 import AddJogadoresPage from "@/pages/add-jogadores";
 import AllJogadoresPage from "@/pages/all-jogadores";
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: "/partida/selecionar-jogadores", element: <SelecionarJogadoresPage /> },
       { path: "/partida/registrar-stats", element: <RegistrarStatsPage /> },
       { path: "/admin/jogadores", element: <AddJogadoresPage /> },
+      { path: "*", element: <NotFoundPage /> }
     ],
   }
 ])
