@@ -7,7 +7,7 @@ export default function LastPartidaSection() {
   const { data, isLoading, error } = useGetLastPartida();
 
   return (
-    <section className="flex flex-col gap-6 mx-auto px-2 py-4 text-center shadow-lg w-full">
+    <section className="flex flex-col gap-6 mx-auto py-4 text-center shadow-lg w-full">
       <h3 className="text-lg font-semibold">Última Partida</h3>
       {error && <ErrorSection />}
       {isLoading || !data ? <SkeletonLastPartida /> : <PartidaCard partida={data} />}
