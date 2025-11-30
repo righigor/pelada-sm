@@ -30,10 +30,10 @@ export default function GolsChart({ data }: GolsChartProps) {
       </h3>
 
       <Card className="p-4">
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
+        <ChartContainer config={chartConfig} className="h-[400px] w-full">
           <BarChart
             data={data}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            margin={{ top: 20, right: 30, left: 20, bottom: 45 }}
           >
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
 
@@ -46,7 +46,7 @@ export default function GolsChart({ data }: GolsChartProps) {
               interval={0}
               angle={-45}
               textAnchor="end"
-              height={60}
+              height={45}
             />
 
             <YAxis
