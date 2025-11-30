@@ -46,6 +46,7 @@ export interface JogadorEstatisticaCompleta {
   nome: string;
   fotoUrl: string | null;
   gols: number;
+  partidas: number;
   assistencias: number;
   golContra: number;
 }
