@@ -19,7 +19,7 @@ export const usePartidaStore = create<PartidaState>()(
 
       setJogadoresSelecionados: (jogadores) => {
         const novasEstatisticas = jogadores.reduce((acc, jogador) => {
-          acc[jogador.id] = { gols: 0, assistencias: 0, golContra: 0 };
+          acc[jogador.id] = { gols: 0, assistencias: 0, golContra: 0, partidas: 1 };
           return acc;
         }, {} as PartidaState['estatisticas']);
         

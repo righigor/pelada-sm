@@ -27,6 +27,7 @@ export async function deletePartidaAndRollbackStats(
         gols: increment(-stats.gols),
         assistencias: increment(-stats.assistencias),
         golContra: increment(-stats.golContra),
+        partidas: increment(-1),
       });
     }
     transaction.delete(partidaRef);

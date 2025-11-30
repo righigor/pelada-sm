@@ -20,6 +20,7 @@ export function getListaCompleta(
         nome: nome,
         fotoUrl: info.fotoUrl,
         gols: stats.gols,
+        partidas: stats.partidas,
         assistencias: stats.assistencias,
         golContra: stats.golContra,
       });
