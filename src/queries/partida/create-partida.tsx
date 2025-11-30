@@ -27,6 +27,7 @@ export async function createNewPartida(data: PartidaData): Promise<string> {
         gols: increment(stats.gols),
         assistencias: increment(stats.assistencias),
         golContra: increment(stats.golContra),
+        partidas: increment(1),
       }) as Promise<void>
     );
   }

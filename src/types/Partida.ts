@@ -4,6 +4,7 @@ export interface EstatisticaPartida {
   gols: number;
   assistencias: number;
   golContra: number;
+  partidas: number;
 }
 
 export interface PartidaData {

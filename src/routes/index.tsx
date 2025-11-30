@@ -2,9 +2,11 @@ import App from "@/App";
 import NotFoundPage from "@/components/not-found";
 import AppLayout from "@/layouts/app-layout";
 import AddJogadoresPage from "@/pages/add-jogadores";
+import AdminAllJogadoresPage from "@/pages/admin-all-jogadores";
 import AdminAllPartidasPage from "@/pages/admin-all-partidas";
 import AllJogadoresPage from "@/pages/all-jogadores";
 import AllPartidasPage from "@/pages/all-partidas";
+import DetalhesJogadorPage from "@/pages/detalhes-jogador";
 import DetalhesPartidaPage from "@/pages/detalhes-partida";
 import RegistrarStatsPage from "@/pages/registrar-stats";
 import SelecionarJogadoresPage from "@/pages/selecionar-jogadores";
@@ -16,6 +18,8 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <App /> },
       { path: "/jogadores", element: <AllJogadoresPage /> },
+      {path: "/admin/jogadores", element: <AdminAllJogadoresPage /> },
+      { path: "/jogadores/:id", element: <DetalhesJogadorPage /> },
       { path: "/partidas", element: <AllPartidasPage /> },
       {path: "/admin/partidas", element: <AdminAllPartidasPage /> },
       { path: "/partida/:partidaId", element: <DetalhesPartidaPage /> },
