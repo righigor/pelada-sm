@@ -8,7 +8,7 @@ export default function useUpdatePhotoMutation() {
         mutationFn: ({ jogadorId, file }: { jogadorId: string; file: File }) => 
             updateJogadorPhoto(jogadorId, file),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['jogadoresList'] });
+            queryClient.invalidateQueries({ queryKey: ['jogadores'] });
             toast.success("Foto atualizada com sucesso!");
         },
         onError: (error) => {
