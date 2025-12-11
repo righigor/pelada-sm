@@ -5,22 +5,18 @@ import { useCallback } from "react";
 
 const startVibration = () => {
     if (window.navigator && window.navigator.vibrate) {
-        window.navigator.vibrate([200, 100, 200]); 
+        window.navigator.vibrate([200, 100, 200]);
     } else {
-        console.log("API de Vibração não suportada ou permissão negada.");
+        alert("Jogo encerrado!");
     }
 };
 
 export default function TimerDisplay() {
-  const { formattedTime, isRunning, start, pause, reset, isFinished } = useTimer(10000); // 10 segundos para teste
-
   const handleTimeFinish = useCallback(() => {
         startVibration();
     }, []);
+  const { formattedTime, isRunning, start, pause, reset } = useTimer(5000, handleTimeFinish);
 
-  if (isFinished) {
-    handleTimeFinish();
-  }
 
   return (
     <div className="sticky top-25 z-10 flex items-center justify-center p-3 backdrop-blur-sm rounded-lg shadow-xl mb-4 border max-w-2xl mx-auto gap-2 bg-card/55">
