@@ -15,8 +15,8 @@ const formatTime = (ms: number) => {
 };
 
 export const useTimer = (
-  initialTimeMs: number = SIX_MINUTES_MS,
-  onFinish?: () => void
+  onFinish?: () => void,
+  initialTimeMs: number = SIX_MINUTES_MS
 ) => {
   const [time, setTime] = useState(initialTimeMs);
   const [isRunning, setIsRunning] = useState(false);
@@ -34,7 +34,6 @@ export const useTimer = (
             clearInterval(interval!);
             setIsRunning(false);
             setIsFinished(true);
-            setTime(initialTimeMs);
             if (onFinish) {
               onFinish();
             }

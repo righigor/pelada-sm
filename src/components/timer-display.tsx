@@ -17,10 +17,8 @@ export default function TimerDisplay() {
   const handleTimeFinish = useCallback(() => {
     startVibration();
   }, []);
-  const { formattedTime, isRunning, start, pause, reset } = useTimer(
-    5000,
-    handleTimeFinish
-  );
+  const { formattedTime, isRunning, start, pause, reset } =
+    useTimer(handleTimeFinish);
 
   return (
     <div className="sticky top-25 z-10 flex items-center justify-center p-3 backdrop-blur-sm rounded-lg shadow-xl mb-4 border max-w-2xl mx-auto gap-2 bg-card/55">
