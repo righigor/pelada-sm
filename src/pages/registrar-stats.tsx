@@ -1,5 +1,6 @@
 import { ConfirmSaveStats } from "@/components/confirm-save-stats";
 import JogadorCardStats from "@/components/jogador-card-stats";
+import TimerDisplay from "@/components/timer-display";
 import { useCreatePartida } from "@/hooks/partida/use-create-partida";
 import { usePartidaStore } from "@/stores/usePartidaStore";
 
@@ -46,6 +47,9 @@ export default function RegistrarStatsPage() {
 
   return (
     <div className="container mx-auto px-8 py-12">
+
+      <TimerDisplay />
+
       <div className="mb-4 flex items-center justify-center gap-2">
         <h2 className="text-sm md:text-lg font-semibold">
           Data: {new Date().toLocaleDateString()}
