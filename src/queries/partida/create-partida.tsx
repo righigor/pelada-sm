@@ -1,22 +1,14 @@
 import { db } from "@/firebase/config";
+import type { JogadorUpdate } from "@/types/partida/CreatePartida";
 import type { PartidaKey, PartidaPayload } from "@/types/PartidaStore";
+import { getDestaque } from "@/utils/get-destaque";
 import {
   collection,
   addDoc,
   updateDoc,
   doc,
   increment,
-  FieldValue,
 } from "firebase/firestore";
-
-interface JogadorUpdate {
-  gols?: FieldValue;
-  assistencias?: FieldValue;
-  golContra?: FieldValue;
-  partidas?: FieldValue;
-  updatedAt?: Date;
-  [key: string]: FieldValue | Date | undefined;
-}
 
 export async function createNewPartida(data: PartidaPayload): Promise<string> {
   const partidasRef = collection(db, "partidas");
@@ -40,10 +32,21 @@ export async function createNewPartida(data: PartidaPayload): Promise<string> {
     }
   }
 
+  const artilheiro = getDestaque(data.timeEstatisticas, "gols");
+  const maiorAssistente = getDestaque(data.timeEstatisticas, "assistencias");
+  const bagre = getDestaque(data.timeEstatisticas, "golContra");
+
+  const resumoPartida = {
+    artilheiro,
+    maiorAssistente,
+    bagre,
+  }
+
   const newPartidaRef = await addDoc(partidasRef, {
     dataPartida: data.date,
     local: "Colégio Santa Maria - Nova Suíça",
     timesEstatisticas: data.timeEstatisticas,
+    resumoPartida,
   });
 
   const jogadorPromises: Promise<void>[] = [];
@@ -72,7 +75,6 @@ export async function createNewPartida(data: PartidaPayload): Promise<string> {
 
     jogadorPromises.push(updateDoc(jogadorRef, updates) as Promise<void>);
   }
-
 
   await Promise.all(jogadorPromises);
 

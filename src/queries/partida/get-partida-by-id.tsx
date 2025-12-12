@@ -1,5 +1,6 @@
 import { db } from "@/firebase/config";
-import type { PartidaByIDResponseType } from "@/types/Partida";
+import type { PartidaByIDResponseType } from "@/types/partida/PartidaById";
+
 import { doc, getDoc } from "firebase/firestore";
 
 export default async function getPartidaByID(partidaId: string): Promise<PartidaByIDResponseType> {
