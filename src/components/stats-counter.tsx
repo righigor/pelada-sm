@@ -1,17 +1,17 @@
-import type { CorTime } from "@/types/Partida";
 import { Button } from "./ui/button";
+import type { PartidaKey } from "@/types/PartidaStore";
 
 interface StatsCounterProps {
   jogadorId: string;
   tipo: "gols" | "assistencias" | "golContra";
   label: string;
-  timeCor: CorTime;
+  partidaKey: PartidaKey;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Icone: any;
   cor: string;
   value: number;
   onUpdate: (
-    timeCor: CorTime,
+    partidaKey: PartidaKey,
     jogadorId: string,
     estatisticaKey: "gols" | "assistencias" | "golContra",
     value: number
@@ -22,7 +22,7 @@ export default function StatsCounter({
   jogadorId,
   tipo,
   label,
-  timeCor,
+  partidaKey,
   Icone,
   cor,
   value,
@@ -38,7 +38,7 @@ export default function StatsCounter({
         <Button
           variant="outline"
           size="icon-sm"
-          onClick={() => onUpdate(timeCor, jogadorId, tipo, -1)}
+          onClick={() => onUpdate(partidaKey, jogadorId, tipo, -1)}
           disabled={value === 0}
         >
           -
@@ -47,7 +47,7 @@ export default function StatsCounter({
         <Button
           variant="outline"
           size="icon-sm"
-          onClick={() => onUpdate(timeCor, jogadorId, tipo, 1)}
+          onClick={() => onUpdate(partidaKey, jogadorId, tipo, 1)}
         >
           +
         </Button>

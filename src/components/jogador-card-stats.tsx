@@ -3,22 +3,24 @@ import AvatarLoad from "./avatar-load";
 import { Card } from "./ui/card";
 import StatsCounter from "./stats-counter";
 import { IconBallFootball, IconShoe } from "@tabler/icons-react";
-import type { CorTime, EstatisticaPartida } from "@/types/Partida";
+import type { JogadorEstatisticaStore, PartidaKey } from "@/types/PartidaStore";
 
 
 interface JogadorCardStatsProps {
   jogador: JogadorResponseType;
+  partidaKey: PartidaKey;
   handleUpdate: (
-    timeCor: CorTime,
+    partidaKey: PartidaKey,
     jogadorId: string,
     estatisticaKey: "gols" | "assistencias" | "golContra",
     value: number
   ) => void;
-  estatisticas: { [jogadorId: string]: EstatisticaPartida };
+  estatisticas: JogadorEstatisticaStore | undefined | null;
 }
 
 export default function JogadorCardStats({
   jogador,
+  partidaKey,
   handleUpdate,
   estatisticas,
 }: JogadorCardStatsProps) {
@@ -37,30 +39,32 @@ export default function JogadorCardStats({
       <div className="ml-4 flex flex-wrap gap-2 md:flex md:items-center md:justify-between md:flex-row">
         <StatsCounter
           jogadorId={jogador.id}
-          timeCor={jogador.timeCor}
+          partidaKey={partidaKey}
           tipo="gols"
           label="Gols"
           Icone={IconBallFootball}
           cor="text-white"
-          value={estatisticas[jogador.id]?.gols || 0}
+          value={estatisticas?.gols || 0}
           onUpdate={handleUpdate}
         />
         <StatsCounter
           jogadorId={jogador.id}
+          partidaKey={partidaKey}
           tipo="assistencias"
           label="Assistências"
           Icone={IconShoe}
           cor="text-white"
-          value={estatisticas[jogador.id]?.assistencias || 0}
+          value={estatisticas?.assistencias || 0}
           onUpdate={handleUpdate}
         />
         <StatsCounter
           jogadorId={jogador.id}
+          partidaKey={partidaKey}
           tipo="golContra"
           label="Gol Contra"
           Icone={IconBallFootball}
           cor="text-red-500"
-          value={estatisticas[jogador.id]?.golContra || 0}
+          value={estatisticas?.golContra || 0}
           onUpdate={handleUpdate}
         />
       </div>

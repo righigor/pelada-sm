@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/accordion";
 import type { CorTime } from "@/types/Partida";
 import type { JogadorResponseType } from "@/types/jogadores/Jogador";
+import { useEffect } from "react";
+import type { EstatisticasInputStore, PartidaKey, PartidaPayload } from "@/types/PartidaStore";
 
 type EstatisticaKeyType = "gols" | "assistencias" | "golContra";
 
@@ -23,7 +25,7 @@ const colorEmojiMap: { [key: string]: string } = {
   goleiros: "🧤",
 };
 
-const ALL_PARTIDA_GROUPS: (CorTime | "goleiros")[] = [
+const ALL_PARTIDA_GROUPS: PartidaKey[] = [
   "azul",
   "preto",
   "branco",
@@ -35,8 +37,38 @@ export default function RegistrarStatsPage() {
   const timesSelecionados = usePartidaStore((state) => state.timesSelecionados);
   const estatisticasInput = usePartidaStore((state) => state.estatisticasInput);
   const updateEstatistica = usePartidaStore((state) => state.updateEstatistica);
+  const setEstatisticasInput = usePartidaStore(
+    (state) => state.setEstatisticasInput
+  );
 
   const { mutate, isPending } = useCreatePartida();
+
+  
+  useEffect(() => {
+    if (Object.keys(estatisticasInput || {}).length > 0) return;
+
+    const initialStats = {} as EstatisticasInputStore;
+
+    ALL_PARTIDA_GROUPS.forEach((key) => {
+      const jogadoresDoTime: JogadorResponseType[] =
+        timesSelecionados[key] || [];
+
+      if (jogadoresDoTime.length > 0) {
+        initialStats[key] = { jogadores: {} };
+        jogadoresDoTime.forEach((jogador) => {
+          initialStats[key].jogadores[jogador.id] = {
+            gols: 0,
+            assistencias: 0,
+            golContra: 0,
+            nome: jogador.nome,
+          };
+        });
+      }
+    });
+    
+    setEstatisticasInput(initialStats);
+  }, [timesSelecionados, setEstatisticasInput, estatisticasInput]);
+
 
   if (
     !timesSelecionados ||
@@ -50,24 +82,23 @@ export default function RegistrarStatsPage() {
   }
 
   const handleUpdate = (
-    timeCor: CorTime,
+    partidaKey: PartidaKey,
     jogadorId: string,
     estatisticaKey: EstatisticaKeyType,
     value: number
   ) => {
-    // O valor passado é o incremento/decremento (+1 ou -1)
     const currentStat =
-      estatisticasInput?.[timeCor]?.jogadores[jogadorId]?.[estatisticaKey] || 0;
-    const newStat = Math.max(0, currentStat + value); // Garante que o placar não é negativo
+      estatisticasInput?.[partidaKey]?.jogadores[jogadorId]?.[estatisticaKey] || 0;
+    const newStat = Math.max(0, currentStat + value);
 
-    updateEstatistica(timeCor, jogadorId, estatisticaKey, newStat);
+    updateEstatistica(partidaKey, jogadorId, estatisticaKey, newStat);
   };
 
   const handleSalvarPartida = () => {
-    const data = {
-      date: new Date(),
-      jogadoresEstatisticas: estatisticas,
-    };
+      const data: PartidaPayload = {
+        date: new Date(),
+        timeEstatisticas: estatisticasInput,
+      };
     console.log("Salvar partida:", data);
     mutate(data);
   };
@@ -119,9 +150,12 @@ export default function RegistrarStatsPage() {
                     {jogadoresDoTime.map((jogador) => (
                       <JogadorCardStats
                         key={jogador.id}
+                        partidaKey={key}
                         jogador={jogador}
-                        estatisticas={{}}
-                        handleUpdate={handleUpdate}
+                        estatisticas={estatisticasInput?.[key]?.jogadores[jogador.id]}
+                        handleUpdate={(key, jogadorId, estatisticaKey, value) =>
+                          handleUpdate(key, jogadorId, estatisticaKey, value)
+                        }
                       />
                     ))}
                   </div>

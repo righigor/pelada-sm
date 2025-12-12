@@ -1,10 +1,10 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { CorTime, PartidaActions, PartidaState } from "@/types/Partida";
+import type { EstatisticasInputStore, PartidaActions, PartidaKey, PartidaState, PartidaTimes } from "@/types/PartidaStore";
 
 const initialPartidaState: PartidaState = {
-  timesSelecionados: null,
-  estatisticasInput: null,
+  timesSelecionados: {} as PartidaTimes,
+  estatisticasInput: {} as EstatisticasInputStore,
 };
 
 export const usePartidaStore = create<PartidaState & PartidaActions>()(
@@ -14,7 +14,7 @@ export const usePartidaStore = create<PartidaState & PartidaActions>()(
       setTimesSelecionados: (times) => set({ timesSelecionados: times }),
 
       updateEstatistica: (
-        timeCor: CorTime,
+        partidaKey: PartidaKey,
         jogadorId: string,
         estatisticaKey: "gols" | "assistencias" | "golContra",
         value: number
@@ -22,34 +22,37 @@ export const usePartidaStore = create<PartidaState & PartidaActions>()(
         set((state) => {
           const currentStatsInput = state.estatisticasInput || {};
 
-          // 1. Clonagem e inicialização defensiva do Time
-          const timeStats = currentStatsInput[timeCor] || { jogadores: {} };
-          const jogadorStats = timeStats.jogadores[jogadorId] || {
+          const groupStats = currentStatsInput[partidaKey] || { jogadores: {} };
+          const jogadorStats = groupStats.jogadores[jogadorId] || {
             gols: 0,
             assistencias: 0,
             golContra: 0,
             nome: "",
           };
 
-          // 2. Cria o novo estado de forma imutável
           const novoEstado = {
             ...currentStatsInput,
-            [timeCor]: {
-              ...timeStats,
+            [partidaKey]: {
               jogadores: {
-                ...timeStats.jogadores,
+                ...groupStats.jogadores,
                 [jogadorId]: {
                   ...jogadorStats,
-                  [estatisticaKey]: value, // Aplica o novo valor
+                  [estatisticaKey]: value,
                 },
               },
             },
           };
-          console.log("Atualizando estatísticas:", novoEstado);
-
+          console.log("Atualizando estatística:", {
+            partidaKey,
+            jogadorId,
+            estatisticaKey,
+            value,
+          });
           return { estatisticasInput: novoEstado };
         }),
 
+      setEstatisticasInput: (estatisticas: EstatisticasInputStore) =>
+        set({ estatisticasInput: estatisticas }),
       resetPartida: () => set(initialPartidaState),
     }),
     {
