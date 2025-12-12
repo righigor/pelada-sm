@@ -1,7 +1,10 @@
 import { db } from "@/firebase/config";
 import type { JogadorUpdate } from "@/types/partida/CreatePartida";
 import type { PartidaKey, PartidaPayload } from "@/types/PartidaStore";
+import { getAllGols } from "@/utils/get-all-gols";
 import { getDestaque } from "@/utils/get-destaque";
+import { getMvps } from "@/utils/get-mvp";
+import getTotalJogadores from "@/utils/get-total-jogadores";
 import {
   collection,
   addDoc,
@@ -35,12 +38,18 @@ export async function createNewPartida(data: PartidaPayload): Promise<string> {
   const artilheiro = getDestaque(data.timeEstatisticas, "gols");
   const maiorAssistente = getDestaque(data.timeEstatisticas, "assistencias");
   const bagre = getDestaque(data.timeEstatisticas, "golContra");
-
+  const golsTotais = getAllGols(data.timeEstatisticas);
+  const jogadoresTotais = getTotalJogadores(data.timeEstatisticas);
+  const { mvpGeral, mvpPorTime } = getMvps(data.timeEstatisticas);
   const resumoPartida = {
     artilheiro,
     maiorAssistente,
     bagre,
-  }
+    golsTotais,
+    jogadoresTotais,
+    mvpGeral,
+    mvpPorTime,
+  };
 
   const newPartidaRef = await addDoc(partidasRef, {
     dataPartida: data.date,

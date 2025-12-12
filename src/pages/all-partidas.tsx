@@ -4,6 +4,7 @@ import { useGetAllPartidas } from "@/hooks/partida/use-get-all-partidas";
 
 export default function AllPartidasPage() {
   const { data, isPending } = useGetAllPartidas();
+  console.log(data);
 
   return (
     <div className="flex flex-col mt-8 container mx-auto px-8 py-8">
@@ -12,8 +13,8 @@ export default function AllPartidasPage() {
       </h2>
       <section>
         {isPending && <SkeletonCard />}
-        {data?.map((partida) => (
-          <PartidaCard key={partida.id} partida={partida} />
+        {data?.map((partida, i) => (
+          <PartidaCard key={i} partida={partida} />
         ))}
       </section>
     </div>

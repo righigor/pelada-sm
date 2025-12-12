@@ -1,11 +1,16 @@
-import type { JogadoresEstatistica } from "@/types/jogadores/Jogador";
+import type { EstatisticasInputStore } from "@/types/PartidaStore";
 
-export function getAllGols(estatisticas: JogadoresEstatistica): number {
-    let totalGols = 0;
+export function getAllGols(estatisticasInput: EstatisticasInputStore): number {
+  let totalGols = 0;
 
-    for (const stats of Object.values(estatisticas)) {
-        totalGols += stats.gols;
+  for (const groupKey in estatisticasInput) {
+    const grupoStats =
+      estatisticasInput[groupKey as keyof EstatisticasInputStore];
+
+    for (const stats of Object.values(grupoStats.jogadores)) {
+      totalGols += stats.gols;
     }
+  }
 
-    return totalGols;
+  return totalGols;
 }

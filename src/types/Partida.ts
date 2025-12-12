@@ -1,5 +1,3 @@
-import type { Timestamp } from "firebase/firestore";
-
 export interface EstatisticaPartida {
   gols: number;
   assistencias: number;
@@ -23,12 +21,6 @@ export interface PartidaData {
   }
 }
 
-export interface PartidaByIDResponseType {
-  id: string;
-  dataPartida: Timestamp;
-  local: string;
-  jogadoresEstatisticas: { [jogadorId: string]: EstatisticaPartida };
-}
 
 export const CORES_TIMES = ["azul", "preto", "branco", "vermelho"] as const;
 
