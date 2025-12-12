@@ -5,8 +5,8 @@ import { toast } from "sonner";
 export default function useUpdatePhotoMutation() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ jogadorId, file }: { jogadorId: string; file: File }) => 
-            updateJogadorPhoto(jogadorId, file),
+        mutationFn: ({ jogadorId, jogadorNome, file }: { jogadorId: string; jogadorNome: string; file: File }) => 
+            updateJogadorPhoto(jogadorId, jogadorNome, file),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['jogadoresList'] });
             toast.success("Foto atualizada com sucesso!");
