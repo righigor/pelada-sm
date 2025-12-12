@@ -3,14 +3,15 @@ import AvatarLoad from "./avatar-load";
 import { Card } from "./ui/card";
 import StatsCounter from "./stats-counter";
 import { IconBallFootball, IconShoe } from "@tabler/icons-react";
-import type { EstatisticaPartida } from "@/types/Partida";
+import type { CorTime, EstatisticaPartida } from "@/types/Partida";
 
 
 interface JogadorCardStatsProps {
   jogador: JogadorResponseType;
   handleUpdate: (
+    timeCor: CorTime,
     jogadorId: string,
-    tipo: "gols" | "assistencias" | "golContra",
+    estatisticaKey: "gols" | "assistencias" | "golContra",
     value: number
   ) => void;
   estatisticas: { [jogadorId: string]: EstatisticaPartida };
@@ -36,6 +37,7 @@ export default function JogadorCardStats({
       <div className="ml-4 flex flex-wrap gap-2 md:flex md:items-center md:justify-between md:flex-row">
         <StatsCounter
           jogadorId={jogador.id}
+          timeCor={jogador.timeCor}
           tipo="gols"
           label="Gols"
           Icone={IconBallFootball}

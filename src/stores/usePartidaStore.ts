@@ -1,49 +1,59 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import type { JogadorResponseType } from '../types/jogadores/Jogador';
-import type { EstatisticaPartida } from '@/types/Partida';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import type { CorTime, PartidaActions, PartidaState } from "@/types/Partida";
 
-interface PartidaState {
-  jogadoresSelecionados: JogadorResponseType[];
-  estatisticas: { [jogadorId: string]: EstatisticaPartida };
-  setJogadoresSelecionados: (jogadores: JogadorResponseType[]) => void;
-  updateEstatistica: (jogadorId: string, tipo: keyof EstatisticaPartida, valor: number) => void;
-  clearPartida: () => void;
-}
+const initialPartidaState: PartidaState = {
+  timesSelecionados: null,
+  estatisticasInput: null,
+};
 
-export const usePartidaStore = create<PartidaState>()(
+export const usePartidaStore = create<PartidaState & PartidaActions>()(
   persist(
     (set) => ({
-      jogadoresSelecionados: [],
-      estatisticas: {},
+      ...initialPartidaState,
+      setTimesSelecionados: (times) => set({ timesSelecionados: times }),
 
-      setJogadoresSelecionados: (jogadores) => {
-        const novasEstatisticas = jogadores.reduce((acc, jogador) => {
-          acc[jogador.id] = { gols: 0, assistencias: 0, golContra: 0, partidas: 1 };
-          return acc;
-        }, {} as PartidaState['estatisticas']);
-        
-        set({ 
-          jogadoresSelecionados: jogadores, 
-          estatisticas: novasEstatisticas 
-        });
-      },
+      updateEstatistica: (
+        timeCor: CorTime,
+        jogadorId: string,
+        estatisticaKey: "gols" | "assistencias" | "golContra",
+        value: number
+      ) =>
+        set((state) => {
+          const currentStatsInput = state.estatisticasInput || {};
 
-      updateEstatistica: (jogadorId, tipo, valor) =>
-        set((state) => ({
-          estatisticas: {
-            ...state.estatisticas,
-            [jogadorId]: {
-              ...state.estatisticas[jogadorId],
-              [tipo]: valor,
+          // 1. Clonagem e inicialização defensiva do Time
+          const timeStats = currentStatsInput[timeCor] || { jogadores: {} };
+          const jogadorStats = timeStats.jogadores[jogadorId] || {
+            gols: 0,
+            assistencias: 0,
+            golContra: 0,
+            nome: "",
+          };
+
+          // 2. Cria o novo estado de forma imutável
+          const novoEstado = {
+            ...currentStatsInput,
+            [timeCor]: {
+              ...timeStats,
+              jogadores: {
+                ...timeStats.jogadores,
+                [jogadorId]: {
+                  ...jogadorStats,
+                  [estatisticaKey]: value, // Aplica o novo valor
+                },
+              },
             },
-          },
-        })),
+          };
+          console.log("Atualizando estatísticas:", novoEstado);
 
-      clearPartida: () => set({ jogadoresSelecionados: [], estatisticas: {} }),
+          return { estatisticasInput: novoEstado };
+        }),
+
+      resetPartida: () => set(initialPartidaState),
     }),
     {
-      name: 'partida-em-andamento',
+      name: "partida-em-andamento",
       storage: createJSONStorage(() => localStorage),
     }
   )
