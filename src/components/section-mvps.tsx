@@ -1,6 +1,7 @@
 import MvpCard from "./mvp-card";
 import { IconBallFootball, IconShoe, IconFish } from "@tabler/icons-react";
 import type { DestaquePartida } from "@/types/destaques/Destaque";
+import { Trophy } from "lucide-react";
 
 interface SectionMvpsProps {
   artilheiro: DestaquePartida | null;
@@ -9,6 +10,8 @@ interface SectionMvpsProps {
   assistenteFotoUrl?: string | null;
   bagre: DestaquePartida | null;
   bagreFotoUrl?: string | null;
+  mvp?: DestaquePartida | null;
+  mvpFotoUrl?: string | null;
 }
 
 export default function SectionMvps({
@@ -18,13 +21,24 @@ export default function SectionMvps({
   assistenteFotoUrl,
   bagre,
   bagreFotoUrl,
+  mvp,
+  mvpFotoUrl,
 }: SectionMvpsProps) {
 
 
   return (
     <section className="mx-auto border bg-blue-950/35 p-4 rounded-lg mb-8 flex flex-col gap-6 items-center">
       <h3 className="text-xl font-semibold">Destaques da pelada</h3>
-      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 ">
+      <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-2 ">
+        <MvpCard
+          title="MVP da Pelada"
+          icon={<Trophy />}
+          name={mvp?.nome ?? "N/A"}
+          fotoUrl={mvpFotoUrl ?? null}
+          stat={mvp?.stat ?? null}
+          type="mvp"
+          fallbackMessage="Confira os destaques abaixo"
+        />
         <MvpCard
           title="Artilheiro"
           icon={<IconBallFootball />}

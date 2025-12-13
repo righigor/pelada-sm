@@ -30,10 +30,10 @@ export default function PartidaCard({ partida }: PartidaCardProps) {
         {partida.resumoPartida.artilheiro ? (
           <div className="text-xs md:text-lg flex items-center flex-col gap-2 md:flex-row">
             <TrophyIcon className="inline-block size-5 md:w-5 md:h-5 mr-1 text-yellow-500" />
-            <span className="md:font-semibold">{partida.resumoPartida.artilheiro?.nome} ({partida.resumoPartida.artilheiro?.stat} gols)</span>
+            <span className="md:font-semibold">{`MVP: ${partida.resumoPartida.mvpGeral?.nome}`}</span>
           </div>
         ) : (
-          <p className="text-xs md:text-lg">Sem artilheiro</p>
+          <p className="text-xs md:text-lg">Ninguém foi eleito MVP</p>
         )}
       </div>
     </Card>

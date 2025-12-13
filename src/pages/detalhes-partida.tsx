@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { getListaCompleta } from "@/utils/get-lista-completa";
 import LoadingSection from "@/components/loading-section";
 import ErrorSection from "@/components/error-section";
+import ListByTeams from "@/components/list-by-teams";
 
 export default function DetalhesPartidaPage() {
   const { partidaId } = useParams<{ partidaId: string }>();
@@ -27,15 +28,16 @@ export default function DetalhesPartidaPage() {
   if (!jogadoresInfos || !partida) return null;
 
 
-  // const chartData = getGolsChartData(
-  //   partida.jogadoresEstatisticas,
-  //   jogadoresNames
-  // );
+    const chartData = getGolsChartData(
+      partida.timesEstatisticas,
+      jogadoresInfos
+    );
 
-  // const listaEstatisticas = getListaCompleta(
-  //   partida.jogadoresEstatisticas,
-  //   jogadoresInfos
-  // );
+  const listaEstatisticas = getListaCompleta(
+    partida.timesEstatisticas,
+    jogadoresInfos
+  );
+
 
   return (
     <div className="mt-8 container mx-auto px-8 py-8">
@@ -71,13 +73,17 @@ export default function DetalhesPartidaPage() {
         assistenteFotoUrl={jogadoresInfos[partida.resumoPartida.maiorAssistente?.jogadorId ?? ""]?.fotoUrl ?? null}
         bagre={partida.resumoPartida.bagre}
         bagreFotoUrl={jogadoresInfos[partida.resumoPartida.bagre?.jogadorId ?? ""]?.fotoUrl ?? null}
+        mvp={partida.resumoPartida.mvpGeral}
+        mvpFotoUrl={jogadoresInfos[partida.resumoPartida.mvpGeral?.jogadorId ?? ""]?.fotoUrl ?? null}
       />
 
-      {/* <GolsChart data={chartData} />
+      <GolsChart data={chartData} />
+
+      <ListByTeams estatisticas={partida.timesEstatisticas} teamsMvps={partida.resumoPartida.mvpPorTime} />
 
       <ListaJogadoresPartida
         listaEstatisticas={listaEstatisticas}
-      /> */}
+      />
 
     </div>
   );

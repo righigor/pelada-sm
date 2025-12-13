@@ -1,5 +1,3 @@
-import type { GetAllPartidaResponseType } from "../Partida";
-
 export type JogadorType = {
   id: string;
   nome: string;
@@ -38,8 +36,6 @@ export type JogadorNameMap = {
   };
 };
 
-export type JogadoresEstatistica =
-  GetAllPartidaResponseType["jogadoresEstatisticas"];
 
 export interface JogadorEstatisticaCompleta {
   id: string;
