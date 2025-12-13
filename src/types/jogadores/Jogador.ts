@@ -1,3 +1,5 @@
+import type { PartidaKey } from "../PartidaStore";
+
 export type JogadorType = {
   id: string;
   nome: string;
@@ -12,6 +14,7 @@ export interface FirestoreTimestamp {
   nanoseconds: number;
 }
 
+
 export interface JogadorResponseType {
   id: string;
   nome: string;
@@ -20,6 +23,8 @@ export interface JogadorResponseType {
   assistencias: number;
   golContra: number;
   partidas: number;
+  times: Partial<Record<PartidaKey, number>>;
+  companheiros: Record<string, number>;
   createdAt?: FirestoreTimestamp;
   updatedAt?: FirestoreTimestamp;
 }
