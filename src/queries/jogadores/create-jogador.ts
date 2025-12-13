@@ -16,7 +16,7 @@ export async function createJogador(data: CreateJogadorRequest): Promise<string>
     fotoUrl: imgUrl,
     gols: 0,
     assistencias: 0,
-    golsContra: 0,
+    golContra: 0,
     partidas: 0,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),

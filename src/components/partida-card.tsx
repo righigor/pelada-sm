@@ -1,22 +1,16 @@
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import type { GetAllPartidaResponseType } from "@/types/Partida";
 import { Avatar, AvatarImage } from "./ui/avatar";
-import useGetAllNamesJogadores from "@/hooks/jogadores/use-get-names-jogadores";
-import getArtilheiro from "@/utils/get-artilheiro";
 import { TrophyIcon } from 'lucide-react'
 import { formatDate } from "@/utils/format-date";
+import type { PartidaByIDResponseType } from "@/types/partida/PartidaById";
 
 interface PartidaCardProps {
-  partida: GetAllPartidaResponseType;
+  partida: PartidaByIDResponseType;
 }
 
 export default function PartidaCard({ partida }: PartidaCardProps) {
   const navigate = useNavigate();
-  const {data: jogadoresNames } = useGetAllNamesJogadores();
-
-  const artilheiro = getArtilheiro(partida.jogadoresEstatisticas);
-  const artilheiroName = artilheiro && jogadoresNames ? jogadoresNames[artilheiro.jogadorId] : null;
 
   return (
     <Card
@@ -33,13 +27,13 @@ export default function PartidaCard({ partida }: PartidaCardProps) {
       </div>
 
       <div>
-        {artilheiroName ? (
+        {partida.resumoPartida.artilheiro ? (
           <div className="text-xs md:text-lg flex items-center flex-col gap-2 md:flex-row">
             <TrophyIcon className="inline-block size-5 md:w-5 md:h-5 mr-1 text-yellow-500" />
-            <span className="md:font-semibold">{artilheiroName.nome} ({artilheiro?.stat} gols)</span>
+            <span className="md:font-semibold">{`MVP: ${partida.resumoPartida.mvpGeral?.nome}`}</span>
           </div>
         ) : (
-          <p className="text-xs md:text-lg">Sem artilheiro</p>
+          <p className="text-xs md:text-lg">Ninguém foi eleito MVP</p>
         )}
       </div>
     </Card>

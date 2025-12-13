@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useGetJogadorDetails } from "@/hooks/jogadores/use-get-jogador-by-id";
 import JogadorHeaderDetalhes from "@/components/jogador-header-detalhes";
+import JogadorTimesDetalhes from "@/components/jogador-times-detalhes";
+import CompanheirosDeTime from "@/components/companheiros-de-time";
 
 
 export default function DetalhesJogadorPage() {
@@ -24,8 +26,10 @@ export default function DetalhesJogadorPage() {
   }
 
   return (
-    <div className="container mx-auto p-8">
+    <div className="container mx-auto p-8 space-y-8">
       <JogadorHeaderDetalhes jogador={jogador} />
+      <JogadorTimesDetalhes jogador={jogador} />
+      <CompanheirosDeTime jogador={jogador} />
     </div>
   );
 }

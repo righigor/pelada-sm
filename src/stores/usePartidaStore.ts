@@ -1,49 +1,62 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import type { JogadorResponseType } from '../types/jogadores/Jogador';
-import type { EstatisticaPartida } from '@/types/Partida';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import type { EstatisticasInputStore, PartidaActions, PartidaKey, PartidaState, PartidaTimes } from "@/types/PartidaStore";
 
-interface PartidaState {
-  jogadoresSelecionados: JogadorResponseType[];
-  estatisticas: { [jogadorId: string]: EstatisticaPartida };
-  setJogadoresSelecionados: (jogadores: JogadorResponseType[]) => void;
-  updateEstatistica: (jogadorId: string, tipo: keyof EstatisticaPartida, valor: number) => void;
-  clearPartida: () => void;
-}
+const initialPartidaState: PartidaState = {
+  timesSelecionados: {} as PartidaTimes,
+  estatisticasInput: {} as EstatisticasInputStore,
+};
 
-export const usePartidaStore = create<PartidaState>()(
+export const usePartidaStore = create<PartidaState & PartidaActions>()(
   persist(
     (set) => ({
-      jogadoresSelecionados: [],
-      estatisticas: {},
+      ...initialPartidaState,
+      setTimesSelecionados: (times) => set({ timesSelecionados: times }),
 
-      setJogadoresSelecionados: (jogadores) => {
-        const novasEstatisticas = jogadores.reduce((acc, jogador) => {
-          acc[jogador.id] = { gols: 0, assistencias: 0, golContra: 0, partidas: 1 };
-          return acc;
-        }, {} as PartidaState['estatisticas']);
-        
-        set({ 
-          jogadoresSelecionados: jogadores, 
-          estatisticas: novasEstatisticas 
-        });
-      },
+      updateEstatistica: (
+        partidaKey: PartidaKey,
+        jogadorId: string,
+        estatisticaKey: "gols" | "assistencias" | "golContra",
+        value: number
+      ) =>
+        set((state) => {
+          const currentStatsInput = state.estatisticasInput || {};
 
-      updateEstatistica: (jogadorId, tipo, valor) =>
-        set((state) => ({
-          estatisticas: {
-            ...state.estatisticas,
-            [jogadorId]: {
-              ...state.estatisticas[jogadorId],
-              [tipo]: valor,
+          const groupStats = currentStatsInput[partidaKey] || { jogadores: {} };
+          const jogadorStats = groupStats.jogadores[jogadorId] || {
+            gols: 0,
+            assistencias: 0,
+            golContra: 0,
+            nome: "",
+          };
+
+          const novoEstado = {
+            ...currentStatsInput,
+            [partidaKey]: {
+              jogadores: {
+                ...groupStats.jogadores,
+                [jogadorId]: {
+                  ...jogadorStats,
+                  [estatisticaKey]: value,
+                },
+              },
             },
-          },
-        })),
+          };
+          console.log("Atualizando estatística:", {
+            partidaKey,
+            jogadorId,
+            estatisticaKey,
+            value,
+          });
+          return { estatisticasInput: novoEstado };
+        }),
 
-      clearPartida: () => set({ jogadoresSelecionados: [], estatisticas: {} }),
+      setEstatisticasInput: (estatisticas: EstatisticasInputStore) =>
+        set({ estatisticasInput: estatisticas }),
+      resetPartida: () => set(initialPartidaState),
     }),
     {
-      name: 'partida-em-andamento',
+      name: "partida-em-andamento",
       storage: createJSONStorage(() => localStorage),
     }
   )

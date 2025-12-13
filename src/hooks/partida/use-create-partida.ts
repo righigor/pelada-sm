@@ -3,24 +3,24 @@ import { usePartidaStore } from "../../stores/usePartidaStore";
 import { createNewPartida } from "@/queries/partida/create-partida";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import type { PartidaData } from "@/types/Partida";
+import type { PartidaPayload } from "@/types/PartidaStore";
 
 export const useCreatePartida = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const estatisticas = usePartidaStore((state) => state.estatisticas);
-  const clearPartida = usePartidaStore((state) => state.clearPartida);
+  const estatisticasInput = usePartidaStore((state) => state.estatisticasInput);
+  const resetPartida = usePartidaStore((state) => state.resetPartida);
 
   return useMutation({
-    mutationFn: async (dadosParaSalvar: PartidaData) => {
-      if (Object.keys(estatisticas).length === 0) {
+    mutationFn: async (dadosParaSalvar: PartidaPayload) => {
+      if (Object.keys(estatisticasInput).length === 0) {
         throw new Error("Nenhuma estatística registrada.");
       }
       return createNewPartida(dadosParaSalvar);
     },
 
     onSuccess: (partidaId) => {
-      clearPartida();
+      resetPartida();
       queryClient.invalidateQueries({ queryKey: ["historicoPartidas"] });
       queryClient.invalidateQueries({ queryKey: ["todosJogadores"] });
       toast.success("Partida registrada com sucesso!");

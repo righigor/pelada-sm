@@ -1,5 +1,3 @@
-import type { Timestamp } from "firebase/firestore";
-
 export interface EstatisticaPartida {
   gols: number;
   assistencias: number;
@@ -7,21 +5,25 @@ export interface EstatisticaPartida {
   partidas: number;
 }
 
+export type EstatisticaKeyType = "gols" | "assistencias" | "golContra";
+
+export type JogadoresStatsPorTime = {
+  [jogadorId: string]: EstatisticaPartida;
+}
+
 export interface PartidaData {
   date: Date;
-  jogadoresEstatisticas: { [jogadorId: string]: EstatisticaPartida };
+  goleiros?: string[];
+  times: {
+    [key in CorTime]: {
+      jogadores: JogadoresStatsPorTime;
+    };
+  }
 }
 
-export interface GetAllPartidaResponseType {
-  id: string;
-  dataPartida: Timestamp;
-  local: string;
-  jogadoresEstatisticas: { [jogadorId: string]: EstatisticaPartida };
-}
 
-export interface PartidaByIDResponseType {
-  id: string;
-  dataPartida: Timestamp;
-  local: string;
-  jogadoresEstatisticas: { [jogadorId: string]: EstatisticaPartida };
-}
+export const CORES_TIMES = ["azul", "preto", "branco", "vermelho"] as const;
+
+export type CorTime = typeof CORES_TIMES[number] | "goleiros";
+
+export const JOGADORES_POR_TIME = 4;

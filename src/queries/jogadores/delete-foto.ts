@@ -8,8 +8,8 @@ export async function deleteFoto(photoUrl: string): Promise<void> {
     try {
         const fileRef = ref(storage, photoUrl);
         await deleteObject(fileRef);
-        toast.success(`Foto excluída do Storage: ${photoUrl}`);
+        toast.success(`Foto excluída do Storage com sucesso.`);
     } catch (error) {
-        toast.error(`Aviso: Falha ao excluir a foto (${photoUrl}). ${error}`);
+        toast.error(`Aviso: Falha ao excluir a foto. ${error}`);
     }
 }

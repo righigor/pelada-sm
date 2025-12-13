@@ -23,7 +23,7 @@ export default function AdminJogadorCard({ jogador }: AdminJogadorCardProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedFile) {
-      mutate({ jogadorId: jogador.id, file: selectedFile });
+      mutate({ jogadorId: jogador.id, jogadorNome: jogador.nome, file: selectedFile });
     } else {
       alert("Selecione um arquivo de foto.");
     }

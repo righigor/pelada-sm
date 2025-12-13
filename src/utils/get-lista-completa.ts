@@ -1,29 +1,41 @@
+import type { EstatisticasInputStore } from "@/types/PartidaStore";
 import type {
-  JogadoresEstatistica,
-  JogadorEstatisticaCompleta,
   JogadorNameMap,
+  JogadorResponseType,
 } from "@/types/jogadores/Jogador";
 
+
 export function getListaCompleta(
-  estatisticas: JogadoresEstatistica,
+  estatisticasInput: EstatisticasInputStore | undefined,
   jogadorInfo: JogadorNameMap
-): JogadorEstatisticaCompleta[] {
-  const lista: JogadorEstatisticaCompleta[] = [];
+): JogadorResponseType[] {
+  const lista: JogadorResponseType[] = [];
 
-  for (const [jogadorId, stats] of Object.entries(estatisticas)) {
-    const info = jogadorInfo[jogadorId];
-    const nome = info ? info.nome : "Jogador Desconhecido";
+  if (!estatisticasInput) {
+    return [];
+  }
 
-    if (info) {
-      lista.push({
-        id: jogadorId,
-        nome: nome,
-        fotoUrl: info.fotoUrl,
-        gols: stats.gols,
-        partidas: stats.partidas,
-        assistencias: stats.assistencias,
-        golContra: stats.golContra,
-      });
+
+  for (const groupKey in estatisticasInput) {
+    const grupoStats =
+      estatisticasInput[groupKey as keyof EstatisticasInputStore];
+
+    for (const [jogadorId, stats] of Object.entries(grupoStats.jogadores)) {
+      const info = jogadorInfo[jogadorId];
+
+      if (info) {
+        lista.push({
+          id: jogadorId,
+          nome: info.nome,
+          fotoUrl: info.fotoUrl,
+          gols: stats.gols || 0,
+          assistencias: stats.assistencias || 0,
+          golContra: stats.golContra || 0,
+          partidas: 1,
+          times: {},
+          companheiros: {},
+        });
+      }
     }
   }
 

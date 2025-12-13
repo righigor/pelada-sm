@@ -1,6 +1,11 @@
 import { db } from "@/firebase/config";
 import { doc, increment, runTransaction } from "firebase/firestore";
-import type { EstatisticaPartida } from "@/types/Partida";
+import type { EstatisticasInputStore, PartidaKey } from "@/types/PartidaStore";
+import type { JogadorUpdate } from "@/types/partida/CreatePartida";
+
+interface PartidaDataRollback {
+  timesEstatisticas: EstatisticasInputStore
+}
 
 export async function deletePartidaAndRollbackStats(
   partidaId: string
@@ -14,21 +19,47 @@ export async function deletePartidaAndRollbackStats(
       throw new Error("Partida não encontrada para o ID fornecido.");
     }
 
-    const partidaData = partidaSnap.data() as {
-      jogadoresEstatisticas: { [jogadorId: string]: EstatisticaPartida };
-    };
+    const partidaData = partidaSnap.data() as PartidaDataRollback;
 
-    const statsToRevert = partidaData.jogadoresEstatisticas;
+    const estatisticasPartida = partidaData.timesEstatisticas;
 
-    for (const [jogadorId, stats] of Object.entries(statsToRevert)) {
+    const jogadorGrupoMap: Record<string, PartidaKey> = {};
+    const grupoJogadoresMap: Record<PartidaKey, string[]> = {
+        azul: [], preto: [], branco: [], vermelho: [], goleiros: [],
+    } as Record<PartidaKey, string[]>;
+
+    for (const groupKey in estatisticasPartida) {
+        const key = groupKey as PartidaKey;
+        const grupoStats = estatisticasPartida[key];
+
+        for (const jogadorId of Object.keys(grupoStats.jogadores)) {
+            jogadorGrupoMap[jogadorId] = key;
+            grupoJogadoresMap[key].push(jogadorId);
+        }
+    }
+
+    for (const [jogadorId, grupoKey] of Object.entries(jogadorGrupoMap)) {
+      const grupoStats = estatisticasPartida[grupoKey];
+      const stats = grupoStats.jogadores[jogadorId];
       const jogadorRef = doc(db, "jogadores", jogadorId);
 
-      transaction.update(jogadorRef, {
+      const updates: JogadorUpdate = {
         gols: increment(-stats.gols),
         assistencias: increment(-stats.assistencias),
         golContra: increment(-stats.golContra),
         partidas: increment(-1),
-      });
+
+        [`times.${grupoKey}`]: increment(-1),
+      };
+
+      const companheirosIds = grupoJogadoresMap[grupoKey].filter(
+        (id) => id !== jogadorId
+      );
+
+      for (const companheiroId of companheirosIds) {
+        updates[`companheiros.${companheiroId}`] = increment(-1);
+      }
+      transaction.update(jogadorRef, updates);
     }
     transaction.delete(partidaRef);
   });

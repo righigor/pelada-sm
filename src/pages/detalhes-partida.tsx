@@ -4,21 +4,18 @@ import SectionMvps from "@/components/section-mvps";
 import useGetAllNamesJogadores from "@/hooks/jogadores/use-get-names-jogadores";
 import useGetPartidaByID from "@/hooks/partida/use-get-partida-by-id";
 import { formatDate } from "@/utils/format-date";
-import { getAllGols } from "@/utils/get-all-gols";
-import getArtilheiro from "@/utils/get-artilheiro";
-import { getAssistente } from "@/utils/get-assistente";
-import { getBagre } from "@/utils/get-bagre";
 import { getGolsChartData } from "@/utils/get-gols-chart-data";
 import { IconBallFootball } from "@tabler/icons-react";
 import { useParams } from "react-router-dom";
 import { getListaCompleta } from "@/utils/get-lista-completa";
 import LoadingSection from "@/components/loading-section";
 import ErrorSection from "@/components/error-section";
+import ListByTeams from "@/components/list-by-teams";
 
 export default function DetalhesPartidaPage() {
   const { partidaId } = useParams<{ partidaId: string }>();
   const { data: partida, error, isLoading } = useGetPartidaByID(partidaId!);
-  const { data: jogadoresNames } = useGetAllNamesJogadores();
+  const { data: jogadoresInfos } = useGetAllNamesJogadores();
 
   if (isLoading) {
     return <LoadingSection />;
@@ -28,27 +25,19 @@ export default function DetalhesPartidaPage() {
     return <ErrorSection />;
   }
 
-  if (!jogadoresNames || !partida) return null;
+  if (!jogadoresInfos || !partida) return null;
 
-  const artilheiro = getArtilheiro(partida.jogadoresEstatisticas);
-  const artilheiroName =
-    artilheiro && jogadoresNames ? jogadoresNames[artilheiro.jogadorId] : null;
-  const assistente = getAssistente(partida.jogadoresEstatisticas);
-  const assistenteName =
-    assistente && jogadoresNames ? jogadoresNames[assistente.jogadorId] : null;
-  const bagre = getBagre(partida.jogadoresEstatisticas);
-  const bagreName =
-    bagre && jogadoresNames ? jogadoresNames[bagre.jogadorId] : null;
 
-  const chartData = getGolsChartData(
-    partida.jogadoresEstatisticas,
-    jogadoresNames
-  );
+    const chartData = getGolsChartData(
+      partida.timesEstatisticas,
+      jogadoresInfos
+    );
 
   const listaEstatisticas = getListaCompleta(
-    partida.jogadoresEstatisticas,
-    jogadoresNames
+    partida.timesEstatisticas,
+    jogadoresInfos
   );
+
 
   return (
     <div className="mt-8 container mx-auto px-8 py-8">
@@ -65,28 +54,32 @@ export default function DetalhesPartidaPage() {
           <div className="text-center">
             <p className="text-3xl font-bold flex items-center justify-center gap-1">
               <IconBallFootball size={24} />
-              {getAllGols(partida.jogadoresEstatisticas)}
+              {partida.resumoPartida.golsTotais}
             </p>
             <p className="text-sm text-gray-500">Gols Totais</p>
           </div>
           <div className="text-center">
             <p className="text-3xl font-bold">
-              {Object.keys(partida.jogadoresEstatisticas).length}
+              {partida.resumoPartida.jogadoresTotais}
             </p>
             <p className="text-sm text-gray-500">Jogadores</p>
           </div>
         </div>
       </header>
       <SectionMvps
-        artilheiro={artilheiro}
-        artilheiroName={artilheiroName}
-        assistente={assistente}
-        assistenteName={assistenteName}
-        bagre={bagre}
-        bagreName={bagreName}
+        artilheiro={partida.resumoPartida.artilheiro}
+        artilheiroFotoUrl={jogadoresInfos[partida.resumoPartida.artilheiro?.jogadorId ?? ""]?.fotoUrl ?? null}
+        assistente={partida.resumoPartida.maiorAssistente}
+        assistenteFotoUrl={jogadoresInfos[partida.resumoPartida.maiorAssistente?.jogadorId ?? ""]?.fotoUrl ?? null}
+        bagre={partida.resumoPartida.bagre}
+        bagreFotoUrl={jogadoresInfos[partida.resumoPartida.bagre?.jogadorId ?? ""]?.fotoUrl ?? null}
+        mvp={partida.resumoPartida.mvpGeral}
+        mvpFotoUrl={jogadoresInfos[partida.resumoPartida.mvpGeral?.jogadorId ?? ""]?.fotoUrl ?? null}
       />
 
       <GolsChart data={chartData} />
+
+      <ListByTeams estatisticas={partida.timesEstatisticas} teamsMvps={partida.resumoPartida.mvpPorTime} />
 
       <ListaJogadoresPartida
         listaEstatisticas={listaEstatisticas}

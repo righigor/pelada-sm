@@ -1,4 +1,4 @@
-import type { GetAllPartidaResponseType } from "../Partida";
+import type { PartidaKey } from "../PartidaStore";
 
 export type JogadorType = {
   id: string;
@@ -14,6 +14,7 @@ export interface FirestoreTimestamp {
   nanoseconds: number;
 }
 
+
 export interface JogadorResponseType {
   id: string;
   nome: string;
@@ -22,8 +23,8 @@ export interface JogadorResponseType {
   assistencias: number;
   golContra: number;
   partidas: number;
-  createdAt?: FirestoreTimestamp;
-  updatedAt?: FirestoreTimestamp;
+  times: Partial<Record<PartidaKey, number>>;
+  companheiros: Record<string, number>;
 }
 
 export interface JogadorAvatarType {
@@ -38,8 +39,6 @@ export type JogadorNameMap = {
   };
 };
 
-export type JogadoresEstatistica =
-  GetAllPartidaResponseType["jogadoresEstatisticas"];
 
 export interface JogadorEstatisticaCompleta {
   id: string;

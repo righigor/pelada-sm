@@ -1,30 +1,31 @@
-import type {
-  JogadoresEstatistica,
-  JogadorNameMap,
-} from "@/types/jogadores/Jogador";
+import type { JogadorNameMap } from "@/types/jogadores/Jogador";
+import type { EstatisticasInputStore } from "@/types/PartidaStore";
 
 export interface ChartData {
   name: string;
   Gols: number;
-  fotoUrl: string | null;
   jogadorId: string;
 }
 
 export function getGolsChartData(
-  estatisticas: JogadoresEstatistica,
+  estatisticasInput: EstatisticasInputStore,
   jogadorInfo: JogadorNameMap
 ): ChartData[] {
   const data: ChartData[] = [];
 
-  for (const [jogadorId, stats] of Object.entries(estatisticas)) {
-    const jogador = jogadorInfo[jogadorId];
+  for (const groupKey in estatisticasInput) {
+    const grupoStats =
+      estatisticasInput[groupKey as keyof EstatisticasInputStore];
 
-    data.push({
-      name: jogador ? jogador.nome : "Desconhecido",
-      Gols: stats.gols || 0,
-      fotoUrl: jogador ? jogador.fotoUrl : null,
-      jogadorId: jogadorId,
-    });
+    for (const [jogadorId, stats] of Object.entries(grupoStats.jogadores)) {
+      const jogador = jogadorInfo[jogadorId];
+
+      data.push({
+        name: jogador ? jogador.nome : "Desconhecido",
+        Gols: stats.gols || 0,
+        jogadorId: jogadorId,
+      });
+    }
   }
 
   return data;
