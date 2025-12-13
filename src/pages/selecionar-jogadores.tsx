@@ -4,14 +4,11 @@ import { useNavigate } from "react-router-dom";
 import type { JogadorResponseType } from "@/types/jogadores/Jogador";
 import JogadorItemSelecionar from "@/components/jogador-item-selecionar";
 import { usePartidaStore } from "@/stores/usePartidaStore";
-import {
-  JOGADORES_POR_TIME,
-  type CorTime,
-  type PartidaTimes,
-} from "@/types/Partida";
+import { JOGADORES_POR_TIME } from "@/types/Partida";
 import { Separator } from "@/components/ui/separator";
 import SelecionadorJogadorHeader from "@/components/selecionador-jogador-header";
 import SelecionarJogadoresFooter from "@/components/selecionar-jogador-footer";
+import type { PartidaKey } from "@/types/PartidaStore";
 
 export const MAX_GOLEIROS = 2;
 export const STEPS = [
@@ -32,13 +29,15 @@ export default function SelecionarJogadoresPage() {
   );
 
   const [currentStep, setCurrentStep] = useState<StepType>("azul");
-  const [times, setTimes] = useState<Record<CorTime, JogadorResponseType[]>>({
-    azul: [],
-    preto: [],
-    branco: [],
-    vermelho: [],
-    goleiros: [],
-  } as PartidaTimes);
+  const [times, setTimes] = useState<Record<PartidaKey, JogadorResponseType[]>>(
+    {
+      azul: [],
+      preto: [],
+      branco: [],
+      vermelho: [],
+      goleiros: [],
+    }
+  );
 
   const todosSelecionados = useMemo(() => {
     return Object.values(times).flat();

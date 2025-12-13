@@ -1,12 +1,12 @@
 import { Card } from "@/components/ui/card";
-import type { GetAllPartidaResponseType } from "@/types/Partida";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { formatDate } from "@/utils/format-date";
 import { useDeletePartida } from "@/hooks/partida/use-delete-partida";
 import { ConfirmDeletePartida } from "./confirm-delete-partida";
+import type { PartidaByIDResponseType } from "@/types/partida/PartidaById";
 
 interface PartidaCardProps {
-  partida: GetAllPartidaResponseType;
+  partida: PartidaByIDResponseType;
 }
 
 export default function AdminPartidaCard({ partida }: PartidaCardProps) {

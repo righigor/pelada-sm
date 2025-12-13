@@ -4,8 +4,7 @@ import { useGetAllPartidas } from "@/hooks/partida/use-get-all-partidas";
 
 export default function AllPartidasPage() {
   const { data, isPending } = useGetAllPartidas();
-  console.log(data);
-
+  
   return (
     <div className="flex flex-col mt-8 container mx-auto px-8 py-8">
       <h2 className="text-xl font-bold mb-4 text-center md:text-2xl">

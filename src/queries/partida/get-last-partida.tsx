@@ -1,5 +1,5 @@
 import { db } from "@/firebase/config";
-import type { PartidaByIDResponseType } from "@/types/Partida";
+import type { PartidaByIDResponseType } from "@/types/partida/PartidaById";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 
 export async function getLastPartida() {
