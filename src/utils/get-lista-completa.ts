@@ -1,18 +1,20 @@
 import type { EstatisticasInputStore } from "@/types/PartidaStore";
 import type {
-  JogadorEstatisticaCompleta,
   JogadorNameMap,
+  JogadorResponseType,
 } from "@/types/jogadores/Jogador";
+
 
 export function getListaCompleta(
   estatisticasInput: EstatisticasInputStore | undefined,
   jogadorInfo: JogadorNameMap
-): JogadorEstatisticaCompleta[] {
-  const lista: JogadorEstatisticaCompleta[] = [];
+): JogadorResponseType[] {
+  const lista: JogadorResponseType[] = [];
 
   if (!estatisticasInput) {
     return [];
   }
+
 
   for (const groupKey in estatisticasInput) {
     const grupoStats =
@@ -29,8 +31,9 @@ export function getListaCompleta(
           gols: stats.gols || 0,
           assistencias: stats.assistencias || 0,
           golContra: stats.golContra || 0,
-
           partidas: 1,
+          times: {},
+          companheiros: {},
         });
       }
     }

@@ -25,8 +25,6 @@ export interface JogadorResponseType {
   partidas: number;
   times: Partial<Record<PartidaKey, number>>;
   companheiros: Record<string, number>;
-  createdAt?: FirestoreTimestamp;
-  updatedAt?: FirestoreTimestamp;
 }
 
 export interface JogadorAvatarType {
