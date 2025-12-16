@@ -20,6 +20,8 @@ export const STEPS = [
 ] as const;
 export type StepType = (typeof STEPS)[number];
 
+const TIMES_OBRIGATORIOS: PartidaKey[] = ["azul", "preto"];
+
 export default function SelecionarJogadoresPage() {
   const { data: todosJogadores } = useGetAllJogadores();
   const navigate = useNavigate();
@@ -110,7 +112,13 @@ export default function SelecionarJogadoresPage() {
   const isLastStep = currentStep === "goleiros";
   const isFirstStep = currentStep === "azul";
 
-  const canAdvance = isLastStep ? true : jogadoresNoTime === JOGADORES_POR_TIME;
+  const isMandatoryTime = TIMES_OBRIGATORIOS.includes(currentStep);
+  
+  const canAdvance = isMandatoryTime
+    ? jogadoresNoTime === JOGADORES_POR_TIME
+    : true;
+
+  // const canAdvance = isLastStep ? true : jogadoresNoTime === JOGADORES_POR_TIME;
 
   return (
     <div className="flex flex-col gap-6 container mx-auto px-4 md:px-8 py-8">
