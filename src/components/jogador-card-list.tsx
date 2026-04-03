@@ -3,28 +3,46 @@ import { IconBallFootball, IconShield, IconShoe } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import AvatarLoad from "./avatar-load";
 import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
+import { useMemo } from "react";
 
 interface JogadorItemProps {
   jogador: JogadorNewResponseType;
+  temporadaFiltro: string;
 }
 
-export default function JogadorCardList({ jogador }: JogadorItemProps) {
+export default function JogadorCardList({
+  jogador,
+  temporadaFiltro,
+}: JogadorItemProps) {
   const navigate = useNavigate();
   const avatarSizeClasses = "w-14 h-14 md:w-20 md:h-20";
 
-  const stats = jogador.stats || {
+  const statsVazios = {
     gols: 0,
     assistencias: 0,
     golsContra: 0,
     defesasDificeis: 0,
+    partidas: 0,
   };
 
+  const stats = useMemo(() => {
+    if (!jogador?.stats) return statsVazios;
+
+    if (temporadaFiltro === "all") {
+      return jogador.stats;
+    }
+
+    return jogador.stats.temporadas?.[temporadaFiltro] || statsVazios;
+  }, [jogador, temporadaFiltro]);
+
   return (
-    <Card className="mb-4 p-4 flex flex-row justify-between items-center cursor-pointer hover:scale-105 transition-transform duration-500" onClick={() => navigate(`/jogadores/${jogador.id}`)}>
+    <Card
+      className="mb-4 p-4 flex flex-row justify-between items-center cursor-pointer hover:scale-105 transition-transform duration-500"
+      onClick={() => navigate(`/jogadores/${jogador.id}`)}
+    >
       <div className="flex gap-2 md:gap-4 items-center">
         <AvatarLoad jogador={jogador} avatarSizeClasses={avatarSizeClasses} />
-        <h2 className="md:text-xl text-xs font-bold">{jogador.nome}
-        </h2>
+        <h2 className="md:text-xl text-xs font-bold">{jogador.nome}</h2>
       </div>
 
       <div className="flex gap-4 items-center md:gap-8">
@@ -42,7 +60,9 @@ export default function JogadorCardList({ jogador }: JogadorItemProps) {
         </div>
         {stats.defesasDificeis > 0 && (
           <div className="flex items-center">
-            <strong className="text-xs md:text-xl">{stats.defesasDificeis}</strong>
+            <strong className="text-xs md:text-xl">
+              {stats.defesasDificeis}
+            </strong>
             <IconShield className="inline-block ml-1 text-blue-700 size-4 md:size-6" />
           </div>
         )}
