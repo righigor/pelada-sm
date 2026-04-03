@@ -3,11 +3,11 @@ import LoadingButton from "./loading-button";
 import { Card, CardDescription, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import useUpdatePhotoMutation from "@/hooks/jogadores/use-update-foto";
-import type { JogadorResponseType } from "@/types/jogadores/Jogador";
+import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
 import AvatarLoad from "./avatar-load";
 
 interface AdminJogadorCardProps {
-  jogador: JogadorResponseType;
+  jogador: JogadorNewResponseType;
 }
 
 export default function AdminJogadorCard({ jogador }: AdminJogadorCardProps) {
