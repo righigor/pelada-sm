@@ -8,16 +8,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import LoadingButton from "./loading-button"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import LoadingButton from "./loading-button";
 
 interface ConfirmSaveStatsProps {
   handleSalvarPartida: () => void;
   isLoading: boolean;
 }
 
-export function ConfirmSaveStats({ handleSalvarPartida, isLoading }: ConfirmSaveStatsProps) {
+export function ConfirmSaveStats({
+  handleSalvarPartida,
+  isLoading,
+}: ConfirmSaveStatsProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -27,22 +30,19 @@ export function ConfirmSaveStats({ handleSalvarPartida, isLoading }: ConfirmSave
         <AlertDialogHeader>
           <AlertDialogTitle>Tem certeza quer salvar os dados?</AlertDialogTitle>
           <AlertDialogDescription>
-            Ao confirmar, os dados da partida serão salvos permanentemente.
-            Esta ação não pode ser desfeita.
+            Ao confirmar, os dados da partida serão salvos permanentemente. Esta
+            ação não pode ser desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction>
-            <LoadingButton
-              onClick={handleSalvarPartida}
-              isLoading={isLoading}
-            >
+            <LoadingButton onClick={handleSalvarPartida} isLoading={isLoading}>
               Confirmar e Salvar
             </LoadingButton>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }

@@ -3,7 +3,7 @@ import type { PartidaKey } from "@/types/PartidaStore";
 
 interface StatsCounterProps {
   jogadorId: string;
-  tipo: "gols" | "assistencias" | "golContra";
+  tipo: "gols" | "assistencias" | "golsContra" | "dd";
   label: string;
   partidaKey: PartidaKey;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,7 +13,7 @@ interface StatsCounterProps {
   onUpdate: (
     partidaKey: PartidaKey,
     jogadorId: string,
-    estatisticaKey: "gols" | "assistencias" | "golContra",
+    estatisticaKey: "gols" | "assistencias" | "golsContra" | "dd",
     value: number
   ) => void;
 }

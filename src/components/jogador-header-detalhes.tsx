@@ -1,15 +1,17 @@
 import type { JogadorDetails } from "@/queries/jogadores/get-jogador-by-id";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { IconBallFootball, IconShoe, IconMoodSad } from "@tabler/icons-react";
+  IconBallFootball,
+  IconShoe,
+  IconMoodSad,
+  IconShield,
+} from "@tabler/icons-react";
 import AvatarLoad from "@/components/avatar-load";
+import type { StatsJogadorType } from "@/types/jogadores/Jogador";
 
 interface JogadorHeaderDetalhesProps {
   jogador: JogadorDetails;
+  statsExibicao: Omit<StatsJogadorType, "temporadas">;
 }
 
 const StatItem: React.FC<{
@@ -30,8 +32,14 @@ const StatItem: React.FC<{
   </div>
 );
 
+export default function JogadorHeaderDetalhes({
+  jogador,
+  statsExibicao,
+}: JogadorHeaderDetalhesProps) {
+  const totalPartidas = statsExibicao.partidas || 0;
+  const calcMedia = (val: number) =>
+    totalPartidas > 0 ? (val / totalPartidas).toFixed(2) : "0.00";
 
-export default function JogadorHeaderDetalhes({ jogador }: JogadorHeaderDetalhesProps) {
   return (
     <Card className="mx-auto mt-10">
       <CardHeader className="flex flex-col items-center">
@@ -48,32 +56,40 @@ export default function JogadorHeaderDetalhes({ jogador }: JogadorHeaderDetalhes
           />
           <div>
             <p className="text-center text-sm md:text-xl font-semibold mb-2">
-              {jogador.partidas}{" "}
-              {jogador.partidas === 1 ? "Partida Jogada" : "Partidas Jogadas"}
+              {totalPartidas}{" "}
+              {totalPartidas === 1 ? "Partida Jogada" : "Partidas Jogadas"}
             </p>
             <div className="space-y-2">
               <StatItem
-                label="Gols Totais"
-                total={jogador.gols}
-                average={jogador.mediaGols}
-                icon={<IconBallFootball className="w-5 h-5" />}
+                label="Gols"
+                total={statsExibicao.gols}
+                average={Number(calcMedia(statsExibicao.gols))}
+                icon={<IconBallFootball />}
               />
               <StatItem
-                label="Assistências Totais"
-                total={jogador.assistencias}
-                average={jogador.mediaAssistencias}
-                icon={<IconShoe className="w-5 h-5" />}
+                label="Assistências"
+                total={statsExibicao.assistencias}
+                average={Number(calcMedia(statsExibicao.assistencias))}
+                icon={<IconShoe />}
               />
               <StatItem
-                label="Gols Contra Totais"
-                total={jogador.golContra}
-                average={jogador.mediaGolContra}
-                icon={<IconMoodSad className="w-5 h-5 text-red-500" />}
+                label="Gols Contra"
+                total={statsExibicao.golsContra}
+                average={Number(calcMedia(statsExibicao.golsContra))}
+                icon={<IconMoodSad className="text-red-500" />}
               />
+              {statsExibicao.defesasDificeis > 0 && (
+                <StatItem
+                  label="Defesas"
+                  total={statsExibicao.defesasDificeis}
+                  average={Number(calcMedia(statsExibicao.defesasDificeis))}
+                  icon={<IconShield className="text-blue-500" />}
+                />
+              )}
             </div>
           </div>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

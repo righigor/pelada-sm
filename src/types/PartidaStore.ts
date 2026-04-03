@@ -1,11 +1,12 @@
-import type { JogadorResponseType } from "./jogadores/Jogador";
+import type { JogadorNewResponseType } from "./jogadores/Jogador";
 
 export type PartidaKey = "azul" | "preto" | "branco" | "vermelho" | "goleiros";
 
 export interface JogadorEstatisticaStore {
   gols: number;
   assistencias: number;
-  golContra: number;
+  golsContra: number;
+  dd: number;
   nome: string;
 }
 
@@ -16,7 +17,7 @@ export interface GrupoEstatisticaStore {
 export type EstatisticasInputStore = Record<PartidaKey, GrupoEstatisticaStore>;
 
 export type PartidaTimes = {
-  [key in PartidaKey]: JogadorResponseType[];
+  [key in PartidaKey]: JogadorNewResponseType[];
 };
 
 export interface PartidaState {
@@ -29,7 +30,7 @@ export interface PartidaActions {
   updateEstatistica: (
     partidaKey: PartidaKey,
     jogadorId: string,
-    estatisticaKey: "gols" | "assistencias" | "golContra",
+    estatisticaKey: "gols" | "assistencias" | "golsContra",
     value: number
   ) => void;
   setEstatisticasInput: (estatisticas: EstatisticasInputStore) => void;

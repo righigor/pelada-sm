@@ -35,6 +35,7 @@ export async function createNewPartida(data: PartidaPayload): Promise<string> {
     }
   }
 
+
   const artilheiro = getDestaque(data.timeEstatisticas, "gols");
   const maiorAssistente = getDestaque(data.timeEstatisticas, "assistencias");
   const bagre = getDestaque(data.timeEstatisticas, "golContra");
@@ -58,6 +59,7 @@ export async function createNewPartida(data: PartidaPayload): Promise<string> {
     resumoPartida,
   });
 
+
   const jogadorPromises: Promise<void>[] = [];
 
   for (const [jogadorId, grupoKey] of Object.entries(jogadorGrupoMap)) {
@@ -67,7 +69,7 @@ export async function createNewPartida(data: PartidaPayload): Promise<string> {
     const updates: JogadorUpdate = {
       gols: increment(stats.gols),
       assistencias: increment(stats.assistencias),
-      golContra: increment(stats.golContra),
+      golContra: increment(stats.golsContra),
       partidas: increment(1),
       updatedAt: new Date(),
 

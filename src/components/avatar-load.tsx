@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import type { JogadorAvatarType, JogadorResponseType } from "@/types/jogadores/Jogador";
+import type { JogadorAvatarType, JogadorNewResponseType } from "@/types/jogadores/Jogador";
 import { getIniciais } from "@/utils/get-iniciais";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Skeleton } from "./ui/skeleton";
 import { useEffect, useState } from "react";
 
 interface AvatarLoadProps {
-  jogador: JogadorResponseType | JogadorAvatarType;
+  jogador: JogadorNewResponseType | JogadorAvatarType;
   avatarSizeClasses: string;
 }
 

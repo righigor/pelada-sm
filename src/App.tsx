@@ -4,9 +4,9 @@ import { useGetTopTresJogadores } from "./hooks/jogadores/use-get-top-tres-jogad
 import { IconBallFootball, IconShoe, IconFish } from "@tabler/icons-react";
 
 function App() {
-  const { data: golsData, isLoading: isLoadingGols } = useGetTopTresJogadores("gols", 3);
-  const { data: assistenciasData, isLoading: isLoadingAssistencias } = useGetTopTresJogadores("assistencias", 3);
-  const { data: golContraData, isLoading: isLoadingGolContra } = useGetTopTresJogadores("golContra", 3);
+  const { data: golsData, isPending: isLoadingGols } = useGetTopTresJogadores("gols", 3);
+  const { data: assistenciasData, isPending: isLoadingAssistencias } = useGetTopTresJogadores("assistencias", 3);
+  const { data: golContraData, isPending: isLoadingGolContra } = useGetTopTresJogadores("golsContra", 3);
 
   return (
     <div className="flex flex-col gap-8">
@@ -22,7 +22,7 @@ function App() {
         <div className="border w-full  border-gray-900" />
         <div className="flex flex-col gap-6 text-center mt-4">
           <h3 className="text-lg md:text-2xl font-semibold">
-            Destaques da Pelada
+            Destaques da Pelada - All Time Rankings
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <RankingCard
@@ -50,7 +50,7 @@ function App() {
               isLoading={isLoadingGolContra}
               title="Top Bagres"
               icon={<IconFish />}
-              dataKey="golContra"
+              dataKey="golsContra"
               unit="Gols Contra"
               color="#8884d8"
             />

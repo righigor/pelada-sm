@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Item, ItemActions, ItemTitle } from "@/components/ui/item";
 import { Check, Plus } from "lucide-react"; // Ícones
-import type { JogadorResponseType } from "@/types/jogadores/Jogador";
+import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
 import AvatarLoad from "./avatar-load";
 
 interface JogadorCardProps {
-  jogador: JogadorResponseType;
+  jogador: JogadorNewResponseType;
   isSelected: boolean;
-  onToggle: (jogador: JogadorResponseType) => void;
+  onToggle: (jogador: JogadorNewResponseType) => void;
   isDisabled: boolean;
 }
 

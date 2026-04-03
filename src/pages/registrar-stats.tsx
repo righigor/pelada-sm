@@ -1,9 +1,6 @@
 import { ConfirmSaveStats } from "@/components/confirm-save-stats";
 import JogadorCardStats from "@/components/jogador-card-stats";
 import TimerDisplay from "@/components/timer-display";
-import { useCreatePartida } from "@/hooks/partida/use-create-partida";
-import { usePartidaStore } from "@/stores/usePartidaStore";
-
 import {
   Accordion,
   AccordionContent,
@@ -11,11 +8,20 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import type { CorTime } from "@/types/Partida";
-import type { JogadorResponseType } from "@/types/jogadores/Jogador";
-import { useEffect } from "react";
-import type { EstatisticasInputStore, PartidaKey, PartidaPayload } from "@/types/PartidaStore";
+import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
+import type { PartidaKey } from "@/types/PartidaStore";
+import useGetPartidaByID from "@/hooks/partida/use-get-partida-by-id";
+import { useNavigate, useParams } from "react-router-dom";
+import { useUpdateStats } from "@/hooks/partida/use-update-stats";
+import { formatarData } from "@/utils/formatar-data";
+import { TimeHeaderCard } from "@/components/time-header-card";
+import { useUpdateVitorias } from "@/hooks/partida/use-update-vitorias";
+import LoadingSection from "@/components/loading-section";
+import NotFoundPage from "@/components/not-found";
+import { useFinalizePartida } from "@/hooks/partida/use-finaliza-partida";
+import { PARTIDA_STATUS } from "@/utils/constants";
 
-type EstatisticaKeyType = "gols" | "assistencias" | "golContra";
+type EstatisticaKeyType = "gols" | "assistencias" | "golsContra" | "dd";
 
 const colorEmojiMap: { [key: string]: string } = {
   azul: "🔵",
@@ -25,61 +31,42 @@ const colorEmojiMap: { [key: string]: string } = {
   goleiros: "🧤",
 };
 
-const ALL_PARTIDA_GROUPS: PartidaKey[] = [
-  "azul",
-  "preto",
-  "branco",
-  "vermelho",
-  "goleiros",
-];
-
 export default function RegistrarStatsPage() {
-  const timesSelecionados = usePartidaStore((state) => state.timesSelecionados);
-  const estatisticasInput = usePartidaStore((state) => state.estatisticasInput);
-  const updateEstatistica = usePartidaStore((state) => state.updateEstatistica);
-  const setEstatisticasInput = usePartidaStore(
-    (state) => state.setEstatisticasInput
+  const navigate = useNavigate();
+  const { partidaId } = useParams();
+  const { data: partida, isPending: isPartidaPending } = useGetPartidaByID(
+    partidaId || ""
   );
+  const { mutate } = useUpdateStats(partidaId || "");
+  const { mutate: mutateVitorias } = useUpdateVitorias(partidaId || "");
+  const { mutate: mutateFinalize, isPending: isFinalizePending } =
+    useFinalizePartida();
 
-  const { mutate, isPending } = useCreatePartida();
-
-  
-  useEffect(() => {
-    if (Object.keys(estatisticasInput || {}).length > 0) return;
-
-    const initialStats = {} as EstatisticasInputStore;
-
-    ALL_PARTIDA_GROUPS.forEach((key) => {
-      const jogadoresDoTime: JogadorResponseType[] =
-        timesSelecionados[key] || [];
-
-      if (jogadoresDoTime.length > 0) {
-        initialStats[key] = { jogadores: {} };
-        jogadoresDoTime.forEach((jogador) => {
-          initialStats[key].jogadores[jogador.id] = {
-            gols: 0,
-            assistencias: 0,
-            golContra: 0,
-            nome: jogador.nome,
-          };
-        });
-      }
-    });
-    
-    setEstatisticasInput(initialStats);
-  }, [timesSelecionados, setEstatisticasInput, estatisticasInput]);
-
-
-  if (
-    !timesSelecionados ||
-    Object.values(timesSelecionados).flat().length === 0
-  ) {
+  if (!partidaId) {
     return (
-      <div className="p-8 text-center">
-        Carregando dados ou redirecionando...
+      <div className="container mx-auto px-8 py-12">
+        Partida ID is required.
       </div>
     );
   }
+  if (isPartidaPending) {
+    return <LoadingSection />;
+  }
+
+  if (!partida && !isPartidaPending) {
+    return <NotFoundPage />;
+  }
+
+  if (partida.status === PARTIDA_STATUS.FINALIZADO) {
+    navigate(`/partida/${partidaId}`);
+    return null;
+  }
+
+  const handleFinalizar = () => {
+    if (partida) {
+      mutateFinalize(partida);
+    }
+  };
 
   const handleUpdate = (
     partidaKey: PartidaKey,
@@ -87,20 +74,12 @@ export default function RegistrarStatsPage() {
     estatisticaKey: EstatisticaKeyType,
     value: number
   ) => {
-    const currentStat =
-      estatisticasInput?.[partidaKey]?.jogadores[jogadorId]?.[estatisticaKey] || 0;
-    const newStat = Math.max(0, currentStat + value);
-
-    updateEstatistica(partidaKey, jogadorId, estatisticaKey, newStat);
-  };
-
-  const handleSalvarPartida = () => {
-      const data: PartidaPayload = {
-        date: new Date(),
-        timeEstatisticas: estatisticasInput,
-      };
-    console.log("Salvar partida:", data);
-    mutate(data);
+    mutate({
+      time: partidaKey,
+      jogadorId,
+      campo: estatisticaKey,
+      valor: value,
+    });
   };
 
   const getLabel = (key: CorTime | "goleiros") => {
@@ -122,7 +101,7 @@ export default function RegistrarStatsPage() {
 
       <div className="mb-4 flex items-center justify-center gap-2">
         <h2 className="text-sm md:text-lg font-semibold">
-          Data: {new Date().toLocaleDateString()}
+          Data: {formatarData(partida.dataPartida) || "Data não disponível"}
         </h2>
         <span>-</span>
         <h3 className="text-sm md:text-lg font-semibold">
@@ -132,13 +111,13 @@ export default function RegistrarStatsPage() {
 
       <section className="mb-10">
         <Accordion type="single" collapsible className="w-full">
-          {ALL_PARTIDA_GROUPS.map((key) => {
-            const jogadoresDoTime: JogadorResponseType[] =
-              timesSelecionados[key] || [];
+          {Object.entries(partida.timesEstatisticas).map(([key, timeData]) => {
+            const partidaKey = key as PartidaKey;
+            const jogadoresArray = Object.entries(timeData.jogadores);
 
-            if (jogadoresDoTime.length === 0) return null;
+            if (jogadoresArray.length === 0) return null;
 
-            const label = getLabel(key);
+            const label = getLabel(partidaKey);
 
             return (
               <AccordionItem key={key} value={key}>
@@ -146,15 +125,28 @@ export default function RegistrarStatsPage() {
                   {label}
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div className="flex flex-col ">
-                    {jogadoresDoTime.map((jogador) => (
+                  <div className="flex flex-col gap-4">
+                    {key === "goleiros" ? null : (
+                      <TimeHeaderCard
+                        vitorias={timeData.vitorias}
+                        onUpdate={(valor) => {
+                          mutateVitorias({ time: partidaKey, valor });
+                        }}
+                      />
+                    )}
+                    {jogadoresArray.map(([id, stats]) => (
                       <JogadorCardStats
-                        key={jogador.id}
-                        partidaKey={key}
-                        jogador={jogador}
-                        estatisticas={estatisticasInput?.[key]?.jogadores[jogador.id]}
-                        handleUpdate={(key, jogadorId, estatisticaKey, value) =>
-                          handleUpdate(key, jogadorId, estatisticaKey, value)
+                        key={id}
+                        partidaKey={partidaKey}
+                        jogador={
+                          {
+                            id,
+                            nome: timeData.jogadores[id].nome,
+                          } as JogadorNewResponseType
+                        }
+                        estatisticas={stats}
+                        handleUpdate={(time, jogadorId, campo, valor) =>
+                          handleUpdate(time, jogadorId, campo, valor)
                         }
                       />
                     ))}
@@ -167,8 +159,8 @@ export default function RegistrarStatsPage() {
       </section>
 
       <ConfirmSaveStats
-        handleSalvarPartida={handleSalvarPartida}
-        isLoading={isPending}
+        handleSalvarPartida={handleFinalizar}
+        isLoading={isFinalizePending}
       />
     </div>
   );

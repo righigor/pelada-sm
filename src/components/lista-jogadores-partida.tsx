@@ -1,8 +1,9 @@
-import type { JogadorResponseType } from "@/types/jogadores/Jogador";
+
 import JogadorCard from "./jogador-card";
+import type { JogadorInfo } from "@/utils/get-lista-completa";
 
 interface ListaJogadoresPartidaProps {
-  listaEstatisticas: JogadorResponseType[];
+  listaEstatisticas: JogadorInfo[];
 }
 
 export default function ListaJogadoresPartida({ listaEstatisticas }: ListaJogadoresPartidaProps) {

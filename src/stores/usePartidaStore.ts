@@ -3,7 +3,13 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import type { EstatisticasInputStore, PartidaActions, PartidaKey, PartidaState, PartidaTimes } from "@/types/PartidaStore";
 
 const initialPartidaState: PartidaState = {
-  timesSelecionados: {} as PartidaTimes,
+  timesSelecionados: {
+    azul: [],
+    preto: [],
+    branco: [],
+    vermelho: [],
+    goleiros: [],
+  } as PartidaTimes,
   estatisticasInput: {} as EstatisticasInputStore,
 };
 
@@ -16,7 +22,7 @@ export const usePartidaStore = create<PartidaState & PartidaActions>()(
       updateEstatistica: (
         partidaKey: PartidaKey,
         jogadorId: string,
-        estatisticaKey: "gols" | "assistencias" | "golContra",
+        estatisticaKey: "gols" | "assistencias" | "golsContra",
         value: number
       ) =>
         set((state) => {
@@ -26,7 +32,7 @@ export const usePartidaStore = create<PartidaState & PartidaActions>()(
           const jogadorStats = groupStats.jogadores[jogadorId] || {
             gols: 0,
             assistencias: 0,
-            golContra: 0,
+            golsContra: 0,
             nome: "",
           };
 
@@ -42,21 +48,19 @@ export const usePartidaStore = create<PartidaState & PartidaActions>()(
               },
             },
           };
-          console.log("Atualizando estatística:", {
-            partidaKey,
-            jogadorId,
-            estatisticaKey,
-            value,
-          });
           return { estatisticasInput: novoEstado };
         }),
 
       setEstatisticasInput: (estatisticas: EstatisticasInputStore) =>
         set({ estatisticasInput: estatisticas }),
-      resetPartida: () => set(initialPartidaState),
+      resetPartida: () => {
+        set(initialPartidaState)
+        localStorage.removeItem("partida-em-andamento");
+      },
     }),
     {
       name: "partida-em-andamento",
+      version: 2,
       storage: createJSONStorage(() => localStorage),
     }
   )

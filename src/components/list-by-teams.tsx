@@ -37,8 +37,10 @@ export default function ListByTeams({
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-4">
-        {Object.entries(estatisticas).map(([teamKey, grupo]) => (
+      <CardContent className="space-y-4 md:grid md:grid-cols-2 lg:grid-cols-4 gap-2">
+        {Object.entries(estatisticas).map(([teamKey, grupo]) => {
+          if (Object.keys(grupo.jogadores).length === 0) return null;
+          return (
           <Item
             key={teamKey}
             variant="outline"
@@ -62,7 +64,7 @@ export default function ListByTeams({
               <TeamList jogadores={grupo} />
             </ItemContent>
           </Item>
-        ))}
+        )})}
       </CardContent>
     </Card>
   );

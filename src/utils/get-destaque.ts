@@ -1,9 +1,10 @@
 import type { DestaquePartida } from "@/types/destaques/Destaque";
 import type { EstatisticaKeyType } from "@/types/Partida";
-import type { EstatisticasInputStore } from "@/types/PartidaStore";
+import type { TimeData } from "@/types/partida/Estatisticas";
+import type { PartidaKey } from "@/types/PartidaStore";
 
 export function getDestaque(
-  estatisticasInput: EstatisticasInputStore,
+  estatisticasInput: Record<PartidaKey, TimeData>,
   statKey: EstatisticaKeyType
 ): DestaquePartida | null {
   let melhorJogadorId: string | null = null;
@@ -12,7 +13,7 @@ export function getDestaque(
 
   for (const groupKey in estatisticasInput) {
     const grupoStats =
-      estatisticasInput[groupKey as keyof EstatisticasInputStore];
+      estatisticasInput[groupKey as keyof Record<PartidaKey, TimeData>];
 
     for (const [jogadorId, stats] of Object.entries(grupoStats.jogadores)) {
       const currentStat = stats[statKey];

@@ -1,11 +1,12 @@
 import { db } from "@/firebase/config";
-import type { JogadorResponseType } from "@/types/jogadores/Jogador";
+import type { JogadorNewResponseType, StatsJogadorType } from "@/types/jogadores/Jogador";
 import { doc, getDoc } from "firebase/firestore";
 
-export interface JogadorDetails extends JogadorResponseType {
+export interface JogadorDetails extends JogadorNewResponseType {
     mediaGols: number;
     mediaAssistencias: number;
-    mediaGolContra: number;
+    mediaGolsContra: number;
+    mediaDefesas: number;
 }
 
 export const getJogadorById = async (jogadorId: string): Promise<JogadorDetails> => {
@@ -16,18 +17,35 @@ export const getJogadorById = async (jogadorId: string): Promise<JogadorDetails>
         throw new Error("Jogador não encontrado.");
     }
 
-    const data = { id: docSnap.id, ...docSnap.data() } as JogadorResponseType;
-    
-    const partidas = data.partidas || 0;
+    const rawData = docSnap.data();
 
-    const mediaGols = partidas > 0 ? (data.gols / partidas) : 0;
-    const mediaAssistencias = partidas > 0 ? (data.assistencias / partidas) : 0;
-    const mediaGolContra = partidas > 0 ? (data.golContra / partidas) : 0;
+    const stats: StatsJogadorType = rawData.stats || {
+        gols: 0,
+        assistencias: 0,
+        golsContra: 0,
+        partidas: 0,
+        defesasDificeis: 0,
+        times: { azul: 0, preto: 0, branco: 0, vermelho: 0, goleiros: 0 },
+        companheiros: {},
+        temporadas: {}
+    };
+
+    const data = { 
+        id: docSnap.id, 
+        ...rawData,
+        stats
+    } as JogadorNewResponseType;
+    
+    const totalPartidas = stats.partidas || 0;
+
+    const calcularMedia = (valor: number) => 
+        totalPartidas > 0 ? parseFloat((valor / totalPartidas).toFixed(2)) : 0;
 
     return {
         ...data,
-        mediaGols: parseFloat(mediaGols.toFixed(2)),
-        mediaAssistencias: parseFloat(mediaAssistencias.toFixed(2)),
-        mediaGolContra: parseFloat(mediaGolContra.toFixed(2)),
+        mediaGols: calcularMedia(stats.gols),
+        mediaAssistencias: calcularMedia(stats.assistencias),
+        mediaGolsContra: calcularMedia(stats.golsContra),
+        mediaDefesas: calcularMedia(stats.defesasDificeis),
     };
 };
