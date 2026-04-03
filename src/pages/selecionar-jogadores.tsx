@@ -1,7 +1,6 @@
 import { useGetAllJogadores } from "@/hooks/jogadores/use-get-all-jogadores";
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import type { JogadorResponseType } from "@/types/jogadores/Jogador";
+import { useEffect, useMemo, useState } from "react";
+import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
 import JogadorItemSelecionar from "@/components/jogador-item-selecionar";
 import { usePartidaStore } from "@/stores/usePartidaStore";
 import { JOGADORES_POR_TIME } from "@/types/Partida";
@@ -9,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import SelecionadorJogadorHeader from "@/components/selecionador-jogador-header";
 import SelecionarJogadoresFooter from "@/components/selecionar-jogador-footer";
 import type { PartidaKey } from "@/types/PartidaStore";
+import { useCreatePartidaComJogadores } from "@/hooks/partida/use-create-partida-com-jogadores";
 
 export const MAX_GOLEIROS = 2;
 export const STEPS = [
@@ -20,18 +20,21 @@ export const STEPS = [
 ] as const;
 export type StepType = (typeof STEPS)[number];
 
-const TIMES_OBRIGATORIOS: PartidaKey[] = ["azul", "preto"];
-
 export default function SelecionarJogadoresPage() {
   const { data: todosJogadores } = useGetAllJogadores();
-  const navigate = useNavigate();
+  const { mutate: createPartida, isPending } = useCreatePartidaComJogadores();
 
   const setTimesSelecionados = usePartidaStore(
     (state) => state.setTimesSelecionados
   );
+  const resetPartida = usePartidaStore((state) => state.resetPartida);
+
+  useEffect(() => {
+    resetPartida();
+  }, [resetPartida]);
 
   const [currentStep, setCurrentStep] = useState<StepType>("azul");
-  const [times, setTimes] = useState<Record<PartidaKey, JogadorResponseType[]>>(
+  const [times, setTimes] = useState<Record<PartidaKey, JogadorNewResponseType[]>>(
     {
       azul: [],
       preto: [],
@@ -51,10 +54,10 @@ export default function SelecionarJogadoresPage() {
       (jogador) =>
         !todosSelecionados.find((s) => s.id === jogador.id) ||
         times[currentStep].find((s) => s.id === jogador.id)
-    );
+    ) as JogadorNewResponseType[];
   }, [todosJogadores, todosSelecionados, currentStep, times]);
 
-  const handleToggleJogador = (jogador: JogadorResponseType) => {
+  const handleToggleJogador = (jogador: JogadorNewResponseType) => {
     setTimes((prevTimes) => {
       const timeAtual = prevTimes[currentStep];
       const isSelectedForCurrentTime = timeAtual.find(
@@ -88,8 +91,7 @@ export default function SelecionarJogadoresPage() {
       setCurrentStep(next);
     } else {
       setTimesSelecionados(times);
-      navigate("/partida/registrar-stats");
-      console.log("Times Selecionados:", times);
+      createPartida(times);
     }
   };
 
@@ -112,13 +114,7 @@ export default function SelecionarJogadoresPage() {
   const isLastStep = currentStep === "goleiros";
   const isFirstStep = currentStep === "azul";
 
-  const isMandatoryTime = TIMES_OBRIGATORIOS.includes(currentStep);
-  
-  const canAdvance = isMandatoryTime
-    ? jogadoresNoTime === JOGADORES_POR_TIME
-    : true;
-
-  // const canAdvance = isLastStep ? true : jogadoresNoTime === JOGADORES_POR_TIME;
+  const canAdvance = isLastStep ? true : jogadoresNoTime === JOGADORES_POR_TIME;
 
   return (
     <div className="flex flex-col gap-6 container mx-auto px-4 md:px-8 py-8">
@@ -166,6 +162,7 @@ export default function SelecionarJogadoresPage() {
         handleProximaEtapa={handleProximaEtapa}
         isFirstStep={isFirstStep}
         isLastStep={isLastStep}
+        isPending={isPending}
       />
     </div>
   );

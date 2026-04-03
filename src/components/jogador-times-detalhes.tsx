@@ -1,5 +1,6 @@
 import type { JogadorDetails } from "@/queries/jogadores/get-jogador-by-id";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import type { StatsJogadorType } from "@/types/jogadores/Jogador";
 
 interface JogadorTimesDetalhesProps {
   jogador: JogadorDetails;
@@ -14,28 +15,30 @@ const teamEmojiMap: Record<string, string> = {
 };
 
 
-export default function JogadorTimesDetalhes({ jogador }: JogadorTimesDetalhesProps) {
+interface JogadorTimesDetalhesProps {
+  statsExibicao: Omit<StatsJogadorType, "temporadas">;
+}
+
+export default function JogadorTimesDetalhes({ statsExibicao }: JogadorTimesDetalhesProps) {
+  const timesEntries = Object.entries(statsExibicao.times || {});
+
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Times</CardTitle>
-        <CardDescription className="text-xs">Lista de quantas vezes o jogador já jogou em cada time</CardDescription>
+      <CardHeader className="text-center pb-2">
+        <CardTitle>Participação por Times</CardTitle>
       </CardHeader>
       <CardContent>
-        {jogador.partidas === 0 ? (
-          <p className="text-center text-gray-400">Nenhum time encontrado para este jogador.</p>
+        {timesEntries.length === 0 ? (
+          <p className="text-center text-zinc-500 py-4">Sem dados neste período.</p>
         ) : (
-          Object.entries(jogador.times).map(([team, count]) => (
-            <div key={team} className="flex justify-between items-center py-2 border-b last:border-b-0">
-              <div className="flex items-center gap-2">
-                <span className="text-xl ">{teamEmojiMap[team]}</span>
-                <span className="capitalize font-medium">{team}</span>
-              </div>
-              <span className="font-bold">{count} {count === 1 ? "Partida" : "Partidas"}</span>
+          timesEntries.map(([team, count]) => (
+            <div key={team} className="flex justify-between py-2 border-b last:border-0">
+               <span className="capitalize">{teamEmojiMap[team]} {team}</span>
+               <span className="font-bold">{count as number} {count === 1 ? 'jogo' : 'jogos'}</span>
             </div>
           ))
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

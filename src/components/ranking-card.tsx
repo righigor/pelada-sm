@@ -1,15 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid } from "recharts";
-import type { JogadorResponseType } from "@/types/jogadores/Jogador";
+import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "./ui/chart";
+import type { StatField } from "@/types/partida/Estatisticas";
 
 interface RankingCardProps {
   title: string;
   icon: React.ReactNode;
-  data: JogadorResponseType[];
+  data: JogadorNewResponseType[];
   isLoading: boolean;
-  dataKey: "gols" | "assistencias" | "golContra";
+  dataKey: StatField;
+  temporada?: string;
   unit: string;
   color: string;
 }
@@ -20,6 +23,7 @@ export default function RankingCard({
   data,
   isLoading,
   dataKey,
+  temporada,
   unit,
 }: RankingCardProps) {
   const RANK_COLORS: { [key: number]: string } = {
@@ -37,66 +41,58 @@ export default function RankingCard({
     );
   }
 
-  if (!data || data.length === 0) {
+const flattenedData = (data || []).map((jogador) => {
+    let valor = 0;
+    
+    if (temporada && jogador.stats.temporadas?.[temporada]) {
+      // Busca na temporada específica
+      valor = (jogador.stats.temporadas[temporada] as any)[dataKey] || 0;
+    } else {
+      // Busca no "All Time" (Geral)
+      valor = (jogador.stats as any)[dataKey] || 0;
+    }
+
+    return {
+      id: jogador.id,
+      nomeEixo: jogador.nome,
+      [dataKey]: valor,
+    };
+  });
+
+  const filteredData = flattenedData.filter((item) => (item[dataKey] as number)> 0);
+
+  if (filteredData.length === 0) {
     return (
-      <Card className="shadow-lg h-[300px]">
+      <Card className="shadow-lg h-[400px] border-zinc-800 bg-zinc-950">
         <CardHeader>
-          <CardTitle className="text-xl flex items-center gap-2">
+          <CardTitle className="text-xl flex items-center justify-center gap-2">
             {icon} {title}
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-center text-gray-500">
-            Nenhum dado disponível ainda.
-          </p>
+        <CardContent className="flex flex-col items-center justify-center h-48 text-zinc-500">
+          <p>Nenhum registro encontrado.</p>
         </CardContent>
       </Card>
     );
   }
 
-  const chartConfig = {
-    Gols: {
-      label: "test",
-      color: "hsl(var(--chart-1))",
-    },
-  };
-
-  const filteredData = data.filter((item) => item[dataKey] > 0);
-
-  if (!filteredData || filteredData.length === 0) {
-    return (
-      <Card className="shadow-lg h-[400px]">
-        <CardHeader>
-          <CardTitle className="text-xl flex items-center gap-2">
-            {icon} {title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-center text-gray-500">
-            Nenhum jogador fez um(a) {unit.toLowerCase()} ainda.
-          </p>
-        </CardContent>
-      </Card>
-    );
-  }
-
+  // 3. PÓDIO VISUAL: Se tivermos 3 pessoas, colocamos o 1º no centro [2º, 1º, 3º]
   let chartData = filteredData.map((item, index) => ({
     ...item,
     rank: index + 1,
-    nomeEixo: `${item.nome}`,
   }));
 
   if (chartData.length === 3) {
-    const segundoLugar = chartData[1];
-    const primeiroLugar = chartData[0];
-    const terceiroLugar = chartData[2];
-
-    if (primeiroLugar[dataKey] !== segundoLugar[dataKey]) {
-      chartData = [segundoLugar, primeiroLugar, terceiroLugar];
-    } else {
-      chartData = [primeiroLugar, segundoLugar, terceiroLugar];
-    }
+    const [primeiro, segundo, terceiro] = chartData;
+    chartData = [segundo, primeiro, terceiro];
   }
+
+  const chartConfig = {
+    [dataKey]: {
+      label: unit,
+      color: "hsl(var(--primary))",
+    },
+  };
 
   return (
     <Card className="shadow-lg h-full text-center flex flex-col">

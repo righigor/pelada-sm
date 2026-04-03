@@ -14,17 +14,26 @@ export interface FirestoreTimestamp {
   nanoseconds: number;
 }
 
-
 export interface JogadorResponseType {
   id: string;
   nome: string;
   fotoUrl: string | null;
   gols: number;
   assistencias: number;
-  golContra: number;
+  golsContra: number;
   partidas: number;
   times: Partial<Record<PartidaKey, number>>;
   companheiros: Record<string, number>;
+}
+
+export interface JogadorNewResponseType {
+  id: string;
+  nome: string;
+  fotoUrl: string | null;
+  telfone: string | null;
+  stats: StatsJogadorType;
+  createdAt: FirestoreTimestamp;
+  updatedAt: FirestoreTimestamp;
 }
 
 export interface JogadorAvatarType {
@@ -39,7 +48,6 @@ export type JogadorNameMap = {
   };
 };
 
-
 export interface JogadorEstatisticaCompleta {
   id: string;
   nome: string;
@@ -48,4 +56,39 @@ export interface JogadorEstatisticaCompleta {
   partidas: number;
   assistencias: number;
   golContra: number;
+}
+
+export interface StatsJogadorType {
+  gols: number;
+  assistencias: number;
+  golsContra: number;
+  partidas: number;
+  defesasDificeis: number;
+  times: TimesJogadorType;
+  companheiros: CompanheirosJogadorType;
+  temporadas: TemporadasJogadorType;
+}
+
+export interface TimesJogadorType {
+  azul: number | null;
+  preto: number | null;
+  branco: number | null;
+  vermelho: number | null;
+  goleiros: number | null;
+}
+
+export interface CompanheirosJogadorType {
+  [companheiroId: string]: number;
+}
+
+export interface TemporadasJogadorType {
+  [temporada: string]: {
+    gols: number;
+    assistencias: number;
+    golsContra: number;
+    partidas: number;
+    defesasDificeis: number;
+    times: TimesJogadorType;
+    companheiros: CompanheirosJogadorType;
+  };
 }

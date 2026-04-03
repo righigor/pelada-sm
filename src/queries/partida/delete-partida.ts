@@ -46,7 +46,7 @@ export async function deletePartidaAndRollbackStats(
       const updates: JogadorUpdate = {
         gols: increment(-stats.gols),
         assistencias: increment(-stats.assistencias),
-        golContra: increment(-stats.golContra),
+        golsContra: increment(-stats.golsContra),
         partidas: increment(-1),
 
         [`times.${grupoKey}`]: increment(-1),

@@ -1,4 +1,4 @@
-import JogadorCard from "@/components/jogador-card";
+import JogadorCardList from "@/components/jogador-card-list";
 import SkeletonCard from "@/components/skeleton/skeleton-card";
 import { useGetAllJogadores } from "@/hooks/jogadores/use-get-all-jogadores";
 
@@ -13,7 +13,7 @@ export default function AllJogadoresPage() {
       <section>
         {isPending && <SkeletonCard />}
         {data?.map((jogador) => (
-          <JogadorCard key={jogador.id} jogador={jogador} />
+          <JogadorCardList key={jogador.id} jogador={jogador} />
         ))}
       </section>
     </div>

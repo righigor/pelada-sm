@@ -9,22 +9,20 @@ import {
   CardTitle,
 } from "./ui/card";
 import { IconUsers } from "@tabler/icons-react";
+import type { StatsJogadorType } from "@/types/jogadores/Jogador";
 
 interface CompanheirosDeTimeProps {
   jogador: JogadorDetails;
+  statsExibicao: Omit<StatsJogadorType, "temporadas">;
 }
 
-export default function CompanheirosDeTime({
-  jogador,
-}: CompanheirosDeTimeProps) {
+export default function CompanheirosDeTime({ jogador, statsExibicao }: CompanheirosDeTimeProps) {
   const { data: jogadoresInfo, isPending } = useGetAllNamesJogadores();
-
-  if (isPending) {
-    return <div>Carregando companheiros de time...</div>;
-  }
+  
+  if (isPending) return <div>Carregando...</div>;
 
   const companheirosList = getCompanheirosList(
-    jogador.companheiros,
+    statsExibicao.companheiros || {},
     jogadoresInfo
   );
 
@@ -41,6 +39,9 @@ export default function CompanheirosDeTime({
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {companheirosList.length === 0 ? (
+          <p className="text-center text-zinc-500 py-4">Sem dados neste período.</p>
+        ) : null}
         <ul className="space-y-3">
           {companheirosList.map((companheiro, index) => (
             <li

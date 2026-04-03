@@ -1,18 +1,18 @@
-import type { JogadorResponseType } from "@/types/jogadores/Jogador";
+import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
 import AvatarLoad from "./avatar-load";
 import { Card } from "./ui/card";
 import StatsCounter from "./stats-counter";
-import { IconBallFootball, IconShoe } from "@tabler/icons-react";
+import { IconBallFootball, IconShieldCheck, IconShoe } from "@tabler/icons-react";
 import type { JogadorEstatisticaStore, PartidaKey } from "@/types/PartidaStore";
 
 
 interface JogadorCardStatsProps {
-  jogador: JogadorResponseType;
+  jogador: JogadorNewResponseType;
   partidaKey: PartidaKey;
   handleUpdate: (
     partidaKey: PartidaKey,
     jogadorId: string,
-    estatisticaKey: "gols" | "assistencias" | "golContra",
+    estatisticaKey: "gols" | "assistencias" | "golsContra" | "dd",
     value: number
   ) => void;
   estatisticas: JogadorEstatisticaStore | undefined | null;
@@ -60,13 +60,25 @@ export default function JogadorCardStats({
         <StatsCounter
           jogadorId={jogador.id}
           partidaKey={partidaKey}
-          tipo="golContra"
+          tipo="golsContra"
           label="Gol Contra"
           Icone={IconBallFootball}
           cor="text-red-500"
-          value={estatisticas?.golContra || 0}
+          value={estatisticas?.golsContra || 0}
           onUpdate={handleUpdate}
         />
+        {partidaKey === "goleiros" && (
+          <StatsCounter
+            jogadorId={jogador.id}
+            partidaKey={partidaKey}
+            tipo="dd"
+            label="Defesa Difícil"
+            Icone={IconShieldCheck}
+            cor="text-yellow-400"
+            value={estatisticas?.dd || 0}
+            onUpdate={handleUpdate}
+          />
+        )}
       </div>
     </Card>
   );

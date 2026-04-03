@@ -1,15 +1,25 @@
 import type { EstatisticasInputStore } from "@/types/PartidaStore";
 import type {
   JogadorNameMap,
-  JogadorResponseType,
 } from "@/types/jogadores/Jogador";
 
+export interface JogadorInfo {
+  id: string;
+  nome: string;
+  fotoUrl: string | null;
+  gols: number;
+  assistencias: number;
+  golsContra: number;
+  partidas: number;
+  times: Record<string, string[]>;
+  companheiros: Record<string, number>;
+}
 
 export function getListaCompleta(
   estatisticasInput: EstatisticasInputStore | undefined,
   jogadorInfo: JogadorNameMap
-): JogadorResponseType[] {
-  const lista: JogadorResponseType[] = [];
+): JogadorInfo[] {
+  const lista: JogadorInfo[] = [];
 
   if (!estatisticasInput) {
     return [];
@@ -30,7 +40,7 @@ export function getListaCompleta(
           fotoUrl: info.fotoUrl,
           gols: stats.gols || 0,
           assistencias: stats.assistencias || 0,
-          golContra: stats.golContra || 0,
+          golsContra: stats.golsContra || 0,
           partidas: 1,
           times: {},
           companheiros: {},

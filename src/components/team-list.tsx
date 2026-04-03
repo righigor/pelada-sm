@@ -37,7 +37,7 @@ export default function TeamList({ jogadores }: TeamListProps) {
                 </span>
                 <span className="flex items-center gap-1">
                   <IconBallFootball className="text-red-700 size-4" />{" "}
-                  {estatistica.golContra}
+                  {estatistica.golsContra}
                 </span>
               </div>
             </div>

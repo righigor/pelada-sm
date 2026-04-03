@@ -5,7 +5,7 @@ export interface EstatisticaPartida {
   partidas: number;
 }
 
-export type EstatisticaKeyType = "gols" | "assistencias" | "golContra";
+export type EstatisticaKeyType = "gols" | "assistencias" | "golsContra" | "dd";
 
 export type JogadoresStatsPorTime = {
   [jogadorId: string]: EstatisticaPartida;
