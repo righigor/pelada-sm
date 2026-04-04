@@ -1,6 +1,6 @@
 import type { JogadorDetails } from "@/queries/jogadores/get-jogador-by-id";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import type { StatsJogadorType } from "@/types/jogadores/Jogador";
+import type { JogadorDetalhesStatsType } from "@/types/jogadores/Jogador";
 
 interface JogadorTimesDetalhesProps {
   jogador: JogadorDetails;
@@ -16,7 +16,7 @@ const teamEmojiMap: Record<string, string> = {
 
 
 interface JogadorTimesDetalhesProps {
-  statsExibicao: Omit<StatsJogadorType, "temporadas">;
+  statsExibicao: JogadorDetalhesStatsType;
 }
 
 export default function JogadorTimesDetalhes({ statsExibicao }: JogadorTimesDetalhesProps) {

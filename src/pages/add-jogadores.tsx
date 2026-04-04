@@ -7,11 +7,12 @@ import { useState } from "react";
 export default function AddJogadoresPage() {
   const [foto, setFoto] = useState<File | null>(null);
   const [nome, setNome] = useState("");
+  const [telefone, setTelefone] = useState("");
   const { mutate, isPending } = useCreateJogador();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate({ nome: nome.trim(), foto });
+    mutate({ nome: nome.trim(), foto, telefone: telefone.trim() });
   };
 
   return (
@@ -24,6 +25,13 @@ export default function AddJogadoresPage() {
           className="w-full"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
+        />
+        <Input
+          type="text"
+          placeholder="Telefone - 553199999999"
+          className="w-full mt-2"
+          value={telefone}
+          onChange={(e) => setTelefone(e.target.value)}
         />
         <LoadingButton
           isLoading={isPending}

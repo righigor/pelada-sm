@@ -1,5 +1,3 @@
-import type { PartidaKey } from "../PartidaStore";
-
 export type JogadorType = {
   id: string;
   nome: string;
@@ -12,18 +10,6 @@ export interface FirestoreTimestamp {
   type: "firestore/timestamp/1.0";
   seconds: number;
   nanoseconds: number;
-}
-
-export interface JogadorResponseType {
-  id: string;
-  nome: string;
-  fotoUrl: string | null;
-  gols: number;
-  assistencias: number;
-  golsContra: number;
-  partidas: number;
-  times: Partial<Record<PartidaKey, number>>;
-  companheiros: Record<string, number>;
 }
 
 export interface JogadorNewResponseType {
@@ -48,25 +34,29 @@ export type JogadorNameMap = {
   };
 };
 
-export interface JogadorEstatisticaCompleta {
-  id: string;
-  nome: string;
-  fotoUrl: string | null;
-  gols: number;
-  partidas: number;
-  assistencias: number;
-  golContra: number;
-}
-
 export interface StatsJogadorType {
   gols: number;
   assistencias: number;
   golsContra: number;
   partidas: number;
   defesasDificeis: number;
+  mvpsGeral: number;
+  mvpsPorTime: number;
   times: TimesJogadorType;
   companheiros: CompanheirosJogadorType;
   temporadas: TemporadasJogadorType;
+}
+
+export interface JogadorDetalhesStatsType {
+  gols: number;
+  assistencias: number;
+  golsContra: number;
+  partidas: number;
+  defesasDificeis: number;
+  mvpsGeral: number;
+  mvpsPorTime: number;
+  times: TimesJogadorType;
+  companheiros: CompanheirosJogadorType;
 }
 
 export interface TimesJogadorType {
@@ -88,6 +78,8 @@ export interface TemporadasJogadorType {
     golsContra: number;
     partidas: number;
     defesasDificeis: number;
+    mvpsGeral: number;
+    mvpsPorTime: number;
     times: TimesJogadorType;
     companheiros: CompanheirosJogadorType;
   };

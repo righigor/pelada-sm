@@ -9,11 +9,11 @@ import {
   CardTitle,
 } from "./ui/card";
 import { IconUsers } from "@tabler/icons-react";
-import type { StatsJogadorType } from "@/types/jogadores/Jogador";
+import type { JogadorDetalhesStatsType } from "@/types/jogadores/Jogador";
 
 interface CompanheirosDeTimeProps {
   jogador: JogadorDetails;
-  statsExibicao: Omit<StatsJogadorType, "temporadas">;
+  statsExibicao: JogadorDetalhesStatsType;
 }
 
 export default function CompanheirosDeTime({ jogador, statsExibicao }: CompanheirosDeTimeProps) {

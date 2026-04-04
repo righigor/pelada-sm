@@ -32,7 +32,7 @@ export default function AdminJogadorCard({ jogador }: AdminJogadorCardProps) {
   return (
     <Card className="shadow-lg p-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
       <div className="flex items-center space-x-4">
-        <AvatarLoad jogador={jogador} avatarSizeClasses="" />
+        <AvatarLoad jogador={jogador} avatarSizeClasses="w-20 h-20" />
         <div>
           <CardTitle className="text-lg">{jogador.nome}</CardTitle>
           <CardDescription>ID: {jogador.id.substring(0, 8)}...</CardDescription>

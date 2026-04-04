@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { StatsJogadorType } from "@/types/jogadores/Jogador";
+import type { JogadorDetalhesStatsType } from "@/types/jogadores/Jogador";
 
 export default function DetalhesJogadorPage() {
   const { id } = useParams<{ id: string }>();
@@ -24,22 +24,22 @@ export default function DetalhesJogadorPage() {
       <div className="text-center p-8">Carregando detalhes do jogador...</div>
     );
   }
+  
+  if (error) {
+    return (
+      <div className="text-center p-8 text-red-600">Erro: {error.message}</div>
+    );
+  }
+  
+  if (!jogador) {
+    return <div className="text-center p-8">Jogador não encontrado.</div>;
+  }
   const anosDisponiveis = Object.keys(jogador?.stats.temporadas || {}).sort(
     (a, b) => b.localeCompare(a)
   );
 
   if (!anosDisponiveis.includes(anoAtual)) {
     anosDisponiveis.unshift(anoAtual);
-  }
-
-  if (error) {
-    return (
-      <div className="text-center p-8 text-red-600">Erro: {error.message}</div>
-    );
-  }
-
-  if (!jogador) {
-    return <div className="text-center p-8">Jogador não encontrado.</div>;
   }
 
   const statsExibicao =
@@ -52,9 +52,11 @@ export default function DetalhesJogadorPage() {
           golsContra: 0,
           partidas: 0,
           defesasDificeis: 0,
+          mvpsGeral: 0,
+          mvpsPorTime: 0,
           times: {},
           companheiros: {},
-        } as Omit<StatsJogadorType, "temporadas">);
+        } as JogadorDetalhesStatsType);
 
   return (
     <div className="container mx-auto p-8 space-y-8">
@@ -77,7 +79,7 @@ export default function DetalhesJogadorPage() {
         </Select>
       </div>
       <JogadorHeaderDetalhes jogador={jogador} statsExibicao={statsExibicao} />
-      <JogadorTimesDetalhes statsExibicao={statsExibicao} jogador={jogador} />
+      <JogadorTimesDetalhes jogador={jogador} statsExibicao={statsExibicao} />
       <CompanheirosDeTime jogador={jogador} statsExibicao={statsExibicao} />
     </div>
   );

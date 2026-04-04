@@ -2,9 +2,9 @@ import AdminJogadorCard from "@/components/admin-jogador-card";
 import { useGetAllJogadores } from "@/hooks/jogadores/use-get-all-jogadores";
 
 export default function AdminAllJogadoresPage() {
-  const { data: jogadores, isLoading, error } = useGetAllJogadores();
+  const { data: jogadores, isPending, error } = useGetAllJogadores();
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className="text-center p-8">Carregando lista de jogadores...</div>
     );
