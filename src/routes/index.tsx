@@ -4,6 +4,7 @@ import AppLayout from "@/layouts/app-layout";
 import AddJogadoresPage from "@/pages/add-jogadores";
 import AdminAllJogadoresPage from "@/pages/admin-all-jogadores";
 import AdminAllPartidasPage from "@/pages/admin-all-partidas";
+import AdminRankingPage from "@/pages/admin-ranking-potes";
 import AllJogadoresPage from "@/pages/all-jogadores";
 import AllPartidasPage from "@/pages/all-partidas";
 import DetalhesJogadorPage from "@/pages/detalhes-jogador";
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
       { path: "/partida/selecionar-jogadores", element: <SelecionarJogadoresPage /> },
       { path: "/partida/registrar-stats/:partidaId", element: <RegistrarStatsPage /> },
       { path: "/admin/jogador", element: <AddJogadoresPage /> },
+      { path: "/admin/potes", element: <AdminRankingPage /> },
       { path: "*", element: <NotFoundPage /> }
     ],
   }
