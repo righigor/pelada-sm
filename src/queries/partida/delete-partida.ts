@@ -1,66 +1,82 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from "@/firebase/config";
-import { doc, increment, runTransaction } from "firebase/firestore";
-import type { EstatisticasInputStore, PartidaKey } from "@/types/PartidaStore";
-import type { JogadorUpdate } from "@/types/partida/CreatePartida";
+import { doc, increment, writeBatch, getDoc } from "firebase/firestore";
 
-interface PartidaDataRollback {
-  timesEstatisticas: EstatisticasInputStore
-}
+export async function deletePartidaAndRollbackStats(partidaId: string): Promise<void> {
+  const batch = writeBatch(db);
+  const partidaRef = doc(db, "partidas", partidaId);
+  const partidaSnap = await getDoc(partidaRef);
 
-export async function deletePartidaAndRollbackStats(
-  partidaId: string
-): Promise<void> {
-  await runTransaction(db, async (transaction) => {
-    const partidaRef = doc(db, "partidas", partidaId);
+  if (!partidaSnap.exists()) {
+    throw new Error("Partida não encontrada.");
+  }
 
-    const partidaSnap = await transaction.get(partidaRef);
+  const partidaData = partidaSnap.data();
+  const dataPartida = partidaData.dataPartida; 
+  const anoPartida = new Date(dataPartida).getFullYear().toString();
+  const timesEstatisticas = partidaData.timesEstatisticas;
 
-    if (!partidaSnap.exists()) {
-      throw new Error("Partida não encontrada para o ID fornecido.");
-    }
+  const todosJogadoresIds: string[] = [];
+  const jogadoresInfo: Record<string, { time: string; gols: number; assistencias: number; golsContra: number; defesasDificeis: number; mvpGeral: boolean; mvpTime: boolean }> = {};
 
-    const partidaData = partidaSnap.data() as PartidaDataRollback;
-
-    const estatisticasPartida = partidaData.timesEstatisticas;
-
-    const jogadorGrupoMap: Record<string, PartidaKey> = {};
-    const grupoJogadoresMap: Record<PartidaKey, string[]> = {
-        azul: [], preto: [], branco: [], vermelho: [], goleiros: [],
-    } as Record<PartidaKey, string[]>;
-
-    for (const groupKey in estatisticasPartida) {
-        const key = groupKey as PartidaKey;
-        const grupoStats = estatisticasPartida[key];
-
-        for (const jogadorId of Object.keys(grupoStats.jogadores)) {
-            jogadorGrupoMap[jogadorId] = key;
-            grupoJogadoresMap[key].push(jogadorId);
-        }
-    }
-
-    for (const [jogadorId, grupoKey] of Object.entries(jogadorGrupoMap)) {
-      const grupoStats = estatisticasPartida[grupoKey];
-      const stats = grupoStats.jogadores[jogadorId];
-      const jogadorRef = doc(db, "jogadores", jogadorId);
-
-      const updates: JogadorUpdate = {
-        gols: increment(-stats.gols),
-        assistencias: increment(-stats.assistencias),
-        golsContra: increment(-stats.golsContra),
-        partidas: increment(-1),
-
-        [`times.${grupoKey}`]: increment(-1),
+  for (const [timeKey, info] of Object.entries(timesEstatisticas)) {
+    const timeStats = info as any;
+    for (const [jogId, s] of Object.entries(timeStats.jogadores)) {
+      const stats = s as any;
+      todosJogadoresIds.push(jogId);
+      jogadoresInfo[jogId] = {
+        time: timeKey,
+        gols: stats.gols || 0,
+        assistencias: stats.assistencias || 0,
+        golsContra: stats.golsContra || 0,
+        defesasDificeis: stats.defesasDificeis || 0,
+        mvpGeral: partidaData.mvpGeral === jogId,
+        mvpTime: timeStats.mvpTime === jogId
       };
-
-      const companheirosIds = grupoJogadoresMap[grupoKey].filter(
-        (id) => id !== jogadorId
-      );
-
-      for (const companheiroId of companheirosIds) {
-        updates[`companheiros.${companheiroId}`] = increment(-1);
-      }
-      transaction.update(jogadorRef, updates);
     }
-    transaction.delete(partidaRef);
-  });
+  }
+
+  for (const jogadorId of todosJogadoresIds) {
+    const info = jogadoresInfo[jogadorId];
+    const jogadorRef = doc(db, "jogadores", jogadorId);
+
+    const companheirosIds = todosJogadoresIds.filter(id => 
+      id !== jogadorId && jogadoresInfo[id].time === info.time
+    );
+
+    const updates: any = {};
+
+    updates[`stats.gols`] = increment(-info.gols);
+    updates[`stats.assistencias`] = increment(-info.assistencias);
+    updates[`stats.golsContra`] = increment(-info.golsContra);
+    updates[`stats.defesasDificeis`] = increment(-info.defesasDificeis);
+    updates[`stats.partidas`] = increment(-1);
+    updates[`stats.mvpsGeral`] = increment(info.mvpGeral ? -1 : 0);
+    updates[`stats.mvpsPorTime`] = increment(info.mvpTime ? -1 : 0);
+    updates[`stats.times.${info.time}`] = increment(-1);
+
+    for (const compId of companheirosIds) {
+      updates[`stats.companheiros.${compId}`] = increment(-1);
+    }
+
+    const pathTemp = `stats.temporadas.${anoPartida}`;
+    updates[`${pathTemp}.gols`] = increment(-info.gols);
+    updates[`${pathTemp}.assistencias`] = increment(-info.assistencias);
+    updates[`${pathTemp}.golsContra`] = increment(-info.golsContra);
+    updates[`${pathTemp}.defesasDificeis`] = increment(-info.defesasDificeis);
+    updates[`${pathTemp}.partidas`] = increment(-1);
+    updates[`${pathTemp}.mvpsGeral`] = increment(info.mvpGeral ? -1 : 0);
+    updates[`${pathTemp}.mvpsPorTime`] = increment(info.mvpTime ? -1 : 0);
+    updates[`${pathTemp}.times.${info.time}`] = increment(-1);
+
+    for (const compId of companheirosIds) {
+      updates[`${pathTemp}.companheiros.${compId}`] = increment(-1);
+    }
+
+    batch.update(jogadorRef, updates);
+  }
+
+  batch.delete(partidaRef);
+
+  await batch.commit();
 }

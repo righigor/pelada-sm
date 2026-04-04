@@ -5,13 +5,15 @@ import {
   IconShoe,
   IconMoodSad,
   IconShield,
+  IconTrophy,
+  IconStar,
 } from "@tabler/icons-react";
 import AvatarLoad from "@/components/avatar-load";
-import type { StatsJogadorType } from "@/types/jogadores/Jogador";
+import type { JogadorDetalhesStatsType } from "@/types/jogadores/Jogador";
 
 interface JogadorHeaderDetalhesProps {
   jogador: JogadorDetails;
-  statsExibicao: Omit<StatsJogadorType, "temporadas">;
+  statsExibicao: JogadorDetalhesStatsType;
 }
 
 const StatItem: React.FC<{
@@ -52,7 +54,7 @@ export default function JogadorHeaderDetalhes({
         <div className="flex flex-col md:flex-row items-center justify-center mb-4 gap-10 md:gap-24">
           <AvatarLoad
             jogador={jogador}
-            avatarSizeClasses="w-44 h-44 md:w-64 md:h-64 rounded-full object-cover shadow-md"
+            avatarSizeClasses="w-1/2 h-full md:w-1/3 lg:w-1/3 rounded-full object-cover shadow-md"
           />
           <div>
             <p className="text-center text-sm md:text-xl font-semibold mb-2">
@@ -77,6 +79,18 @@ export default function JogadorHeaderDetalhes({
                 total={statsExibicao.golsContra}
                 average={Number(calcMedia(statsExibicao.golsContra))}
                 icon={<IconMoodSad className="text-red-500" />}
+              />
+              <StatItem
+                label="MVP da Pelada"
+                total={statsExibicao.mvpsGeral || 0}
+                average={Number(calcMedia(statsExibicao.mvpsGeral || 0))}
+                icon={<IconTrophy className="w-5 h-5 text-yellow-500" />}
+              />
+              <StatItem
+                label="Melhor do Time"
+                total={statsExibicao.mvpsPorTime || 0}
+                average={Number(calcMedia(statsExibicao.mvpsPorTime || 0))}
+                icon={<IconStar className="w-5 h-5 text-blue-400" />}
               />
               {statsExibicao.defesasDificeis > 0 && (
                 <StatItem
