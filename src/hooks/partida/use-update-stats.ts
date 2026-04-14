@@ -1,40 +1,11 @@
-/* eslint-disable react-hooks/refs */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from "@/firebase/config";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { doc, updateDoc, increment, serverTimestamp } from "firebase/firestore";
-import debounce from "lodash/debounce";
-import { useEffect, useRef, useMemo } from "react";
 import { toast } from "sonner";
 
 export const useUpdateStats = (partidaId: string) => {
   const queryClient = useQueryClient();
-
-  const pendingUpdatesRef = useRef<Record<string, any>>({});
-
-  const debouncedSave = useMemo(() => 
-    debounce(async () => {
-      const updates = pendingUpdatesRef.current;
-      if (Object.keys(updates).length === 0) return;
-
-      pendingUpdatesRef.current = {};
-
-      try {
-        const docRef = doc(db, "partidas", partidaId);
-        await updateDoc(docRef, {
-          ...updates,
-          updatedAt: serverTimestamp(),
-        });
-      } catch (error) {
-        console.error("Erro ao salvar stats:", error);
-        toast.error("Erro ao sincronizar estatísticas.");
-      }
-    }, 2000), 
-  [partidaId]);
-
-  useEffect(() => {
-    return () => debouncedSave.cancel();
-  }, [debouncedSave]);
 
   return useMutation({
     mutationFn: async (payload: {
@@ -44,12 +15,16 @@ export const useUpdateStats = (partidaId: string) => {
       valor: number;
     }) => {
       const { time, jogadorId, campo, valor } = payload;
+      const docRef = doc(db, "partidas", partidaId);
 
-      const caminho = `timesEstatisticas.${time}.jogadores.${jogadorId}.${campo}`;
+      console.log(payload)
 
-      pendingUpdatesRef.current[caminho] = increment(valor);
+      const caminhoEstatistica = `timesEstatisticas.${time}.jogadores.${jogadorId}.${campo}`;
 
-      debouncedSave();
+      await updateDoc(docRef, {
+        [caminhoEstatistica]: increment(valor),
+        updatedAt: serverTimestamp(),
+      });
     },
 
     onMutate: async (newStat) => {
@@ -58,9 +33,11 @@ export const useUpdateStats = (partidaId: string) => {
 
       queryClient.setQueryData(["partida", partidaId], (old: any) => {
         if (!old) return old;
-        
+
+        // Clone profundo para a UI não quebrar
         const newPartida = JSON.parse(JSON.stringify(old));
-        const jogador = newPartida.timesEstatisticas[newStat.time]?.jogadores[newStat.jogadorId];
+        const time = newPartida.timesEstatisticas[newStat.time];
+        const jogador = time?.jogadores[newStat.jogadorId];
 
         if (jogador) {
           const valorAtual = jogador[newStat.campo] || 0;
@@ -73,10 +50,17 @@ export const useUpdateStats = (partidaId: string) => {
       return { previousPartida };
     },
 
-    onError: (_, __, context) => {
+    onError: (err, __, context) => {
+      console.error("Erro na mutação:", err);
       if (context?.previousPartida) {
         queryClient.setQueryData(["partida", partidaId], context.previousPartida);
       }
+      toast.error("Erro ao salvar estatística.");
+    },
+
+    onSettled: () => {
+      // Garante que os dados locais batam com o servidor após a gravação
+      queryClient.invalidateQueries({ queryKey: ["partida", partidaId] });
     },
   });
 };
