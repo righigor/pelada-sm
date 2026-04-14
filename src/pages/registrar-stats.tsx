@@ -111,50 +111,51 @@ export default function RegistrarStatsPage() {
 
       <section className="mb-10">
         <Accordion type="single" collapsible className="w-full">
-          {Object.entries(partida.timesEstatisticas).map(([key, timeData]) => {
-            const partidaKey = key as PartidaKey;
-            const jogadoresArray = Object.entries(timeData.jogadores);
-
-            if (jogadoresArray.length === 0) return null;
-
-            const label = getLabel(partidaKey);
-
-            return (
-              <AccordionItem key={key} value={key}>
-                <AccordionTrigger className="text-base md:text-lg font-semibold capitalize cursor-pointer">
-                  {label}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="flex flex-col gap-4">
-                    {key === "goleiros" ? null : (
-                      <TimeHeaderCard
-                        vitorias={timeData.vitorias}
-                        onUpdate={(valor) => {
-                          mutateVitorias({ time: partidaKey, valor });
-                        }}
-                      />
-                    )}
-                    {jogadoresArray.map(([id, stats]) => (
-                      <JogadorCardStats
-                        key={id}
-                        partidaKey={partidaKey}
-                        jogador={
-                          {
-                            id,
-                            nome: timeData.jogadores[id].nome,
-                          } as JogadorNewResponseType
-                        }
-                        estatisticas={stats}
-                        handleUpdate={(time, jogadorId, campo, valor) =>
-                          handleUpdate(time, jogadorId, campo, valor)
-                        }
-                      />
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
+          {Object.entries(partida.timesEstatisticas ?? {}).map(
+            ([key, timeData]) => {
+              const partidaKey = key as PartidaKey;
+              const jogadoresArray = Object.values(timeData.jogadores || {});
+              if (jogadoresArray.length === 0) return null;
+              const label = getLabel(partidaKey as CorTime | "goleiros");
+              return (
+                <AccordionItem key={key} value={key}>
+                  <AccordionTrigger className="text-base md:text-lg font-semibold capitalize cursor-pointer">
+                    {label}
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="flex flex-col gap-4">
+                      {key === "goleiros" ? null : (
+                        <TimeHeaderCard
+                          vitorias={timeData.vitorias || 0}
+                          onUpdate={(valor) => {
+                            mutateVitorias({ time: partidaKey, valor });
+                          }}
+                        />
+                      )}
+                      {Object.entries(timeData.jogadores || {}).map(
+                        ([id, stats]) => (
+                          <JogadorCardStats
+                            key={id}
+                            partidaKey={partidaKey}
+                            jogador={
+                              {
+                                id: id,
+                                nome: stats.nome,
+                              } as JogadorNewResponseType
+                            }
+                            estatisticas={stats}
+                            handleUpdate={(time, jogadorId, campo, valor) =>
+                              handleUpdate(time, jogadorId, campo, valor)
+                            }
+                          />
+                        )
+                      )}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            }
+          )}
         </Accordion>
       </section>
 
