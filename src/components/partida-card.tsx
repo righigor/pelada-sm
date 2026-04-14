@@ -48,7 +48,7 @@ export default function PartidaCard({ partida }: PartidaCardProps) {
         {isFinalizada ? (
           <ExibeMVPPartidaCard partida={partida} />
         ) : (
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             {partida.timesEstatisticas && (
                 <div
                   onClick={() =>
