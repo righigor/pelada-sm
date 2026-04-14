@@ -6,6 +6,8 @@ import type { PartidaByIDResponseType } from "@/types/partida/PartidaById";
 import { PARTIDA_STATUS } from "@/utils/constants";
 import { ExibeMVPPartidaCard } from "./exibe-mvp-partida-card";
 import { RegistraStatsPartidaCardBtn } from "./registra-stats-partida-card-btn";
+import { Button } from "./ui/button";
+import { Users2 } from "lucide-react";
 
 interface PartidaCardProps {
   partida: PartidaByIDResponseType;
@@ -18,8 +20,6 @@ export default function PartidaCard({ partida }: PartidaCardProps) {
   const handleCardClick = () => {
     if (isFinalizada) {
       navigate(`/partida/${partida.id}`);
-    }else {
-      navigate(`/partida/registrar-stats/${partida.id}`);
     }
   };
 
@@ -48,7 +48,25 @@ export default function PartidaCard({ partida }: PartidaCardProps) {
         {isFinalizada ? (
           <ExibeMVPPartidaCard partida={partida} />
         ) : (
-          <RegistraStatsPartidaCardBtn />
+          <div className="flex gap-2">
+            {partida.timesEstatisticas && (
+                <div
+                  onClick={() =>
+                    navigate(`/partida/editar-times-sorteados/${partida.id}`)
+                  }
+                >
+                  <Button className="cursor-pointer">
+                    <Users2 className="mr-2 h-4 w-4" />
+                    Editar Times
+                  </Button>
+                </div>
+              )}
+            <div
+              onClick={() => navigate(`/partida/registrar-stats/${partida.id}`)}
+            >
+              <RegistraStatsPartidaCardBtn />
+            </div>
+          </div>
         )}
       </div>
     </Card>
