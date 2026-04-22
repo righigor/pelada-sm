@@ -41,7 +41,7 @@ const router = createBrowserRouter([
       { path: "/admin/jogador", element: <AddJogadoresPage /> },
       { path: "/admin/potes", element: <AdminRankingPage /> },
       { path: "*", element: <NotFoundPage /> },
-      { path: "/teseadd", element: <AddPlayersManual /> },
+      { path: "/test", element: <AddPlayersManual /> },
     ],
   },
 ]);
