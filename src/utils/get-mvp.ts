@@ -10,7 +10,7 @@ interface MvpDestaques {
 const PESOS_MVP = {
   GOL: 3,
   ASSISTENCIA: 2,
-  DD: 2.5,
+  DD: 1.5,
   GOL_CONTRA: 4,
 };
 
