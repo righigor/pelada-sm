@@ -10,7 +10,7 @@ interface MvpDestaques {
 const PESOS_MVP = {
   GOL: 3,
   ASSISTENCIA: 2,
-  DD: 2.5,
+  DD: 1.5,
   GOL_CONTRA: 4,
 };
 
@@ -40,14 +40,12 @@ export function getMvps(
     const key = groupKey as PartidaKey;
     const grupoStats = estatisticasInput[key];
 
-    const bonusVitoriaTime = (grupoStats.vitorias || 0) * 1; 
 
     for (const [jogadorId, stats] of Object.entries(grupoStats.jogadores)) {
       const mvpScore =
         (stats.gols || 0) * PESOS_MVP.GOL +
         (stats.assistencias || 0) * PESOS_MVP.ASSISTENCIA +
-        (stats.dd || 0) * PESOS_MVP.DD +
-        bonusVitoriaTime -
+        (stats.dd || 0) * PESOS_MVP.DD -
         (stats.golsContra || 0) * PESOS_MVP.GOL_CONTRA;
 
       if (mvpScore > maxMvpScoreGeral) {
