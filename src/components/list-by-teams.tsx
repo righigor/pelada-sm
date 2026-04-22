@@ -11,6 +11,8 @@ import { Item, ItemContent, ItemMedia, ItemTitle } from "./ui/item";
 import type { DestaquePartida } from "@/types/destaques/Destaque";
 import { Trophy } from "lucide-react";
 
+const ORDEM_TIMES: PartidaKey[] = ["azul", "preto", "branco", "vermelho", "goleiros"];
+
 interface ListByTeamsProps {
   estatisticas: EstatisticasInputStore;
   teamsMvps: Record<PartidaKey, DestaquePartida | null>;
@@ -38,33 +40,38 @@ export default function ListByTeams({
       </CardHeader>
 
       <CardContent className="space-y-4 md:grid md:grid-cols-2 lg:grid-cols-4 gap-2">
-        {Object.entries(estatisticas).map(([teamKey, grupo]) => {
-          if (Object.keys(grupo.jogadores).length === 0) return null;
+        {ORDEM_TIMES.map((teamKey) => {
+          const grupo = estatisticas[teamKey];
+          
+          // Se o time não existir nas estatísticas ou não tiver jogadores, não renderiza
+          if (!grupo || Object.keys(grupo.jogadores).length === 0) return null;
+
           return (
-          <Item
-            key={teamKey}
-            variant="outline"
-            className="space-y-2 flex flex-col"
-          >
-            <div className="flex items-center gap-2">
-              <ItemMedia>{teamEmojiMap[teamKey]}</ItemMedia>
-              <ItemTitle className="capitalize text-xl text-center font-semibold flex items-center gap-2">
-                {teamKey}
-                <span className="flex items-center text-sm font-normal gap-1">
-                  <Trophy className="inline-block ml-2 mb-1 size-4 text-yellow-500" />
-                  <span>
-                    {teamsMvps[teamKey as PartidaKey]
-                      ? `${teamsMvps[teamKey as PartidaKey]!.nome}`
-                      : "N/A"}
+            <Item
+              key={teamKey}
+              variant="outline"
+              className="space-y-2 flex flex-col"
+            >
+              <div className="flex items-center gap-2">
+                <ItemMedia>{teamEmojiMap[teamKey]}</ItemMedia>
+                <ItemTitle className="capitalize text-xl text-center font-semibold flex items-center gap-2">
+                  {teamKey}
+                  <span className="flex items-center text-sm font-normal gap-1">
+                    <Trophy className="inline-block ml-2 mb-1 size-4 text-yellow-500" />
+                    <span>
+                      {teamsMvps[teamKey as PartidaKey]
+                        ? `${teamsMvps[teamKey as PartidaKey]!.nome}`
+                        : "N/A"}
+                    </span>
                   </span>
-                </span>
-              </ItemTitle>
-            </div>
-            <ItemContent>
-              <TeamList jogadores={grupo} />
-            </ItemContent>
-          </Item>
-        )})}
+                </ItemTitle>
+              </div>
+              <ItemContent>
+                <TeamList jogadores={grupo} />
+              </ItemContent>
+            </Item>
+          );
+        })}
       </CardContent>
     </Card>
   );
