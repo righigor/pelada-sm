@@ -1,4 +1,4 @@
-export type StatField = "gols" | "assistencias" | "golsContra" | "dd";
+export type StatField = "gols" | "assistencias" | "golsContra" | "dd" | "mvpsGeral";
 
 export type TimeKey = "azul" | "preto" | "branco" | "vermelho" | "goleiros";
 

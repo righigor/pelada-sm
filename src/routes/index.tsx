@@ -1,6 +1,8 @@
 import App from "@/App";
 import NotFoundPage from "@/components/not-found";
 import AppLayout from "@/layouts/app-layout";
+import PremiacaoPage from "@/pages/premiacao";
+import AdminPremiacaoPage from "@/pages/admin-premiacao";
 import AddJogadoresPage from "@/pages/add-jogadores";
 import AdminAllJogadoresPage from "@/pages/admin-all-jogadores";
 import AdminAllPartidasPage from "@/pages/admin-all-partidas";
@@ -22,8 +24,10 @@ const router = createBrowserRouter([
       { path: "/", element: <App /> },
       { path: "/jogadores", element: <AllJogadoresPage /> },
       { path: "/admin/jogadores", element: <AdminAllJogadoresPage /> },
+      { path: "/admin/premiacao", element: <AdminPremiacaoPage /> },
       { path: "/jogadores/:id", element: <DetalhesJogadorPage /> },
       { path: "/partidas", element: <AllPartidasPage /> },
+      { path: "/estatisticas", element: <PremiacaoPage /> },
       { path: "/admin/partidas", element: <AdminAllPartidasPage /> },
       { path: "/partida/:partidaId", element: <DetalhesPartidaPage /> },
       {
