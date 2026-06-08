@@ -5,6 +5,7 @@ export const useGetJogadorDetails = (jogadorId: string) => {
     return useQuery<JogadorDetails, Error>({
         queryKey: ['jogadorDetails', jogadorId],
         queryFn: () => getJogadorById(jogadorId),
+        staleTime: 1000 * 60 * 5,
         enabled: !!jogadorId,
     });
 };

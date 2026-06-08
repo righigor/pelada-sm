@@ -12,11 +12,29 @@ export interface FirestoreTimestamp {
   nanoseconds: number;
 }
 
+export interface FinanceiroJogadorType {
+  status: 'inactive' | 'pending' | 'active' | 'cancelled';
+
+  idPlano: 'plano_dia_05' | 'plano_dia_10' | 'plano_dia_15' | null;
+
+  mercadoPagoSubscriptionId: string | null;
+
+  pixPendente: {
+    copiaECola: string;
+    vencimento: string;
+    valor: number;
+  } | null;
+
+  ultimoPagamentoEm: string | null; 
+}
+
 export interface JogadorNewResponseType {
   id: string;
   nome: string;
   fotoUrl: string | null;
-  telfone: string | null;
+  telefone: string;
+  cpf: string | null;
+  financeiro: FinanceiroJogadorType;
   stats: StatsJogadorType;
   createdAt: FirestoreTimestamp;
   updatedAt: FirestoreTimestamp;

@@ -16,6 +16,7 @@ import RegistrarStatsPage from "@/pages/registrar-stats";
 import SelecionarJogadoresPage from "@/pages/selecionar-jogadores";
 import { AddPlayersManual } from "@/pages/teseadd";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import CadastroCaixinhaPage from "@/pages/cadastro-caixinha-page";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,8 @@ const router = createBrowserRouter([
       { path: "/admin/potes", element: <AdminRankingPage /> },
       { path: "*", element: <NotFoundPage /> },
       { path: "/test", element: <AddPlayersManual /> },
+      { path: "/premiacao", element: <PremiacaoPage /> },
+      { path: "/caixinha", element: <CadastroCaixinhaPage /> }
     ],
   },
 ]);
