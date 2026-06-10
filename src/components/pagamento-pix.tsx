@@ -46,7 +46,7 @@ export default function PagamentoPix({ pixDados }: PagamentoPixProps) {
               className="h-11 border-slate-200 text-slate-400 font-mono text-xs shadow-inner"
             />
             <Button
-              className="h-11 border-slate-200 px-3 flex items-center gap-1.5 text-slate-700"
+              className="h-11 border-slate-200 px-3 flex items-center gap-1.5 text-slate-700 cursor-pointer"
               onClick={handleCopiar}
             >
               <Copy className="w-4 h-4" /> Copiar

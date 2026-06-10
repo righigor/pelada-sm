@@ -28,6 +28,18 @@ export default function Header() {
       name: "Estatísticas",
       link: "/estatisticas",
     },
+    {
+      name: "Premiações",
+      link: "/premiacoes"
+    },
+    {
+      name: "Portal da Transparência",
+      link: "/portal-da-transparencia"
+    },
+    {
+      name: "Vire Mensalista",
+      link: "/caixinha"
+    }
   ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
