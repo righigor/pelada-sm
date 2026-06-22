@@ -41,7 +41,7 @@ export function ComponenteStatusAtivo({
             <span className="font-semibold text-white">
               {jogadorSelecionado?.nome}
             </span>
-            ! Sua assinatura de **R$ 10,50** via Mercado Pago está confirmada e
+            ! Sua assinatura de **R$ 10,10** via Mercado Pago está confirmada e
             rodando.
           </p>
         </div>
