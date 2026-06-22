@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { PremiacaoEdicao } from "@/hooks/premiacao/use-get-premiacao-em-andamento";
 import { Button } from "./ui/button";
@@ -16,7 +15,7 @@ export default function PremiacaoEmAndamentoDetalhes({
   p,
   setPremiacaoSelecionada,
 }: PremiacaoEmAndamentoDetalhesProps) {
-  const [valoresFinais, setValoresFinais] = useState<Record<string, any>>({});
+  const [valoresFinais] = useState<Record<string, any>>({});
 
   const { mutate: salvarPremiacao, isPending } = useSalvarPremiacao();
 
