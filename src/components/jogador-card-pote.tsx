@@ -14,8 +14,15 @@ export function JogadorCardPote({ jogador, index }: Props) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          style={
+            {
+              ...provided.draggableProps.style,
+            } as React.CSSProperties
+          }
           className={`flex items-center gap-3 p-3 bg-slate-900/50 rounded-lg border border-slate-800 mb-2 transition-shadow ${
-            snapshot.isDragging ? "shadow-2xl border-primary ring-1 ring-primary/50" : ""
+            snapshot.isDragging
+              ? "shadow-2xl border-primary ring-1 ring-primary/50"
+              : ""
           }`}
         >
           <div className="shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-zinc-800 text-[10px] font-bold text-zinc-400">
