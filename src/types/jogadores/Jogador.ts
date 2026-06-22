@@ -12,11 +12,26 @@ export interface FirestoreTimestamp {
   nanoseconds: number;
 }
 
+export interface FinanceiroJogadorType {
+  status: 'inactive' | 'pending' | 'active' | 'cancelled';
+
+  externalReference: string | null;
+  pagamentoId: string | null
+  diaVencimento: string | null;
+  dataCriacao: string | null;
+  pixCopiaECola: string| null;
+  pixQrCodeBase64: string | null;
+
+  ultimoPagamentoEm: string | null; 
+  cpf: string | null;
+}
+
 export interface JogadorNewResponseType {
   id: string;
   nome: string;
   fotoUrl: string | null;
-  telfone: string | null;
+  telefone: string;
+  assinatura?: FinanceiroJogadorType;
   stats: StatsJogadorType;
   createdAt: FirestoreTimestamp;
   updatedAt: FirestoreTimestamp;

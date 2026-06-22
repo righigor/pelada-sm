@@ -16,6 +16,9 @@ import RegistrarStatsPage from "@/pages/registrar-stats";
 import SelecionarJogadoresPage from "@/pages/selecionar-jogadores";
 import { AddPlayersManual } from "@/pages/teseadd";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import CadastroCaixinhaPage from "@/pages/cadastro-caixinha-page";
+import PremiacoesPage from "@/pages/premiacoes-page";
+import AdminPremiacoes from "@/pages/admin-premiacoes";
 
 const router = createBrowserRouter([
   {
@@ -44,8 +47,11 @@ const router = createBrowserRouter([
       },
       { path: "/admin/jogador", element: <AddJogadoresPage /> },
       { path: "/admin/potes", element: <AdminRankingPage /> },
+      { path: "/admin/premiacoes", element: <AdminPremiacoes /> },
       { path: "*", element: <NotFoundPage /> },
       { path: "/test", element: <AddPlayersManual /> },
+      { path: "/premiacoes", element: <PremiacoesPage /> },
+      { path: "/caixinha", element: <CadastroCaixinhaPage /> }
     ],
   },
 ]);

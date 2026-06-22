@@ -24,10 +24,22 @@ export default function Header() {
       name: "Partidas",
       link: "/partidas",
     },
+    // {
+    //   name: "Estatísticas",
+    //   link: "/estatisticas",
+    // },
+    // {
+    //   name: "Premiações",
+    //   link: "/premiacoes"
+    // },
+    // {
+    //   name: "Portal da Transparência",
+    //   link: "/portal-da-transparencia"
+    // },
     {
-      name: "Estatísticas",
-      link: "/estatisticas",
-    },
+      name: "Vire Mensalista",
+      link: "/caixinha"
+    }
   ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

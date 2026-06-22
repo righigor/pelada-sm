@@ -5,6 +5,6 @@ export const useGetLastPartida = () => {
   return useQuery({
     queryKey: ['last-partida'],
     queryFn: getLastPartida,
-    
+    staleTime: 1000 * 60 * 5,
   })
 }

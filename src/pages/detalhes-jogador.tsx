@@ -58,6 +58,7 @@ export default function DetalhesJogadorPage() {
           companheiros: {},
         } as JogadorDetalhesStatsType);
 
+        console.log(jogador)
   return (
     <div className="container mx-auto p-8 space-y-8">
       <div className="mt-4 flex justify-end items-center gap-4">
