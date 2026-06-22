@@ -23,8 +23,8 @@ import PremiacaoEmAndamentoDetalhes from "@/components/premiacao-em-andamento-de
 export default function AdminPremiacoes() {
   const [premiacaoSelecionada, setPremiacaoSelecionada] =
     useState<PremiacaoEdicao | null>(null);
-  const [sheetCategoriaOpen, setSheetCategoriaOpen] = useState(false);
-  const [sheetPremiacaoOpen, setSheetPremiacaoOpen] = useState(false);
+  const [_sheetCategoriaOpen, setSheetCategoriaOpen] = useState(false);
+  const [_sheetPremiacaoOpen, setSheetPremiacaoOpen] = useState(false);
 
   const {
     data: premiacoesAtivas,

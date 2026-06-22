@@ -69,7 +69,7 @@ export function QuadroEdicaoTimes({
     const sourceKey = source.droppableId as PartidaKey;
     const destKey = destination.droppableId as PartidaKey;
     const sourceArray: JogadorComId[] = Object.entries(
-      times[sourceKey].jogadores
+      times[sourceKey].jogadores,
     ).map(([id, dados]) => ({ id, ...dados }));
 
     const destArray: JogadorComId[] =
@@ -105,7 +105,7 @@ export function QuadroEdicaoTimes({
 
   const obterAtletasDisponiveis = () => {
     const idsEscalados = new Set(
-      Object.values(times).flatMap((time) => Object.keys(time.jogadores))
+      Object.values(times).flatMap((time) => Object.keys(time.jogadores)),
     );
     return listaAtletas.filter((atleta) => !idsEscalados.has(atleta.id));
   };
@@ -117,7 +117,7 @@ export function QuadroEdicaoTimes({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         {nomesTimes.map((cor) => {
           const jogadores = Object.entries(times[cor].jogadores).map(
-            ([id, dados]) => ({ id, ...dados })
+            ([id, dados]) => ({ id, ...dados }),
           );
 
           return (
@@ -159,11 +159,16 @@ export function QuadroEdicaoTimes({
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className={`flex items-center justify-between p-3 border rounded-lg shadow-xl transition-all ${
+                            className={`flex items-center gap-3 p-3 bg-slate-900/50 rounded-lg border border-slate-800 mb-2 transition-shadow ${
                               snapshot.isDragging
-                                ? " bg-slate-700 scale-105 z-50"
-                                : "border-slate-700 bg-slate-800 hover:border-slate-500"
+                                ? "shadow-2xl border-primary ring-1 ring-primary/50"
+                                : ""
                             }`}
+                            // A correção está aqui:
+                            style={
+                              provided.draggableProps
+                                .style as React.CSSProperties
+                            }
                           >
                             <div className="flex items-center gap-2 truncate">
                               <GripVertical className="h-4 w-4 text-slate-500 shrink-0" />
