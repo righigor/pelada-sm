@@ -12,6 +12,7 @@ import type { EtapaCadastro } from "@/pages/cadastro-caixinha-page";
 import { useState } from "react";
 import { Calendar, CreditCard } from "lucide-react";
 import LoadingButton from "./loading-button";
+import { toast } from "sonner";
 
 interface FormularioAdesaoCaixinhaProps {
   jogadorSelecionado: JogadorNewResponseType;
@@ -25,12 +26,23 @@ interface FormularioAdesaoCaixinhaProps {
       diaVencimento: string;
     },
     options?: {
-      onSuccess?: (data: { sucesso: boolean; pixCopiaECola: string }) => void;
+      onSuccess?: (data: {
+        assinatura: {
+          pixCopiaECola: string;
+          pixQrCodeBase64: string;
+        };
+      }) => void;
       onError?: (error: Error) => void;
     },
   ) => void;
   isGerandoPix: boolean;
-  setPixDados(pix: string): void;
+  setPixDados({
+    pixCopiaECola,
+    pixQrCodeBase64,
+  }: {
+    pixCopiaECola: string;
+    pixQrCodeBase64: string;
+  }): void;
 }
 
 export default function FormularioAdesaoCaixinha({
@@ -38,7 +50,7 @@ export default function FormularioAdesaoCaixinha({
   setEtapa,
   criarAssinatura,
   isGerandoPix,
-  setPixDados
+  setPixDados,
 }: FormularioAdesaoCaixinhaProps) {
   const [cpf, setCpf] = useState("");
   const [diaVencimento, setDiaVencimento] = useState("10");
@@ -61,21 +73,31 @@ export default function FormularioAdesaoCaixinha({
   const handleGerarAssinatura = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!cpfValido) return;
-    criarAssinatura({
-      jogadorId: jogadorSelecionado.id,
-      nome: jogadorSelecionado.nome,
-      telefone: jogadorSelecionado.telefone,
-      cpf: cpf.replace(/\D/g, ''),
-      diaVencimento: diaVencimento
-    }, {
-      onSuccess: (data) => {
-        setPixDados(data.pixCopiaECola);
-        setEtapa('exibir_pix');
+
+    criarAssinatura(
+      {
+        jogadorId: jogadorSelecionado.id,
+        nome: jogadorSelecionado.nome,
+        telefone: jogadorSelecionado.telefone,
+        cpf: cpf.replace(/\D/g, ""),
+        diaVencimento: diaVencimento,
       },
-      onError: () => {
-        alert("Houve um erro ao gerar o seu Pix. Tente novamente.");
-      }
-    });
+      {
+        onSuccess: (data) => {
+          const dadosPix = data.assinatura;
+          setPixDados({
+            pixCopiaECola: dadosPix.pixCopiaECola,
+            pixQrCodeBase64: dadosPix.pixQrCodeBase64.startsWith("data:image")
+              ? dadosPix.pixQrCodeBase64
+              : `data:image/png;base64,${dadosPix.pixQrCodeBase64}`,
+          });
+          setEtapa("exibir_pix");
+        },
+        onError: () => {
+          toast.error("Houve um erro ao gerar o seu Pix. Tente novamente.");
+        },
+      },
+    );
   };
 
   const opcoesDias = ["5", "10", "15"];
@@ -123,7 +145,7 @@ export default function FormularioAdesaoCaixinha({
                     flex flex-col items-center justify-center p-3 rounded-xl border text-center cursor-pointer transition-all select-none
                     ${
                       ativo
-                        ? "border-emerald-900 ring-1 ring-emerald-800 text-emerald-700 font-bold"
+                        ? "border-emerald-950 ring-1 ring-emerald-800 text-emerald-700 font-bold bg-emerald-50/10"
                         : "border-slate-200 text-slate-600 hover:border-slate-300 font-medium"
                     }
                   `}

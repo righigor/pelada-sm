@@ -9,8 +9,15 @@ interface CriarAssinaturaPayload {
 }
 
 interface CriarAssinaturaResponse {
-  sucesso: boolean;
-  pixCopiaECola: string;
+  assinatura: {
+    sucesso: boolean;
+    pagamentoId: number;
+    cpf: string;
+    external_reference: string;
+    diaVencimento: string;
+    pixCopiaECola: string;
+    pixQrCodeBase64: string;
+  };
 }
 
 export function useCreateAssinatura() {
@@ -32,7 +39,9 @@ export function useCreateAssinatura() {
         throw new Error("Erro ao processar assinatura no n8n.");
       }
 
-      return response.json();
+      const resultado = await response.json();
+      console.log("resultado", resultado);
+      return Array.isArray(resultado) ? resultado[0] : resultado;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jogadores"] });

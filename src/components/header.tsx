@@ -24,18 +24,18 @@ export default function Header() {
       name: "Partidas",
       link: "/partidas",
     },
-    {
-      name: "Estatísticas",
-      link: "/estatisticas",
-    },
-    {
-      name: "Premiações",
-      link: "/premiacoes"
-    },
-    {
-      name: "Portal da Transparência",
-      link: "/portal-da-transparencia"
-    },
+    // {
+    //   name: "Estatísticas",
+    //   link: "/estatisticas",
+    // },
+    // {
+    //   name: "Premiações",
+    //   link: "/premiacoes"
+    // },
+    // {
+    //   name: "Portal da Transparência",
+    //   link: "/portal-da-transparencia"
+    // },
     {
       name: "Vire Mensalista",
       link: "/caixinha"

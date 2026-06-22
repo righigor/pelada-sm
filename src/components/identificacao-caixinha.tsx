@@ -50,7 +50,7 @@ export default function IdentificaoCaixinha({
 
     setTimeout(() => {
       const statusFinanceiro =
-        jogadorSelecionado.financeiro?.status || "inactive";
+        jogadorSelecionado.assinatura?.status || "inactive";
 
       switch (statusFinanceiro) {
         case "active":

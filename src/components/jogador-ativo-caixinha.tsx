@@ -20,10 +20,10 @@ export function ComponenteStatusAtivo({
     setEtapa("identificacao");
   };
 
-  const obterNomePlano = (idPlano: string | null) => {
-    if (idPlano === "plano_dia_05") return "Todo dia 05";
-    if (idPlano === "plano_dia_10") return "Todo dia 10";
-    if (idPlano === "plano_dia_15") return "Todo dia 15";
+  const obterNomePlano = (diaVencimento: string | null | undefined) => {
+    if (diaVencimento) {
+      return `Todo dia ${diaVencimento.padStart(2, "0")}`;
+    }
     return "Mensal";
   };
 
@@ -47,11 +47,11 @@ export function ComponenteStatusAtivo({
         </div>
 
         <div className="space-y-0.5">
-          <span className="text-xs text-slate-400 flex items-center gap-1">
+          <span className="text-xs text-slate-400 flex items-center gap-1 justify-center">
             <Calendar className="w-3.5 h-3.5" /> Vencimento
           </span>
           <span className="text-sm font-semibold text-slate-400">
-            {obterNomePlano(jogadorSelecionado?.financeiro.idPlano ?? null)}
+            {obterNomePlano(jogadorSelecionado?.assinatura?.diaVencimento)}
           </span>
         </div>
       </CardContent>

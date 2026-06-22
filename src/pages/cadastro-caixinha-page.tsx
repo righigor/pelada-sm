@@ -4,7 +4,6 @@ import IdentificaoCaixinha from "@/components/identificacao-caixinha";
 import { useGetAllJogadores } from "@/hooks/jogadores/use-get-all-jogadores";
 import type {
   JogadorNewResponseType,
-  StatsJogadorType,
 } from "@/types/jogadores/Jogador";
 import LoadingEtapaCaixinha from "@/components/loading-etapa-caixinha";
 import FormularioAdesaoCaixinha from "@/components/formulario-adesao-caixinha";
@@ -19,40 +18,31 @@ export type EtapaCadastro =
   | "exibir_pix"
   | "ativo";
 
+  export interface PixFluxoDados {
+  pixCopiaECola: string;
+  pixQrCodeBase64: string;
+}
+
 export default function CadastroCaixinhaPage() {
-  const [etapa, setEtapa] = useState<EtapaCadastro>("exibir_pix");
+  const [etapa, setEtapa] = useState<EtapaCadastro>("identificacao");
   const [jogadorSelecionado, setJogadorSelecionado] =
-    useState<JogadorNewResponseType | null>({
-      id: "jog_123456",
-      nome: "Lucas Silva de Oliveira",
-      telefone: "31999999999",
-      cpf: "123.456.789-00",
-      stats: {} as StatsJogadorType,
-      fotoUrl: "https://randomuser.me/api/portraits/men/75.jpg",
-      createdAt: {
-        seconds: 1717852200,
-        nanoseconds: 0,
-        type: "firestore/timestamp/1.0",
-      },
-      updatedAt: {
-        seconds: 1717852200,
-        nanoseconds: 0,
-        type: "firestore/timestamp/1.0",
-      },
-      financeiro: {
-        status: "active", // Força o status ativo
-        idPlano: "plano_dia_10", // Força o plano do dia 10
-        mercadoPagoSubscriptionId: "sub_mp_987654",
-        pixPendente: null,
-        ultimoPagamentoEm: new Date().toISOString(),
-      },
-    });
-  const [pixDados, setPixDados] = useState<string | null>("00020101021226730014br.gov.bcb.pix2551pix-qr.mercadopago.com/emv/v2/c3b1a2e3-4f5g-6h7i-8j9k-0l1m2n3o4p5q520400005303986540510.505802BR5924Caixinha Pelada Adesaoc6009BeloHoriz62070503***6304A1B2");
+    useState<JogadorNewResponseType | null>(null);
+  const [pixDados, setPixDados] = useState<PixFluxoDados | null>(null);
 
   const { data: jogadores } = useGetAllJogadores();
   const { mutate: criarAssinatura, isPending: isGerandoPix } =
     useCreateAssinatura();
   if (!jogadores) return null;
+
+  const handleSetEtapa = (novaEtapa: EtapaCadastro) => {
+    if (novaEtapa === "exibir_pix" && jogadorSelecionado?.assinatura) {
+      setPixDados({
+        pixCopiaECola: jogadorSelecionado.assinatura.pixCopiaECola || "",
+        pixQrCodeBase64: jogadorSelecionado.assinatura.pixQrCodeBase64 || "",
+      });
+    }
+    setEtapa(novaEtapa);
+  };
 
   return (
     <div className="w-full max-w-md mx-auto p-4 mt-8 font-sans antialiased">
@@ -62,7 +52,7 @@ export default function CadastroCaixinhaPage() {
             jogadores={jogadores}
             setJogadorSelecionado={setJogadorSelecionado}
             jogadorSelecionado={jogadorSelecionado}
-            setEtapa={setEtapa}
+            setEtapa={handleSetEtapa}
           />
         )}
 
@@ -72,7 +62,10 @@ export default function CadastroCaixinhaPage() {
 
         {etapa === "formulario_adesao" && (
           <FormularioAdesaoCaixinha
-            setPixDados={setPixDados}
+            setPixDados={(dados: { pixCopiaECola: string; pixQrCodeBase64: string }) => setPixDados({
+              pixCopiaECola: dados.pixCopiaECola,
+              pixQrCodeBase64: dados.pixQrCodeBase64
+            })}
             jogadorSelecionado={jogadorSelecionado!}
             setEtapa={setEtapa}
             criarAssinatura={criarAssinatura}
@@ -81,7 +74,7 @@ export default function CadastroCaixinhaPage() {
         )}
 
         {etapa === "exibir_pix" && (
-          <PagamentoPix pixDados={pixDados} setPixDados={setPixDados} />
+          <PagamentoPix pixDados={pixDados} />
         )}
 
         {etapa === "ativo" && (
