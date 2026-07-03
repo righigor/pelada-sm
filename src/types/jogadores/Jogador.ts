@@ -13,15 +13,26 @@ export interface FirestoreTimestamp {
 }
 
 export interface FinanceiroJogadorType {
-  status: 'inactive' | 'pending' | 'active' | 'cancelled';
+  status: 'inactive' | 'pending' | 'pending_renewal' | 'active' | 'cancelled';
 
-  externalReference: string | null;
-  pagamentoId: string | null
+  plano: 'mensal' | 'semestral' | 'anual' | null;
+  metodoPagamento: 'pix' | 'cartao' | null;
+  valor: number | null;
+  periodoMeses: number | null;
+  numeroCiclo: number | null;
+
   diaVencimento: string | null;
-  dataCriacao: string | null;
-  pixCopiaECola: string| null;
+  dataProximoVencimento: string | null;
+  pixCopiaECola: string | null;
   pixQrCodeBase64: string | null;
 
+  // Dados Específicos do Cartão
+  preapprovalId: string | null;
+  checkoutUrl: string | null;
+
+  externalReference: string | null;
+  pagamentoId: string | null;
+  dataCriacao: string | null;
   ultimoPagamentoEm: string | null; 
   cpf: string | null;
 }
