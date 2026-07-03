@@ -1,29 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-interface CriarAssinaturaPayload {
-  jogadorId: string;
-  nome: string;
-  telefone: string;
-  cpf: string;
-  diaVencimento: string;
-}
-
-interface CriarAssinaturaResponse {
-  assinatura: {
-    sucesso: boolean;
-    pagamentoId: number;
-    cpf: string;
-    external_reference: string;
-    diaVencimento: string;
-    pixCopiaECola: string;
-    pixQrCodeBase64: string;
-  };
-}
+import type { 
+  CreateAssinaturaPayload, 
+  CreateAssinaturaResponse 
+} from "@/types/caixinha/planos";
 
 export function useCreateAssinatura() {
   const queryClient = useQueryClient();
 
-  return useMutation<CriarAssinaturaResponse, Error, CriarAssinaturaPayload>({
+  return useMutation<CreateAssinaturaResponse, Error, CreateAssinaturaPayload>({
     mutationFn: async (dados) => {
       const URL_N8N = "https://pelada-n8n.duckdns.org/webhook/criar-assinatura";
 

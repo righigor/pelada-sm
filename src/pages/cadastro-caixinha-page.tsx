@@ -1,37 +1,41 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import IdentificaoCaixinha from "@/components/identificacao-caixinha";
 import { useGetAllJogadores } from "@/hooks/jogadores/use-get-all-jogadores";
-import type {
-  JogadorNewResponseType,
-} from "@/types/jogadores/Jogador";
+import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
 import LoadingEtapaCaixinha from "@/components/loading-etapa-caixinha";
+import SelecaoPlanoCaixinha from "@/components/selecao-plano-caixinha";
 import FormularioAdesaoCaixinha from "@/components/formulario-adesao-caixinha";
-import { useCreateAssinatura } from "@/hooks/caixinha/use-create-assinatura";
 import { ComponenteStatusAtivo } from "@/components/jogador-ativo-caixinha";
 import PagamentoPix from "@/components/pagamento-pix";
+import PagamentoCartaoRedirect from "@/components/pagamento-cartao-redirect";
+import type { MetodoPagamento, PixFluxoDados, TipoPlano } from "@/types/caixinha/planos";
+import { useCreateAssinatura } from "@/hooks/caixinha/use-create-assinatura";
+import IdentificaoCaixinha from "@/components/identificacao-caixinha";
+import SelecaoMetodoPagamento from "@/components/seleciona-metodo-pagamento";
 
 export type EtapaCadastro =
   | "identificacao"
   | "carregando"
+  | "selecao_plano"
+  | "selecao_pagamento"
   | "formulario_adesao"
   | "exibir_pix"
+  | "redirecionar_cartao"
   | "ativo";
 
-  export interface PixFluxoDados {
-  pixCopiaECola: string;
-  pixQrCodeBase64: string;
-}
 
 export default function CadastroCaixinhaPage() {
   const [etapa, setEtapa] = useState<EtapaCadastro>("identificacao");
-  const [jogadorSelecionado, setJogadorSelecionado] =
-    useState<JogadorNewResponseType | null>(null);
+  const [jogadorSelecionado, setJogadorSelecionado] = useState<JogadorNewResponseType | null>(null);
   const [pixDados, setPixDados] = useState<PixFluxoDados | null>(null);
+  const [planoSelecionado, setPlanoSelecionado] = useState<TipoPlano>("mensal");
+  const [metodoPagamento, setMetodoPagamento] = useState<MetodoPagamento>("pix");
+  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
 
   const { data: jogadores } = useGetAllJogadores();
-  const { mutate: criarAssinatura, isPending: isGerandoPix } =
+  const { mutate: criarAssinatura, isPending: isGerandoPagamento } =
     useCreateAssinatura();
+
   if (!jogadores) return null;
 
   const handleSetEtapa = (novaEtapa: EtapaCadastro) => {
@@ -53,28 +57,49 @@ export default function CadastroCaixinhaPage() {
             setJogadorSelecionado={setJogadorSelecionado}
             jogadorSelecionado={jogadorSelecionado}
             setEtapa={handleSetEtapa}
+            setCheckoutUrl={setCheckoutUrl}
           />
         )}
 
         {etapa === "carregando" && (
-          <LoadingEtapaCaixinha isGerandoPix={isGerandoPix} />
+          <LoadingEtapaCaixinha isGerandoPix={isGerandoPagamento} />
+        )}
+
+        {etapa === "selecao_plano" && (
+          <SelecaoPlanoCaixinha
+            planoSelecionado={planoSelecionado}
+            setPlanoSelecionado={setPlanoSelecionado}
+            setEtapa={handleSetEtapa}
+          />
+        )}
+
+        {etapa === "selecao_pagamento" && (
+          <SelecaoMetodoPagamento
+            metodoPagamento={metodoPagamento}
+            setMetodoPagamento={setMetodoPagamento}
+            setEtapa={handleSetEtapa}
+          />
         )}
 
         {etapa === "formulario_adesao" && (
           <FormularioAdesaoCaixinha
-            setPixDados={(dados: { pixCopiaECola: string; pixQrCodeBase64: string }) => setPixDados({
-              pixCopiaECola: dados.pixCopiaECola,
-              pixQrCodeBase64: dados.pixQrCodeBase64
-            })}
+            planoSelecionado={planoSelecionado}
+            metodoPagamento={metodoPagamento}
             jogadorSelecionado={jogadorSelecionado!}
-            setEtapa={setEtapa}
+            setEtapa={handleSetEtapa}
             criarAssinatura={criarAssinatura}
-            isGerandoPix={isGerandoPix}
+            isGerandoPagamento={isGerandoPagamento}
+            setPixDados={setPixDados}
+            setCheckoutUrl={setCheckoutUrl}
           />
         )}
 
         {etapa === "exibir_pix" && (
           <PagamentoPix pixDados={pixDados} />
+        )}
+
+        {etapa === "redirecionar_cartao" && checkoutUrl && (
+          <PagamentoCartaoRedirect checkoutUrl={checkoutUrl} />
         )}
 
         {etapa === "ativo" && (

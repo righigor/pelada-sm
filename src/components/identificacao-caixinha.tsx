@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { Search, User } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -17,6 +18,7 @@ interface IdentificacaoCaixinhaProps {
   setJogadorSelecionado: (jogador: JogadorNewResponseType | null) => void;
   jogadorSelecionado: JogadorNewResponseType | null;
   setEtapa: (etapa: EtapaCadastro) => void;
+  setCheckoutUrl: (url: string) => void;
 }
 
 export default function IdentificaoCaixinha({
@@ -24,6 +26,7 @@ export default function IdentificaoCaixinha({
   setJogadorSelecionado,
   jogadorSelecionado,
   setEtapa,
+  setCheckoutUrl,
 }: IdentificacaoCaixinhaProps) {
   const [termoBusca, setTermoBusca] = useState("");
   const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
@@ -58,13 +61,20 @@ export default function IdentificaoCaixinha({
           break;
 
         case "pending":
-          setEtapa("exibir_pix");
+          const checkoutUrl = jogadorSelecionado.assinatura?.checkoutUrl;
+
+          if (checkoutUrl) {
+            setCheckoutUrl(checkoutUrl);
+            setEtapa("redirecionar_cartao");
+          } else {
+            setEtapa("exibir_pix");
+          }
           break;
 
         case "inactive":
         case "cancelled":
         default:
-          setEtapa("formulario_adesao");
+          setEtapa("selecao_plano"); // MUDANÇA AQUI: vai pra seleção de plano
           break;
       }
     }, 600);

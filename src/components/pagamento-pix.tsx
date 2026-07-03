@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { CardHeader, CardTitle, CardDescription, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
 import { toast } from "sonner";
-import type { PixFluxoDados } from "@/pages/cadastro-caixinha-page"; // Ajuste o path se necessário
+import type { PixFluxoDados } from "@/types/caixinha/planos";
 
 interface PagamentoPixProps {
   pixDados: PixFluxoDados | null;
