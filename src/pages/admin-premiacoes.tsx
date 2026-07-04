@@ -15,10 +15,10 @@ import AddCategoria from "@/components/add-categoria";
 import AddPremiacao from "@/components/add-premiacao";
 import {
   useGetPremiacoesEmAndamento,
-  type PremiacaoEdicao,
 } from "@/hooks/premiacao/use-get-premiacao-em-andamento";
 import PremiacaoEmAndamentoCard from "@/components/premiacao-em-andamento-card";
 import PremiacaoEmAndamentoDetalhes from "@/components/premiacao-em-andamento-detalhes";
+import type { PremiacaoEdicao } from "@/types/premiacao/Resultado";
 
 export default function AdminPremiacoes() {
   const [premiacaoSelecionada, setPremiacaoSelecionada] =
