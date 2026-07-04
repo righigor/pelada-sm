@@ -1,4 +1,4 @@
-import type { PremiacaoEdicao } from "@/hooks/premiacao/use-get-premiacao-em-andamento";
+import type { PremiacaoEdicao } from "@/types/premiacao/Resultado";
 import { Calendar } from "lucide-react";
 
 interface PremiacaoEmAndamentoCardProps {

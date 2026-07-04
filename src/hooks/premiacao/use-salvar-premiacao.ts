@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { doc, updateDoc } from "firebase/firestore";
 import { toast } from "sonner";
-import type { PremiacaoEdicao } from "./use-get-premiacao-em-andamento";
 import { db } from "@/firebase/config";
+import type { PremiacaoEdicao } from "@/types/premiacao/Resultado";
 
 interface DadosVencedor {
   vencedorId: string;

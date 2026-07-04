@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { PremiacaoEdicao } from "@/hooks/premiacao/use-get-premiacao-em-andamento";
 import { Button } from "./ui/button";
 import { LinhaCategoria } from "./linha-categoria";
 import { useState } from "react";
 import { useSalvarPremiacao } from "@/hooks/premiacao/use-salvar-premiacao";
 import LoadingButton from "./loading-button";
+import type { PremiacaoEdicao } from "@/types/premiacao/Resultado";
 
 interface PremiacaoEmAndamentoDetalhesProps {
   p: PremiacaoEdicao;
