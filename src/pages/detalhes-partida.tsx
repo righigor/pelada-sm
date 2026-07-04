@@ -27,17 +27,12 @@ export default function DetalhesPartidaPage() {
 
   if (!jogadoresInfos || !partida) return null;
 
-
-    const chartData = getGolsChartData(
-      partida.timesEstatisticas,
-      jogadoresInfos
-    );
+  const chartData = getGolsChartData(partida.timesEstatisticas, jogadoresInfos);
 
   const listaEstatisticas = getListaCompleta(
     partida.timesEstatisticas,
-    jogadoresInfos
+    jogadoresInfos,
   );
-
 
   return (
     <div className="mt-8 container mx-auto px-8 py-8">
@@ -68,23 +63,35 @@ export default function DetalhesPartidaPage() {
       </header>
       <SectionMvps
         artilheiro={partida.resumoPartida.artilheiro}
-        artilheiroFotoUrl={jogadoresInfos[partida.resumoPartida.artilheiro?.jogadorId ?? ""]?.fotoUrl ?? null}
+        artilheiroFotoUrl={
+          jogadoresInfos[partida.resumoPartida.artilheiro?.jogadorId ?? ""]
+            ?.fotoUrl ?? null
+        }
         assistente={partida.resumoPartida.maiorAssistente}
-        assistenteFotoUrl={jogadoresInfos[partida.resumoPartida.maiorAssistente?.jogadorId ?? ""]?.fotoUrl ?? null}
+        assistenteFotoUrl={
+          jogadoresInfos[partida.resumoPartida.maiorAssistente?.jogadorId ?? ""]
+            ?.fotoUrl ?? null
+        }
         bagre={partida.resumoPartida.bagre}
-        bagreFotoUrl={jogadoresInfos[partida.resumoPartida.bagre?.jogadorId ?? ""]?.fotoUrl ?? null}
+        bagreFotoUrl={
+          jogadoresInfos[partida.resumoPartida.bagre?.jogadorId ?? ""]
+            ?.fotoUrl ?? null
+        }
         mvp={partida.resumoPartida.mvpGeral}
-        mvpFotoUrl={jogadoresInfos[partida.resumoPartida.mvpGeral?.jogadorId ?? ""]?.fotoUrl ?? null}
+        mvpFotoUrl={
+          jogadoresInfos[partida.resumoPartida.mvpGeral?.jogadorId ?? ""]
+            ?.fotoUrl ?? null
+        }
       />
 
       <GolsChart data={chartData} />
 
-      <ListByTeams estatisticas={partida.timesEstatisticas} teamsMvps={partida.resumoPartida.mvpPorTime} />
-
-      <ListaJogadoresPartida
-        listaEstatisticas={listaEstatisticas}
+      <ListByTeams
+        estatisticas={partida.timesEstatisticas}
+        teamsMvps={partida.resumoPartida.mvpPorTime}
       />
 
+      <ListaJogadoresPartida listaEstatisticas={listaEstatisticas} />
     </div>
   );
 }

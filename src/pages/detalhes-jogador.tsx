@@ -58,7 +58,6 @@ export default function DetalhesJogadorPage() {
           companheiros: {},
         } as JogadorDetalhesStatsType);
 
-        console.log(jogador)
   return (
     <div className="container mx-auto p-8 space-y-8">
       <div className="mt-4 flex justify-end items-center gap-4">
@@ -79,7 +78,7 @@ export default function DetalhesJogadorPage() {
           </SelectContent>
         </Select>
       </div>
-      <JogadorHeaderDetalhes jogador={jogador} statsExibicao={statsExibicao} />
+      <JogadorHeaderDetalhes jogador={jogador} statsExibicao={statsExibicao} temporada={temporada} />
       <JogadorTimesDetalhes jogador={jogador} statsExibicao={statsExibicao} />
       <CompanheirosDeTime jogador={jogador} statsExibicao={statsExibicao} />
     </div>

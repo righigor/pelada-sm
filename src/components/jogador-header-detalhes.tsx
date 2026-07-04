@@ -1,5 +1,10 @@
 import type { JogadorDetails } from "@/queries/jogadores/get-jogador-by-id";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   IconBallFootball,
   IconShoe,
@@ -10,10 +15,12 @@ import {
 } from "@tabler/icons-react";
 import AvatarLoad from "@/components/avatar-load";
 import type { JogadorDetalhesStatsType } from "@/types/jogadores/Jogador";
+import TrofeusJogador from "./trofeus-jogador";
 
 interface JogadorHeaderDetalhesProps {
   jogador: JogadorDetails;
   statsExibicao: JogadorDetalhesStatsType;
+  temporada: string;
 }
 
 const StatItem: React.FC<{
@@ -37,6 +44,7 @@ const StatItem: React.FC<{
 export default function JogadorHeaderDetalhes({
   jogador,
   statsExibicao,
+  temporada,
 }: JogadorHeaderDetalhesProps) {
   const totalPartidas = statsExibicao.partidas || 0;
   const calcMedia = (val: number) =>
@@ -104,6 +112,8 @@ export default function JogadorHeaderDetalhes({
           </div>
         </div>
       </CardContent>
+
+      <TrofeusJogador jogadorId={jogador.id} temporada={temporada} />
     </Card>
   );
 }

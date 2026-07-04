@@ -1,7 +1,7 @@
 import { db } from "@/firebase/config";
+import type { PremiacaoEdicao } from "@/types/premiacao/Resultado";
 import { useQuery } from "@tanstack/react-query";
 import { doc, getDoc } from "firebase/firestore";
-import type { PremiacaoEdicao } from "./use-get-premiacao-em-andamento";
 
 export function useGetPremiacaoById(id: string | undefined) {
   return useQuery<PremiacaoEdicao | null>({
