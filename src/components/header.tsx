@@ -15,48 +15,47 @@ import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const navigate = useNavigate();
-  const navItems = [
-    {
-      name: "Jogadores",
-      link: "/jogadores",
-    },
-    {
-      name: "Partidas",
-      link: "/partidas",
-    },
-    // {
-    //   name: "Estatísticas",
-    //   link: "/estatisticas",
-    // },
-    // {
-    //   name: "Premiações",
-    //   link: "/premiacoes"
-    // },
-    // {
-    //   name: "Portal da Transparência",
-    //   link: "/portal-da-transparencia"
-    // },
-    {
-      name: "Vire Mensalista",
-      link: "/caixinha"
-    }
+
+  const navItemsDesktopPrincipais = [
+    { name: "Jogadores", link: "/jogadores" },
+    { name: "Partidas", link: "/partidas" },
+    { name: "Premiações", link: "/premiacoes" },
+  ];
+
+  const navItemsDesktopSecundarios = [
+    { name: "Estatísticas", link: "/estatisticas" },
+    // { name: "Portal da Transparência", link: "/portal-da-transparencia" },
+    { name: "Vire Mensalista", link: "/caixinha" },
+  ];
+
+  const navItemsMobile = [
+    { name: "Jogadores", link: "/jogadores" },
+    { name: "Partidas", link: "/partidas" },
+    { name: "Premiações", link: "/premiacoes" },
+    { name: "Estatísticas", link: "/estatisticas" },
+    { name: "Portal da Transparência", link: "/portal-da-transparencia" },
+    { name: "Vire Mensalista", link: "/caixinha" },
   ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <Navbar>
       <NavBody>
         <NavbarLogo />
-        <NavItems items={navItems} />
+        
+        {/* Basta passar a nova prop aqui! */}
+        <NavItems 
+          items={navItemsDesktopPrincipais} 
+          overflowItems={navItemsDesktopSecundarios}
+        />
 
         <NavbarButton
           variant="primary"
-          className="mr-4 hidden items-center md:inline-flex"
-          onClick={() => {
-            navigate("/partida/selecionar-jogadores");
-          }}
+          className="hidden items-center md:inline-flex shrink-0"
+          onClick={() => navigate("/partida/selecionar-jogadores")}
         >
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus className="mr-1 h-4 w-4" />
           Adicionar registro
         </NavbarButton>
       </NavBody>
@@ -74,7 +73,7 @@ export default function Header() {
           isOpen={isMobileMenuOpen}
           onClose={() => setIsMobileMenuOpen(false)}
         >
-          {navItems.map((item, idx) => (
+          {navItemsMobile.map((item, idx) => (
             <a
               key={`mobile-link-${idx}`}
               href={item.link}
@@ -93,10 +92,8 @@ export default function Header() {
             variant="primary"
             className="w-full mt-4 flex items-center justify-center"
           >
-            
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="h-4 w-4" />
               Adicionar registro
-           
           </NavbarButton>
         </MobileNavMenu>
       </MobileNav>

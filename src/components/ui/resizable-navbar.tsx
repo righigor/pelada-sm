@@ -7,7 +7,7 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 
 interface NavbarProps {
@@ -112,22 +112,54 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
   );
 };
 
-export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
+interface NavItemsProps {
+  items: {
+    name: string;
+    link: string;
+  }[];
+  overflowItems?: {
+    name: string;
+    link: string;
+  }[];
+  className?: string;
+  onItemClick?: () => void;
+}
+
+export const NavItems = ({ items, overflowItems, className, onItemClick }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
+
+  // Fecha o dropdown ao clicar fora dele
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
+        setIsMoreOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <motion.div
-      onMouseLeave={() => setHovered(null)}
+      onMouseLeave={() => {
+        setHovered(null);
+        setIsMoreOpen(false); // Fecha ao tirar o mouse do menu todo
+      }}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
+        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-400 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
         className,
       )}
     >
       {items.map((item, idx) => (
         <a
           onMouseEnter={() => setHovered(idx)}
-          onClick={onItemClick}
-          className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
+          onClick={() => {
+            onItemClick?.();
+            setIsMoreOpen(false);
+          }}
+          className="relative px-4 py-2 text-neutral-400 dark:text-neutral-300"
           key={`link-${idx}`}
           href={item.link}
         >
@@ -140,6 +172,74 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
           <span className="relative z-20">{item.name}</span>
         </a>
       ))}
+
+      {/* O NOVO DROPDOWN INTERN0 */}
+      {overflowItems && overflowItems.length > 0 && (
+        <div ref={moreRef} className="relative">
+          <a
+            onMouseEnter={() => {
+              setHovered(items.length); // Usa o próximo índice para ativar o fundo
+              setIsMoreOpen(true);
+            }}
+            onClick={() => setIsMoreOpen(!isMoreOpen)}
+            className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300 flex items-center gap-1 cursor-pointer"
+          >
+            {/* Efeito de hover igualzinho aos outros links */}
+            {hovered === items.length && (
+              <motion.div
+                layoutId="hovered"
+                className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
+              />
+            )}
+            <span className="relative z-20 flex items-center gap-1">
+              Mais
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="14" 
+                height="14" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                className={`transition-transform duration-200 ${isMoreOpen ? 'rotate-180' : ''}`}
+              >
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+            </span>
+          </a>
+
+          {/* Caixa que abre com os itens escondidos */}
+          <motion.div
+            initial={false}
+            animate={{ 
+              opacity: isMoreOpen ? 1 : 0, 
+              y: isMoreOpen ? 0 : -10,
+              scale: isMoreOpen ? 1 : 0.95,
+              pointerEvents: isMoreOpen ? "auto" : "none"
+            }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute top-full right-0 mt-2 w-56 rounded-xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 shadow-xl overflow-hidden z-[100]"
+          >
+            <div className="py-2">
+              {overflowItems.map((item, idx) => (
+                <a
+                  key={`overflow-link-${idx}`}
+                  href={item.link}
+                  onClick={() => {
+                    onItemClick?.();
+                    setIsMoreOpen(false);
+                  }}
+                  className="block px-4 py-2.5 text-sm text-neutral-600 dark:text-neutral-300 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      )}
     </motion.div>
   );
 };
