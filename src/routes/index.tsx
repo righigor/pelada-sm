@@ -1,8 +1,6 @@
 import App from "@/App";
 import NotFoundPage from "@/components/not-found";
 import AppLayout from "@/layouts/app-layout";
-import PremiacaoPage from "@/pages/premiacao";
-import AdminPremiacaoPage from "@/pages/admin-premiacao";
 import AddJogadoresPage from "@/pages/add-jogadores";
 import AdminAllJogadoresPage from "@/pages/admin-all-jogadores";
 import AdminAllPartidasPage from "@/pages/admin-all-partidas";
@@ -19,6 +17,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CadastroCaixinhaPage from "@/pages/cadastro-caixinha-page";
 import PremiacoesPage from "@/pages/premiacoes-page";
 import AdminPremiacoes from "@/pages/admin-premiacoes";
+import PremiacaoDetalhesPage from "@/pages/premiacao-detalhes-page";
 
 const router = createBrowserRouter([
   {
@@ -26,32 +25,25 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <App /> },
       { path: "/jogadores", element: <AllJogadoresPage /> },
-      { path: "/admin/jogadores", element: <AdminAllJogadoresPage /> },
-      { path: "/admin/premiacao", element: <AdminPremiacaoPage /> },
       { path: "/jogadores/:id", element: <DetalhesJogadorPage /> },
+      
+      { path: "/premiacoes", element: <PremiacoesPage /> },
+      { path: "/premiacoes/:id", element: <PremiacaoDetalhesPage /> },
+      { path: "/caixinha", element: <CadastroCaixinhaPage /> },
+      
       { path: "/partidas", element: <AllPartidasPage /> },
-      { path: "/estatisticas", element: <PremiacaoPage /> },
-      { path: "/admin/partidas", element: <AdminAllPartidasPage /> },
       { path: "/partida/:partidaId", element: <DetalhesPartidaPage /> },
-      {
-        path: "/partida/selecionar-jogadores",
-        element: <SelecionarJogadoresPage />,
-      },
-      {
-        path: "/partida/registrar-stats/:partidaId",
-        element: <RegistrarStatsPage />,
-      },
-      {
-        path: "/partida/editar-times-sorteados/:partidaId",
-        element: <EditarTimesSorteados />,
-      },
+      { path: "/partida/selecionar-jogadores", element: <SelecionarJogadoresPage /> },
+      { path: "/partida/registrar-stats/:partidaId", element: <RegistrarStatsPage /> },
+      { path: "/partida/editar-times-sorteados/:partidaId", element: <EditarTimesSorteados /> },
       { path: "/admin/jogador", element: <AddJogadoresPage /> },
+      { path: "/admin/jogadores", element: <AdminAllJogadoresPage /> },
+      { path: "/admin/partidas", element: <AdminAllPartidasPage /> },
       { path: "/admin/potes", element: <AdminRankingPage /> },
       { path: "/admin/premiacoes", element: <AdminPremiacoes /> },
+
       { path: "*", element: <NotFoundPage /> },
       { path: "/test", element: <AddPlayersManual /> },
-      { path: "/premiacoes", element: <PremiacoesPage /> },
-      { path: "/caixinha", element: <CadastroCaixinhaPage /> }
     ],
   },
 ]);
