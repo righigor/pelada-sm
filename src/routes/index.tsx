@@ -26,32 +26,27 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <App /> },
       { path: "/jogadores", element: <AllJogadoresPage /> },
-      { path: "/admin/jogadores", element: <AdminAllJogadoresPage /> },
-      { path: "/admin/premiacao", element: <AdminPremiacaoPage /> },
       { path: "/jogadores/:id", element: <DetalhesJogadorPage /> },
-      { path: "/partidas", element: <AllPartidasPage /> },
       { path: "/estatisticas", element: <PremiacaoPage /> },
-      { path: "/admin/partidas", element: <AdminAllPartidasPage /> },
+      
+      { path: "/premiacoes", element: <PremiacoesPage /> },
+      { path: "/caixinha", element: <CadastroCaixinhaPage /> },
+      
+      { path: "/partidas", element: <AllPartidasPage /> },
       { path: "/partida/:partidaId", element: <DetalhesPartidaPage /> },
-      {
-        path: "/partida/selecionar-jogadores",
-        element: <SelecionarJogadoresPage />,
-      },
-      {
-        path: "/partida/registrar-stats/:partidaId",
-        element: <RegistrarStatsPage />,
-      },
-      {
-        path: "/partida/editar-times-sorteados/:partidaId",
-        element: <EditarTimesSorteados />,
-      },
+      { path: "/partida/selecionar-jogadores", element: <SelecionarJogadoresPage /> },
+      { path: "/partida/registrar-stats/:partidaId", element: <RegistrarStatsPage /> },
+      { path: "/partida/editar-times-sorteados/:partidaId", element: <EditarTimesSorteados /> },
       { path: "/admin/jogador", element: <AddJogadoresPage /> },
+      { path: "/admin/jogadores", element: <AdminAllJogadoresPage /> },
+      { path: "/admin/partidas", element: <AdminAllPartidasPage /> },
       { path: "/admin/potes", element: <AdminRankingPage /> },
       { path: "/admin/premiacoes", element: <AdminPremiacoes /> },
+      { path: "/admin/premiacao", element: <AdminPremiacaoPage /> },
+
+
       { path: "*", element: <NotFoundPage /> },
       { path: "/test", element: <AddPlayersManual /> },
-      { path: "/premiacoes", element: <PremiacoesPage /> },
-      { path: "/caixinha", element: <CadastroCaixinhaPage /> }
     ],
   },
 ]);

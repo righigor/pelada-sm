@@ -20,7 +20,10 @@ export function useSalvarPremiacao() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ premiacaoOriginal, valoresFinais }: Omit<UseSalvarPremiacaoProps, 'onSuccessCallback'>) => {
+    mutationFn: async ({
+      premiacaoOriginal,
+      valoresFinais,
+    }: Omit<UseSalvarPremiacaoProps, "onSuccessCallback">) => {
       const categoriasAtualizadas = premiacaoOriginal.categorias.map((cat) => {
         const dadosVencedor = valoresFinais[cat.idCategoria];
 
@@ -42,6 +45,7 @@ export function useSalvarPremiacao() {
         categorias: categoriasAtualizadas,
         status: "FINALIZADA",
         updatedAt: new Date(),
+        dataFinalizacao: new Date().toISOString(),
       });
     },
     onSuccess: () => {
@@ -52,6 +56,6 @@ export function useSalvarPremiacao() {
     onError: (error) => {
       console.error("Erro ao salvar premiação:", error);
       toast.error("Houve um erro ao tentar finalizar a premiação.");
-    }
+    },
   });
 }
