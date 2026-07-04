@@ -8,8 +8,8 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { PremiacaoEdicao } from "@/hooks/premiacao/use-get-premiacao-em-andamento";
 import { AvatarImage, AvatarFallback, Avatar } from "@radix-ui/react-avatar";
+import type { PremiacaoEdicao } from "@/types/premiacao/Resultado";
 
 interface PremiacaoHistoricoCardProps {
   p: PremiacaoEdicao;

@@ -118,3 +118,31 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* .scroll-trofeus {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted)) transparent;
+} */
+
+/* .scroll-trofeus:hover {
+  scrollbar-color: hsl(var(--border)) hsl(var(--muted));
+}
+
+.scroll-trofeus::-webkit-scrollbar {
+  height: 6px;
+}
+
+.scroll-trofeus::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-trofeus::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 20px;
+  transition: background-color 0.2s;
+}
+
+.scroll-trofeus:hover::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border));
+} */
