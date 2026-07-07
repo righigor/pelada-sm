@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle2, Calendar } from "lucide-react";
 import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
 import type { EtapaCadastro } from "@/pages/cadastro-caixinha-page";
+import { PLANOS } from "@/types/caixinha/planos";
 
 interface ComponenteStatusAtivoProps {
   jogadorSelecionado: JogadorNewResponseType | null;
@@ -20,9 +21,17 @@ export function ComponenteStatusAtivo({
     setEtapa("identificacao");
   };
 
+  if (!jogadorSelecionado?.assinatura) {
+    return null;
+  }
+
   const obterNomePlano = (diaVencimento: string | null | undefined) => {
     if (diaVencimento) {
-      return `Todo dia ${diaVencimento.padStart(2, "0")}`;
+      return `Próximo pagamento em ${new Date(diaVencimento).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })}`;
     }
     return "Mensal";
   };
@@ -41,8 +50,12 @@ export function ComponenteStatusAtivo({
             <span className="font-semibold text-white">
               {jogadorSelecionado?.nome}
             </span>
-            ! Sua assinatura de **R$ 10,10** via Mercado Pago está confirmada e
-            rodando.
+            ! Sua assinatura de{" "}
+            <span className="font-semibold">
+              R$
+              {PLANOS.filter((plano) => plano.id === jogadorSelecionado?.assinatura?.plano)?.[0]?.valorTotal?.toFixed(2)}
+            </span>
+            {" "}via Mercado Pago está confirmada e rodando.
           </p>
         </div>
 
