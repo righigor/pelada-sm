@@ -106,4 +106,5 @@ export async function finalizePartida(partida: PartidaByIDResponseType) {
   });
 
   await batch.commit();
+  return resumoPartida;
 }

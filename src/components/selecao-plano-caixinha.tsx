@@ -19,7 +19,7 @@ export default function SelecaoPlanoCaixinha({
       <CardHeader className="space-y-1 text-center">
         <CardTitle className="text-xl font-bold">Escolha seu Plano ⚽</CardTitle>
         <CardDescription className="text-slate-400">
-          Todos os planos custam R$ 10,00/mês. Escolha por quanto tempo quer garantir sua vaga.
+          Todos os planos custam R$ 10,00/mês, com uma taxa de 5% no Cartão de Crédito. Escolha por quanto tempo quer garantir sua vaga.
         </CardDescription>
       </CardHeader>
 

@@ -128,6 +128,9 @@ export default function FormularioAdesaoCaixinha({
           {planoConfig.valorMensal.toFixed(2).replace(".", ",")}) —{" "}
           <span className="text-white font-semibold">
             Total: R$ {planoConfig.valorTotal.toFixed(2).replace(".", ",")}
+            {metodoPagamento === "cartao" && (
+              <span> + 5% de taxa no Cartão de Crédito, totalizando R$ {(planoConfig.valorTotal * 1.05).toFixed(2).replace(".", ",")}</span>
+            )}
           </span>
         </CardDescription>
       </CardHeader>
