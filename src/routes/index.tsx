@@ -18,6 +18,7 @@ import CadastroCaixinhaPage from "@/pages/cadastro-caixinha-page";
 import PremiacoesPage from "@/pages/premiacoes-page";
 import AdminPremiacoes from "@/pages/admin-premiacoes";
 import PremiacaoDetalhesPage from "@/pages/premiacao-detalhes-page";
+import PagamentoAprovadoPage from "@/pages/pagamento-aprovado";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,9 @@ const router = createBrowserRouter([
       { path: "/partida/selecionar-jogadores", element: <SelecionarJogadoresPage /> },
       { path: "/partida/registrar-stats/:partidaId", element: <RegistrarStatsPage /> },
       { path: "/partida/editar-times-sorteados/:partidaId", element: <EditarTimesSorteados /> },
+
+      {path: "pagamento-aprovado", element: <PagamentoAprovadoPage />},
+
       { path: "/admin/jogador", element: <AddJogadoresPage /> },
       { path: "/admin/jogadores", element: <AdminAllJogadoresPage /> },
       { path: "/admin/partidas", element: <AdminAllPartidasPage /> },
