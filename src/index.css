@@ -146,3 +146,61 @@
 .scroll-trofeus:hover::-webkit-scrollbar-thumb {
   background-color: hsl(var(--border));
 } */
+
+
+/* Cores dos quadradinhos (Modo Claro) */
+.react-calendar-heatmap .color-empty {
+  fill: #f3f4f6; /* Cinza MUITO claro (gray-100) - Sem pelada */
+}
+.react-calendar-heatmap .color-absent {
+  fill: #9ca3af; /* Cinza médio (gray-400) - Teve pelada e não foi */
+}
+.react-calendar-heatmap .color-present {
+  fill: #4ade80; /* Verde claro - Foi na pelada */
+}
+.react-calendar-heatmap .color-mvp {
+  fill: #15803d; /* Verde escuro - MVP */
+}
+
+/* Cores dos quadradinhos (Modo Escuro) */
+html.dark .react-calendar-heatmap .color-empty {
+  fill: #1f2937; /* Cinza escuro (gray-800) - Sem pelada */
+}
+html.dark .react-calendar-heatmap .color-absent {
+  fill: #6b7280; /* Cinza médio (gray-500) - Teve pelada e não foi */
+}
+html.dark .react-calendar-heatmap .color-present {
+  fill: #16a34a; /* Verde claro ajustado pro dark */
+}
+html.dark .react-calendar-heatmap .color-mvp {
+  fill: #4ade80; /* Verde escuro ajustado pro dark */
+}
+
+/* Textos dos Dias da Semana e Meses */
+
+/* MODO CLARO: Cinza médio */
+.react-calendar-heatmap text {
+  fill: #6b7280; /* Equivale ao gray-500 do Tailwind */
+  font-size: 10px;
+}
+
+.react-calendar-heatmap .react-calendar-heatmap-month-label {
+  fill: #6b7280;
+  font-size: 10px;
+  font-weight: 500; /* Deixa o nome do mês um pouquinho mais forte que o dia */
+}
+
+/* MODO ESCURO: Cinza mais claro para ter contraste com o fundo escuro */
+html.dark .react-calendar-heatmap text {
+  fill: #9ca3af; /* Equivale ao gray-400 do Tailwind */
+}
+
+html.dark .react-calendar-heatmap .react-calendar-heatmap-month-label {
+  fill: #9ca3af;
+}
+
+/* Arredondamento dos quadradinhos do SVG */
+.react-calendar-heatmap rect {
+  rx: 3px;
+  ry: 3px;
+}

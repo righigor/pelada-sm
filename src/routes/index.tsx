@@ -19,6 +19,8 @@ import PremiacoesPage from "@/pages/premiacoes-page";
 import AdminPremiacoes from "@/pages/admin-premiacoes";
 import PremiacaoDetalhesPage from "@/pages/premiacao-detalhes-page";
 import PagamentoAprovadoPage from "@/pages/pagamento-aprovado";
+import { PortalTransparenciaPage } from "@/pages/portal-transparecia-page";
+import { AdminCaixinhaPage } from "@/pages/admin-caixinha";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,7 @@ const router = createBrowserRouter([
       { path: "/premiacoes", element: <PremiacoesPage /> },
       { path: "/premiacoes/:id", element: <PremiacaoDetalhesPage /> },
       { path: "/caixinha", element: <CadastroCaixinhaPage /> },
+      { path: "/transparencia", element: <PortalTransparenciaPage /> },
       
       { path: "/partidas", element: <AllPartidasPage /> },
       { path: "/partida/:partidaId", element: <DetalhesPartidaPage /> },
@@ -45,6 +48,7 @@ const router = createBrowserRouter([
       { path: "/admin/partidas", element: <AdminAllPartidasPage /> },
       { path: "/admin/potes", element: <AdminRankingPage /> },
       { path: "/admin/premiacoes", element: <AdminPremiacoes /> },
+      { path: "/admin/caixinha", element: <AdminCaixinhaPage /> },
 
       { path: "*", element: <NotFoundPage /> },
       { path: "/test", element: <AddPlayersManual /> },
