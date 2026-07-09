@@ -24,7 +24,7 @@ export default function Header() {
 
   const navItemsDesktopSecundarios = [
     { name: "Estatísticas", link: "/estatisticas" },
-    // { name: "Portal da Transparência", link: "/portal-da-transparencia" },
+    { name: "Portal da Transparência", link: "/transparencia" },
     { name: "Vire Mensalista", link: "/caixinha" },
   ];
 
@@ -33,7 +33,7 @@ export default function Header() {
     { name: "Partidas", link: "/partidas" },
     { name: "Premiações", link: "/premiacoes" },
     { name: "Estatísticas", link: "/estatisticas" },
-    { name: "Portal da Transparência", link: "/portal-da-transparencia" },
+    { name: "Portal da Transparência", link: "/transparencia" },
     { name: "Vire Mensalista", link: "/caixinha" },
   ];
 

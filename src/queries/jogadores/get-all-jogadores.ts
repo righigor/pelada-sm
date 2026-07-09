@@ -14,15 +14,8 @@ export async function getAllJogadores(): Promise<JogadorNewResponseType[]> {
     return {
       ...data,
       id: doc.id,
-      financeiro: data.financeiro || {
-        status: "inactive",
-        idPlano: null,
-        mercadoPagoSubscriptionId: null,
-        pixPendente: null,
-        ultimoPagamentoEm: null,
-      },
     };
-  }) as unknown as JogadorNewResponseType[];
+  }) as JogadorNewResponseType[];
 
   jogadoresList.sort((a, b) => {
     const nameA = (a.nome ?? "").toString().toLowerCase();
