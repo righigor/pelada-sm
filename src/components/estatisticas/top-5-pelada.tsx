@@ -57,7 +57,7 @@ export function Top5Pelada({ jogadores, isLoading }: Top5PeladaProps) {
       />
 
       <ListaTop5
-        titulo="Top 5 MVPs"
+        titulo="Top 5 MVPs por Time"
         icone={Trophy}
         dados={topMvpTime}
         corValor="text-amber-600 dark:text-amber-400"

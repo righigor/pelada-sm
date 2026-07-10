@@ -23,7 +23,6 @@ import {
   type JogadorStatRow,
 } from "@/utils/estatisticas/table-helper";
 import AvatarLoad from "../avatar-load";
-import { ScrollArea } from "../ui/scroll-area";
 import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
 import TabelaSkeleton from "./skeleton/tabela-skeleton";
 import TabelaError from "./errors/tabela-error";
@@ -185,69 +184,67 @@ export function TabelaEstatisticas({
           Ranking Completo
         </CardTitle>
       </CardHeader>
-      <CardContent className="px-0">
-        <ScrollArea className="h-[400px] w-full">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableHead
-                        key={header.id}
-                        className="px-4 text-center whitespace-nowrap"
+      <CardContent className="px-0 pb-4">
+        <div className="h-[400px] overflow-x-auto overflow-y-auto scrollbar-hide">
+          <Table className="min-w-[800px]">
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      className="px-4 text-center whitespace-nowrap"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} className="hover:bg-muted/50">
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className="px-4 py-2.5 border-r text-center whitespace-nowrap"
                       >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id} className="hover:bg-muted/50">
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell
-                          key={cell.id}
-                          className="px-4 py-2.5 border-r text-center whitespace-nowrap"
-                        >
-                          {cell.id.includes("nome") ? (
-                            <div className="text-left">
-                              {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext(),
-                              )}
-                            </div>
-                          ) : (
-                            flexRender(
+                        {cell.id.includes("nome") ? (
+                          <div className="text-left">
+                            {flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext(),
-                            )
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={colunas.length}
-                      className="h-24 text-center text-muted-foreground"
-                    >
-                      Nenhum jogador com partidas registradas.
-                    </TableCell>
+                            )}
+                          </div>
+                        ) : (
+                          flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )
+                        )}
+                      </TableCell>
+                    ))}
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </ScrollArea>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={colunas.length}
+                    className="h-24 text-center text-muted-foreground"
+                  >
+                    Nenhum jogador com partidas registradas.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </CardContent>
     </Card>
   );

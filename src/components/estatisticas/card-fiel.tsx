@@ -72,22 +72,22 @@ export default function CardTime({ timeKey, fiel }: CardTimeProps) {
           {config.titulo}
         </p>
       </CardHeader>
-      <CardContent className="flex items-center gap-4">
+      <CardContent className="flex items-center gap-2">
         <AvatarLoad
           jogador={fiel ?? { id: "0", nome: "Nenhum", fotoUrl: null }}
-          avatarSizeClasses="size-12"
+          avatarSizeClasses="size-14"
         />
 
-        <div className="flex flex-1 flex-col items-start justify-center gap-1">
-          <div className="flex items-center gap-2">
-            <p className="mt-1 truncate text-sm font-semibold">
+        <div className="flex flex-1 flex-col items-start justify-center">
+          <div className="flex items-center">
+            <p className="text-wrap text-sm font-semibold">
               {fiel ? fiel.nome : "Sem registros"}
             </p>
           </div>
 
           {fiel && (
             <div className="text-right flex items-center gap-1">
-              <p className={`text-2xl font-black ${config.textNum}`}>
+              <p className={`text-xl font-black ${config.textNum}`}>
                 {fiel.vezes}
               </p>
               <p className="text-[10px] font-medium uppercase text-muted-foreground">

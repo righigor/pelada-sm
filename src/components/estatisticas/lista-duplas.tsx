@@ -28,7 +28,7 @@ export default function ListaDuplas({
             Nenhuma dupla formada ainda.
           </p>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {dados.map((dupla, index) => {
               const posicao = index + 1;
               const corPosicao =
@@ -43,50 +43,57 @@ export default function ListaDuplas({
               return (
                 <div
                   key={`${dupla.id1}-${dupla.id2}`}
-                  className="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-muted/50"
+                  className="flex items-center gap-2 rounded-lg p-2 transition-colors hover:bg-muted/50 md:gap-3"
                 >
-                  <div className={`w-6 text-center font-black ${corPosicao}`}>
+                  {/* Posição */}
+                  <div className={`w-6 shrink-0 text-center font-black ${corPosicao}`}>
                     {posicao}
                   </div>
 
-                  <AvatarLoad
-                    jogador={{
-                      id: dupla.id1,
-                      nome: dupla.nome1,
-                      fotoUrl: dupla.fotoUrl1,
-                    }}
-                    avatarSizeClasses="size-14 md:size-16"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-wrap text-xs font-medium leading-tight">
+                  {/* Jogador 1 (Mobile: Coluna | Desktop: Linha à esquerda) */}
+                  <div className="flex flex-1 flex-col items-center text-center md:flex-row md:gap-3">
+                    <AvatarLoad
+                      jogador={{
+                        id: dupla.id1,
+                        nome: dupla.nome1,
+                        fotoUrl: dupla.fotoUrl1,
+                      }}
+                      avatarSizeClasses="size-14 md:size-16"
+                    />
+                    <p className="mt-1 w-full text-wrap text-xs font-medium leading-tight md:mt-0 md:flex-1 md:text-left">
                       {dupla.nome1}
                     </p>
                   </div>
-                  <div className="flex flex-col items-center gap-1">
+
+                  {/* Conector & */}
+                  <div className="flex shrink-0 flex-col items-center">
                     <span className="text-lg font-bold text-muted-foreground">
                       &
                     </span>
                   </div>
 
-                  <div className="min-w-0 flex-1 text-right">
-                    <p className="truncate text-wrap text-xs font-medium leading-tight">
+                  {/* Jogador 2 (Mobile: Coluna | Desktop: Linha à direita, nome ANTES da foto) */}
+                  <div className="flex flex-1 flex-col items-center text-center md:flex-row md:gap-3">
+                    <AvatarLoad
+                      jogador={{
+                        id: dupla.id2,
+                        nome: dupla.nome2,
+                        fotoUrl: dupla.fotoUrl2,
+                      }}
+                      avatarSizeClasses="size-14 md:size-16"
+                    />
+                    {/* O md:order-first faz o nome pular para frente da foto apenas no desktop */}
+                    <p className="mt-1 w-full text-wrap text-xs font-medium leading-tight md:mt-0 md:flex-1 md:text-right md:order-first">
                       {dupla.nome2}
                     </p>
                   </div>
-                  <AvatarLoad
-                    jogador={{
-                      id: dupla.id2,
-                      nome: dupla.nome2,
-                      fotoUrl: dupla.fotoUrl2,
-                    }}
-                    avatarSizeClasses="size-14 md:size-16"
-                  />
 
-                  <div className="w-12 text-right">
-                    <p className=" font-bold tabular-nums text-muted-foreground">
+                  {/* Valor Estatístico */}
+                  <div className="w-12 shrink-0 text-right">
+                    <p className="text-sm font-bold tabular-nums text-muted-foreground">
                       {mostrarGA ? dupla.gaJuntos : dupla.vezesJuntos}
                     </p>
-                    <p className="text-xs text-muted-foreground/70">
+                    <p className="text-[10px] text-muted-foreground/70">
                       {mostrarGA ? "G/A" : "Vezes"}
                     </p>
                   </div>
