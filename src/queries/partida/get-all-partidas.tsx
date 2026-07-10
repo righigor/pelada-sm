@@ -3,7 +3,7 @@ import type { PartidaByIDResponseType } from "@/types/partida/PartidaById";
 
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
-type AllPartidasResponse = Array<PartidaByIDResponseType>; 
+export type AllPartidasResponse = Array<PartidaByIDResponseType>; 
 
 export async function getAllPartidas(): Promise<AllPartidasResponse> {
   const partidasRef = collection(db, "partidas");
