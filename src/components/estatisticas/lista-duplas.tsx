@@ -58,8 +58,8 @@ export default function ListaDuplas({
                     avatarSizeClasses="size-14 md:size-16"
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs font-medium leading-tight">
-                      {dupla.nome1.split(" ")[0]}
+                    <p className="truncate text-wrap text-xs font-medium leading-tight">
+                      {dupla.nome1}
                     </p>
                   </div>
                   <div className="flex flex-col items-center gap-1">
@@ -69,8 +69,8 @@ export default function ListaDuplas({
                   </div>
 
                   <div className="min-w-0 flex-1 text-right">
-                    <p className="truncate text-xs font-medium leading-tight">
-                      {dupla.nome2.split(" ")[0]}
+                    <p className="truncate text-wrap text-xs font-medium leading-tight">
+                      {dupla.nome2}
                     </p>
                   </div>
                   <AvatarLoad

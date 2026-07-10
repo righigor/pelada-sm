@@ -12,7 +12,7 @@ export interface RankingItem {
  */
 export function getTopNRanking(
   jogadores: JogadorNewResponseType[],
-  statKey: "mvpsGeral" | "mvpsPorTime",
+  statKey: "mvpsGeral" | "mvpsPorTime" | "gols" | "assistencias",
   limit: number = 5
 ): RankingItem[] {
   return jogadores
