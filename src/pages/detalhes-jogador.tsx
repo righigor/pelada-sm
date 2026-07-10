@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { JogadorDetalhesStatsType } from "@/types/jogadores/Jogador";
-// import { PlayerHeatmap } from "@/components/heatmap-presenca";
+import { PlayerHeatmap } from "@/components/heatmap-presenca";
 
 
 export default function DetalhesJogadorPage() {
@@ -82,7 +82,7 @@ export default function DetalhesJogadorPage() {
       </div>
       <JogadorHeaderDetalhes jogador={jogador} statsExibicao={statsExibicao} temporada={temporada} />
       <JogadorTimesDetalhes jogador={jogador} statsExibicao={statsExibicao} />
-      {/* <PlayerHeatmap jogadorId={jogador.id} /> */}
+      <PlayerHeatmap jogadorId={jogador.id} />
       <CompanheirosDeTime jogador={jogador} statsExibicao={statsExibicao} />
     </div>
   );

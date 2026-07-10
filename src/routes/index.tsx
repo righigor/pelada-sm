@@ -21,6 +21,7 @@ import PremiacaoDetalhesPage from "@/pages/premiacao-detalhes-page";
 import PagamentoAprovadoPage from "@/pages/pagamento-aprovado";
 import { PortalTransparenciaPage } from "@/pages/portal-transparecia-page";
 import { AdminCaixinhaPage } from "@/pages/admin-caixinha";
+import { EstatisticasPage } from "@/pages/estatisticas-page";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
       { path: "/premiacoes/:id", element: <PremiacaoDetalhesPage /> },
       { path: "/caixinha", element: <CadastroCaixinhaPage /> },
       { path: "/transparencia", element: <PortalTransparenciaPage /> },
+      { path: "/estatisticas", element: <EstatisticasPage /> },
       
       { path: "/partidas", element: <AllPartidasPage /> },
       { path: "/partida/:partidaId", element: <DetalhesPartidaPage /> },
