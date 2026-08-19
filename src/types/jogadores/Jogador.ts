@@ -12,6 +12,8 @@ export interface FirestoreTimestamp {
   nanoseconds: number;
 }
 
+export type JogadorStatus = "ATIVO" | "LESIONADO" | "INATIVO";
+
 export interface FinanceiroJogadorType {
   status: 'inactive' | 'pending' | 'pending_renewal' | 'active' | 'cancelled';
 
@@ -44,6 +46,7 @@ export interface JogadorNewResponseType {
   telefone: string;
   assinatura?: FinanceiroJogadorType;
   stats: StatsJogadorType;
+  status: JogadorStatus;
   createdAt: FirestoreTimestamp;
   updatedAt: FirestoreTimestamp;
 }
