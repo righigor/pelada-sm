@@ -1,9 +1,10 @@
+import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { IconBallFootball, IconShield, IconShoe } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
 import AvatarLoad from "./avatar-load";
 import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
 import { useMemo } from "react";
+import InjuredBandage from "./injured-badge";
 
 interface JogadorItemProps {
   jogador: JogadorNewResponseType;
@@ -14,7 +15,6 @@ export default function JogadorCardList({
   jogador,
   temporadaFiltro,
 }: JogadorItemProps) {
-  const navigate = useNavigate();
   const avatarSizeClasses = "w-14 h-14 md:w-20 md:h-20";
 
   const statsVazios = {
@@ -36,34 +36,49 @@ export default function JogadorCardList({
   }, [jogador, temporadaFiltro]);
 
   return (
-    <Card
-      className="mb-4 p-4 flex flex-row justify-between items-center cursor-pointer hover:scale-105 transition-transform duration-500"
-      onClick={() => navigate(`/jogadores/${jogador.id}`)}
-    >
-      <div className="flex gap-2 md:gap-4 items-center">
-        <AvatarLoad jogador={jogador} avatarSizeClasses={avatarSizeClasses} />
-        <h2 className="md:text-xl text-xs font-bold">{jogador.nome}</h2>
+    <Card className="relative mb-4 flex cursor-pointer flex-row items-center justify-between overflow-visible p-4 transition-transform duration-500 hover:scale-105">
+      <div className="flex items-center gap-2 md:gap-4">
+        <div className="relative shrink-0">
+          <AvatarLoad jogador={jogador} avatarSizeClasses={avatarSizeClasses} />
+
+          {jogador.status === "LESIONADO" && <InjuredBandage />}
+        </div>
+
+        <div className="flex flex-col items-start gap-1">
+          <h2 className="text-xs font-bold md:text-xl">{jogador.nome}</h2>
+
+          {jogador.status === "LESIONADO" && (
+            <Badge variant="destructive">Lesionado</Badge>
+          )}
+
+          {jogador.status === "INATIVO" && (
+            <Badge variant="secondary">Inativo</Badge>
+          )}
+        </div>
       </div>
 
-      <div className="flex gap-4 items-center md:gap-8">
+      <div className="flex items-center gap-4 md:gap-8">
         <div className="flex items-center">
           <strong className="text-xs md:text-xl">{stats.gols}</strong>
-          <IconBallFootball className="inline-block ml-1 size-4 md:size-6" />
+          <IconBallFootball className="ml-1 inline-block size-4 md:size-6" />
         </div>
+
         <div className="flex items-center">
           <strong className="text-xs md:text-xl">{stats.assistencias}</strong>
-          <IconShoe className="inline-block ml-1 size-4 md:size-6" />
+          <IconShoe className="ml-1 inline-block size-4 md:size-6" />
         </div>
+
         <div className="flex items-center">
           <strong className="text-xs md:text-xl">{stats.golsContra}</strong>
-          <IconBallFootball className="inline-block ml-1 text-red-700 size-4 md:size-6" />
+          <IconBallFootball className="ml-1 inline-block size-4 text-red-700 md:size-6" />
         </div>
+
         {stats.defesasDificeis > 0 && (
           <div className="flex items-center">
             <strong className="text-xs md:text-xl">
               {stats.defesasDificeis}
             </strong>
-            <IconShield className="inline-block ml-1 text-blue-700 size-4 md:size-6" />
+            <IconShield className="ml-1 inline-block size-4 text-blue-700 md:size-6" />
           </div>
         )}
       </div>

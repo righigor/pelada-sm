@@ -9,10 +9,10 @@ import {
   getJogadoresFinanceiroView,
   type JogadorFinanceiroView,
 } from "@/utils/caixinha/helpers";
-import { useGetAllJogadores } from "@/hooks/jogadores/use-get-all-jogadores";
 import { useGetAllPagamentos } from "@/hooks/caixinha/use-get-all-pagamentos";
 import { ScrollArea } from "../ui/scroll-area";
 import AvatarLoad from "../avatar-load";
+import type { JogadorNewResponseType } from "@/types/jogadores/Jogador";
 
 const STATUS_CONFIG: Record<
   JogadorFinanceiroView["statusAssinatura"],
@@ -37,11 +37,16 @@ function formatDateSafe(dateStr: string | null): string {
   }
 }
 
-export function ListaJogadoresFinanceiro() {
-  const { data: jogadores, isLoading: loadingJogadores } = useGetAllJogadores();
+interface ListaJogadoresFinanceiroProps {
+  jogadores: JogadorNewResponseType[] | undefined;
+  loadingJogadores: boolean;
+}
+
+export function ListaJogadoresFinanceiro({ jogadores, loadingJogadores}: ListaJogadoresFinanceiroProps) {
   const { data: pagamentos, isLoading: loadingPagamentos } =
     useGetAllPagamentos();
   const [busca, setBusca] = useState("");
+
 
   const jogadoresView = useMemo(() => {
     if (!jogadores || !pagamentos) return [];

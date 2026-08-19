@@ -22,6 +22,7 @@ import PagamentoAprovadoPage from "@/pages/pagamento-aprovado";
 import { PortalTransparenciaPage } from "@/pages/portal-transparecia-page";
 import { AdminCaixinhaPage } from "@/pages/admin-caixinha";
 import { EstatisticasPage } from "@/pages/estatisticas-page";
+import AdminJogadoresStatusPage from "@/pages/admin-jogadores-status";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
 
       { path: "/admin/jogador", element: <AddJogadoresPage /> },
       { path: "/admin/jogadores", element: <AdminAllJogadoresPage /> },
+      { path: "/admin/jogadores/status", element: <AdminJogadoresStatusPage /> },
       { path: "/admin/partidas", element: <AdminAllPartidasPage /> },
       { path: "/admin/potes", element: <AdminRankingPage /> },
       { path: "/admin/premiacoes", element: <AdminPremiacoes /> },
