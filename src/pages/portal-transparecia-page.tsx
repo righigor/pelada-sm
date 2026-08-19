@@ -15,6 +15,10 @@ export function PortalTransparenciaPage() {
   const { data: movimentacoes, isPending: isPendingMovimentacoes } =
     useGetMovimentacoes();
 
+  const jogadoresAtivos = allJogadores?.filter((j) => j.status != "INATIVO");
+
+  console.log(jogadoresAtivos)
+
   return (
     <div className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
@@ -42,7 +46,7 @@ export function PortalTransparenciaPage() {
 
       <GraficoFinanceiro jogadores={allJogadores} isPending={isPendingAllJogadores || isPendingAllPagamentos} pagamentos={allPagamentos} />
 
-      <ListaJogadoresFinanceiro />
+      <ListaJogadoresFinanceiro jogadores={jogadoresAtivos!} loadingJogadores={isPendingAllJogadores} />
 
       <HistoricoMovimentacoes 
         pagamentos={allPagamentos}
