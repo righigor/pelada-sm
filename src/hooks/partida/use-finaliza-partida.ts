@@ -36,6 +36,9 @@ export const useFinalizePartida = () => {
         data.artilheiro?.nome
           ? `👑 *Artilheiro:* ${data.artilheiro.nome}`
           : null,
+        data.maiorAssistente?.nome
+          ? `👑 *Maior Assistente:* ${data.maiorAssistente.nome}`
+          : null, 
         data.paredao?.nome ? `🛡️ *Paredão:* ${data.paredao.nome}` : null,
         data.bagre?.nome
           ? `🐟 *Bagre da Rodada:* ${data.bagre.nome}`
