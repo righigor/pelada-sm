@@ -45,7 +45,7 @@ export interface CreateAssinaturaPayload {
   nome: string;
   telefone: string;
   cpf: string;
-  diaVencimento: string | null;
+  diaVencimento: string;
   plano: TipoPlano;
   metodoPagamento: MetodoPagamento;
 }

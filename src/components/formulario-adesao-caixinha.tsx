@@ -79,7 +79,9 @@ export default function FormularioAdesaoCaixinha({
       nome: jogadorSelecionado.nome,
       telefone: jogadorSelecionado.telefone,
       cpf: cpf.replace(/\D/g, ""),
-      diaVencimento: mostrarDiasVencimento ? diaVencimento : null,
+      diaVencimento: mostrarDiasVencimento
+        ? diaVencimento
+        : new Date().toLocaleDateString("pt-BR", { day: "2-digit" }),
       plano: planoSelecionado,
       metodoPagamento: metodoPagamento,
     };
@@ -129,7 +131,11 @@ export default function FormularioAdesaoCaixinha({
           <span className="text-white font-semibold">
             Total: R$ {planoConfig.valorTotal.toFixed(2).replace(".", ",")}
             {metodoPagamento === "cartao" && (
-              <span> + 5% de taxa no Cartão de Crédito, totalizando R$ {(planoConfig.valorTotal * 1.05).toFixed(2).replace(".", ",")}</span>
+              <span>
+                {" "}
+                + 5% de taxa no Cartão de Crédito, totalizando R${" "}
+                {(planoConfig.valorTotal * 1.05).toFixed(2).replace(".", ",")}
+              </span>
             )}
           </span>
         </CardDescription>
