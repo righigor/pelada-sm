@@ -4,13 +4,14 @@ import { Shield } from "lucide-react";
 
 interface TeamListProps {
   jogadores: GrupoEstatisticaStore;
+  teamKey: string;
 }
 
 interface JogadorComId extends JogadorEstatisticaStore {
     id: string;
 }
 
-export default function TeamList({ jogadores }: TeamListProps) {
+export default function TeamList({ jogadores, teamKey }: TeamListProps) {
   const jogadoresArray: JogadorComId[] = Object.entries(jogadores.jogadores).map(([id, stats]) => ({
     id: id,
     ...stats,
@@ -33,7 +34,7 @@ export default function TeamList({ jogadores }: TeamListProps) {
               <div className="flex gap-8 items-center">
                 <span className="w-1/3">{estatistica.nome}</span>
                 
-                <div className={ehGoleiro 
+                <div className={teamKey === "goleiros" 
                   ? "grid grid-cols-2 gap-x-4 gap-y-1 w-2/3" 
                   : "flex justify-between w-2/3"
                 }>
@@ -47,7 +48,7 @@ export default function TeamList({ jogadores }: TeamListProps) {
                     <IconBallFootball className="text-red-700 size-4" />{" "}
                     {estatistica.golsContra}
                   </span>
-                  {ehGoleiro && (
+                  {ehGoleiro && teamKey === "goleiros" && (
                     <span className="flex items-center gap-1">
                       <Shield className="text-blue-700 size-4" />{" "}
                       {estatistica.dd}

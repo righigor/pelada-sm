@@ -67,7 +67,7 @@ export default function ListByTeams({
                 </ItemTitle>
               </div>
               <ItemContent>
-                <TeamList jogadores={grupo} />
+                <TeamList jogadores={grupo} teamKey={teamKey} />
               </ItemContent>
             </Item>
           );
